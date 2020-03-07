@@ -1,24 +1,11 @@
 package com.tocapp.dyn4jtest;
 
-import androidx.appcompat.app.AppCompatActivity;
+import com.tocapp.gamesdk.activity.MobileGameActivity;
+import com.tocapp.gamesdk.engine.Game;
+import com.tocapp.touchround.TouchRound;
 
-import android.os.Bundle;
-
-import com.tocapp.gamesdk.Renderer;
-import com.tocapp.gamesdk.TestDyn4j;
-
-public class MainActivity extends AppCompatActivity {
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        TestDyn4j t = new TestDyn4j();
-
-        t.test();
-
-        Renderer r = new Renderer();
-        r.test();
+public class MainActivity extends MobileGameActivity {
+    protected Game getGame(){
+        return new TouchRound();
     }
 }
