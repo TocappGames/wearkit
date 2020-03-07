@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 
+import com.tocapp.gamesdk.Renderer;
 import com.tocapp.gamesdk.TestDyn4j;
 
 public class MainActivity extends AppCompatActivity {
@@ -16,5 +17,8 @@ public class MainActivity extends AppCompatActivity {
         TestDyn4j t = new TestDyn4j();
 
         t.test();
+
+        Renderer r = new Renderer();
+        r.test();
     }
 }
