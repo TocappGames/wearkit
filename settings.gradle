@@ -1,0 +1,4 @@
+rootProject.name='Dyn4jTest'
+include ':mobile'
+include ':wear'
+include ':gamesdk'
