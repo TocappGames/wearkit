@@ -8,13 +8,11 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.tocapp.sdk.engine.Game;
-import com.tocapp.sdk.body.Drawable;
+import com.tocapp.sdk.body.Renderable;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.Vector2;
-
-import static java.lang.Double.NaN;
 
 public class GameView extends View {
 
@@ -47,11 +45,7 @@ public class GameView extends View {
         world.update(time);
         this.game.update();
         for(Body body: world.getBodies()){
-            Vector2 center = body.getWorldCenter();
-            Log.d(TAG, "Body center from view: [" + center.x + ", " + center.y + "]");
-            if(Double.valueOf(center.x).isNaN())
-                Log.d(TAG, "ksajdfkajsdf");
-            ((Drawable) body).draw(canvas);
+            ((Renderable) body).render(canvas);
         }
     }
 

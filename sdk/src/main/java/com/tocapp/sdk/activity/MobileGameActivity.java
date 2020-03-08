@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.tocapp.sdk.R;
 import com.tocapp.sdk.display.GameView;
 import com.tocapp.sdk.engine.Game;
-import com.tocapp.sdk.engine.GameRunner;
+import com.tocapp.sdk.display.GameRenderer;
 
 public abstract class MobileGameActivity extends AppCompatActivity {
 
@@ -20,7 +20,7 @@ public abstract class MobileGameActivity extends AppCompatActivity {
 
         this.gameView = findViewById(R.id.game_view);
         this.gameView.setGame(this.getGame());
-        new GameRunner(this.gameView, 30).start();
+        new GameRenderer(this.gameView, 30).start();
     }
 
     abstract protected Game getGame();

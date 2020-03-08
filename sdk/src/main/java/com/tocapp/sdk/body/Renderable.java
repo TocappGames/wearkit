@@ -2,6 +2,6 @@ package com.tocapp.sdk.body;
 
 import android.graphics.Canvas;
 
-public interface Drawable {
-    void draw(Canvas canvas);
+public interface Renderable {
+    void render(Canvas canvas);
 }

@@ -1,14 +1,14 @@
-package com.tocapp.sdk.engine;
+package com.tocapp.sdk.display;
 
 
 import android.view.View;
 
-public class GameRunner extends Thread {
+public class GameRenderer extends Thread {
 
     private View view;
     private int fps;
 
-    public GameRunner(View view, int fps) {
+    public GameRenderer(View view, int fps) {
         this.view = view;
         this.fps = fps;
     }
