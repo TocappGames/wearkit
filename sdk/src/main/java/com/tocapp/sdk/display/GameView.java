@@ -34,22 +34,14 @@ public class GameView extends View {
         this.game = game;
     }
 
-    @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-
-        int sizeW = MeasureSpec.getSize(widthMeasureSpec);
-        int sizeH = MeasureSpec.getSize(heightMeasureSpec);
-        this.matrix.reset();
-        this.matrix.postRotate(180);
-        Log.d(TAG, "widh: " + sizeW + ", heigh: " + sizeH);
-        this.matrix.postTranslate(sizeW, sizeH);
-    }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        this.matrix.reset();
+        this.matrix.postRotate(180);
+        this.matrix.postTranslate(getWidth(), getHeight());
         canvas.setMatrix(this.matrix);
 
         if(this.status.equals(STATUS_READY)){

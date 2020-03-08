@@ -18,7 +18,7 @@ public class TouchRound extends AbstractGame {
 
     @Override
     public void init() {
-        this.world.setGravity(World.EARTH_GRAVITY);
+        this.world.setGravity(World.ZERO_GRAVITY);
         Paint paint = new Paint();
         paint.setColor(Color.RED);
 
@@ -44,19 +44,24 @@ public class TouchRound extends AbstractGame {
 
         this.world.addBody(box);
 
-        for(int i = 0; i < 100; i++){
+        for(int i = 0; i < 50; i++){
             addRandomBall();
         }
 
     }
 
+    private int getRandomByte(){
+        double n = Math.random() * 255;
+        return (int) Math.round(n);
+    }
+
     private void addRandomBall(){
 
         Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
+        paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
 
         GameObject ball = new GameObject(paint);
-        ball.addFixture(new Circle(10), 1.0, 0.08, 0.2);
+        ball.addFixture(new Circle(10), 1.0, 0.0, 5.0);
         ball.translate(40 + Math.random() * 600 , 100 + Math.random() * 800);
         ball.setMass(MassType.NORMAL);
         ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200));
