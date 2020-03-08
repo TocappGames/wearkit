@@ -2,7 +2,9 @@ package com.tocapp.sdk.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
@@ -17,6 +19,7 @@ public class GameView extends View {
     private static final String TAG = "GameView";
     private static final String STATUS_READY = "ready";
     private static final String STATUS_INITIALIZED = "initialized";
+    private final Matrix matrix;
     private Game game;
     private String status;
     private double startTime;
@@ -24,6 +27,7 @@ public class GameView extends View {
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.status = STATUS_READY;
+        this.matrix = new Matrix();
     }
 
     public void setGame(Game game){
@@ -31,8 +35,23 @@ public class GameView extends View {
     }
 
     @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+
+        int sizeW = MeasureSpec.getSize(widthMeasureSpec);
+        int sizeH = MeasureSpec.getSize(heightMeasureSpec);
+        this.matrix.reset();
+        this.matrix.postRotate(180);
+        Log.d(TAG, "widh: " + sizeW + ", heigh: " + sizeH);
+        this.matrix.postTranslate(sizeW, sizeH);
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
+        canvas.setMatrix(this.matrix);
+
         if(this.status.equals(STATUS_READY)){
             this.game.init();
             this.status = STATUS_INITIALIZED;

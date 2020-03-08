@@ -29,7 +29,7 @@ public abstract class MobileGameActivity extends AppCompatActivity {
 
         this.gameView = findViewById(R.id.game_view);
         this.gameView.setGame(this.getGame());
-        new GameRenderer(this.gameView, this, 30).start();
+        new GameRenderer(this.gameView, this, 60).start();
     }
 
     abstract protected Game getGame();
