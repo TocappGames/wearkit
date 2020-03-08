@@ -1,4 +1,4 @@
-package com.tocapp.sdk.shape;
+package com.tocapp.sdk.body;
 
 import android.graphics.Canvas;
 

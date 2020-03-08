@@ -8,10 +8,13 @@ import android.view.MotionEvent;
 import android.view.View;
 
 import com.tocapp.sdk.engine.Game;
-import com.tocapp.sdk.shape.Drawable;
+import com.tocapp.sdk.body.Drawable;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.Vector2;
+
+import static java.lang.Double.NaN;
 
 public class GameView extends View {
 
@@ -42,9 +45,12 @@ public class GameView extends View {
         double time = System.currentTimeMillis() / 1000.0 - this.startTime;
         World world = this.game.getWorld();
         world.update(time);
-        Log.d(TAG, "Time: " + time);
         this.game.update();
         for(Body body: world.getBodies()){
+            Vector2 center = body.getWorldCenter();
+            Log.d(TAG, "Body center from view: [" + center.x + ", " + center.y + "]");
+            if(Double.valueOf(center.x).isNaN())
+                Log.d(TAG, "ksajdfkajsdf");
             ((Drawable) body).draw(canvas);
         }
     }
