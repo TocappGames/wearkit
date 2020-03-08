@@ -11,8 +11,6 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Renderabl
 
     private static final String TAG = "Rectangle";
 
-    private final Paint paint;
-
     /**
      * Full constructor.
      * <p>
@@ -24,13 +22,17 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Renderabl
      * @param height the height
      * @throws IllegalArgumentException if width or height is less than or equal to zero
      */
-    public Rectangle(double width, double height, Paint paint) {
+    public Rectangle(double width, double height) {
         super(width, height);
-        this.paint = paint;
     }
 
     @Override
     public void render(Canvas canvas) {
+        this.render(canvas, new Paint());
+    }
+
+    @Override
+    public void render(Canvas canvas, Paint paint) {
         Vector2 center = this.getCenter();
         double halfWidth = this.getWidth() / 2;
         double halfHeight = this.getHeight() / 2;
@@ -39,7 +41,7 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Renderabl
                 (float) (center.y - halfHeight),
                 (float) (center.x + halfWidth),
                 (float) (center.y + halfHeight),
-                this.paint
+                paint
         );
     }
 }

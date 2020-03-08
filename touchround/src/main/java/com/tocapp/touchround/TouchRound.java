@@ -28,15 +28,15 @@ public class TouchRound extends AbstractGame {
         Paint paint2 = new Paint();
         paint2.setColor(Color.BLUE);
 
-        this.box = new GameObject();
-        Rectangle floor = new Rectangle(768, 20, paint);
+        this.box = new GameObject(paint);
+        Rectangle floor = new Rectangle(768, 20);
         floor.translate(389, 1000);
-        Rectangle ceiling = new Rectangle(768, 20, paint);
+        Rectangle ceiling = new Rectangle(768, 20);
         ceiling.translate(389, 100);
 
-        Rectangle left = new Rectangle(20, 1000, paint);
+        Rectangle left = new Rectangle(20, 1000);
         left.translate(20, 500);
-        Rectangle right = new Rectangle(20, 1000, paint);
+        Rectangle right = new Rectangle(20, 1000);
         right.translate(740, 500);
         this.box.addFixture(floor);
         this.box.addFixture(ceiling);
@@ -44,14 +44,14 @@ public class TouchRound extends AbstractGame {
         this.box.addFixture(right);
         this.box.setMass(MassType.INFINITE);
 
-        this.ball1 = new GameObject();
-        this.ball1.addFixture(new Circle(50, paint), 1.0, 0.0, 5.0);
+        this.ball1 = new GameObject(paint);
+        this.ball1.addFixture(new Circle(50), 1.0, 0.0, 5.0);
         this.ball1.translate(500, 500);
         this.ball1.setMass(MassType.NORMAL);
         this.ball1.setLinearVelocity(new Vector2(0, 500));
 
-        this.ball2 = new GameObject();
-        this.ball2.addFixture(new Circle(50, paint2), 1.0, 0.2, 5.0);
+        this.ball2 = new GameObject(paint2);
+        this.ball2.addFixture(new Circle(50), 1.0, 0.2, 5.0);
         this.ball2.translate(500, 900);
         this.ball2.setMass(MassType.NORMAL);
 

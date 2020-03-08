@@ -12,7 +12,6 @@ public class Circle extends org.dyn4j.geometry.Circle implements Renderable {
 
     private static final String TAG = "Circle";
 
-    private final Paint paint;
 
     /**
      * Full constructor.
@@ -22,15 +21,20 @@ public class Circle extends org.dyn4j.geometry.Circle implements Renderable {
      * @param radius the radius
      * @throws IllegalArgumentException if the given radius is less than or equal to zero
      */
-    public Circle(double radius, Paint paint) {
+    public Circle(double radius) {
         super(radius);
-        this.paint = paint;
     }
 
     @Override
     public void render(Canvas canvas) {
+        this.render(canvas, new Paint());
+    }
+
+    @Override
+    public void render(Canvas canvas, Paint paint) {
         Vector2 center = this.getCenter();
         double radius = this.getRadius();
-        canvas.drawCircle((float) center.x, (float) center.y, (float) radius, this.paint);
+        canvas.drawCircle((float) center.x, (float) center.y, (float) radius, paint);
+
     }
 }
