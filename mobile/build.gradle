@@ -34,5 +34,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     wearApp project(':wear')
     implementation project(path: ':touchround')
-    implementation project(path: ':gamesdk')
+    implementation project(path: ':sdk')
 }

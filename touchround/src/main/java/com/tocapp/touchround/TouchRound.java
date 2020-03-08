@@ -4,29 +4,35 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.Log;
 
-import com.tocapp.gamesdk.engine.BaseGame;
-import com.tocapp.gamesdk.shape.Circle;
+import com.tocapp.sdk.engine.AbstractGame;
+import com.tocapp.sdk.shape.Circle;
 
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
-public class TouchRound extends BaseGame {
+public class TouchRound extends AbstractGame {
 
     private static final String TAG = "TouchRound";
+    private Circle center;
 
-    public TouchRound() {
-        super();
+    @Override
+    public void init() {
         Paint paint = new Paint();
         paint.setColor(Color.RED);
-        Circle center = new Circle(100, paint);
+        center = new Circle(100, paint);
         center.translate(0, 0);
         center.setMassType(MassType.NORMAL);
-        center.applyForce(new Vector2(3,4), new Vector2(0, 0));
+        center.setLinearVelocity(200, 200);
         this.world.addBody(center);
     }
 
     @Override
-    public void onUpdate() {
+    public void update() {
         Log.d(TAG, "onUpdate is called!!");
+    }
+
+    @Override
+    public void finish() {
+
     }
 }
