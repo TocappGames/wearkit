@@ -1,10 +1,9 @@
-package com.tocapp.sdk.geometry;
+package com.tocapp.sdk.rendering.shape;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
-import com.tocapp.sdk.body.Renderable;
+import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.geometry.Vector2;
 
@@ -33,7 +32,6 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Renderabl
     @Override
     public void render(Canvas canvas) {
         Vector2 center = this.getCenter();
-        Log.d(TAG, "center: " + center);
         double halfWidth = this.getWidth() / 2;
         double halfHeight = this.getHeight() / 2;
         canvas.drawRect(

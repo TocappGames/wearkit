@@ -3,16 +3,14 @@ package com.tocapp.sdk.display;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.tocapp.sdk.engine.Game;
-import com.tocapp.sdk.body.Renderable;
+import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
-import org.dyn4j.geometry.Vector2;
 
 public class GameView extends View {
 
