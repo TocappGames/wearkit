@@ -7,8 +7,10 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.tocapp.sdk.engine.Game;
+import com.tocapp.sdk.rendering.GameObject;
 import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.dynamics.Body;
@@ -39,11 +41,6 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        this.matrix.reset();
-        this.matrix.postRotate(180);
-        this.matrix.postTranslate(getWidth(), getHeight());
-        canvas.setMatrix(this.matrix);
-
         if(this.status.equals(STATUS_READY)){
             this.game.init();
             this.status = STATUS_INITIALIZED;
@@ -60,6 +57,9 @@ public class GameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
+        this.game.touchEvent(event);
+        return true;
+       // return super.onTouchEvent(event);
     }
+
 }
