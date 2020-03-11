@@ -37,6 +37,13 @@ public class GameView extends View {
     }
 
 
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+    }
+
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
@@ -53,11 +60,17 @@ public class GameView extends View {
         for(Body body: world.getBodies()){
             ((Renderable) body).render(canvas, game.getScale());
         }
+
+        for (Renderable r: this.game.getLandscape()) {
+            r.render(canvas, this.game.getScale());
+        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        this.game.touchEvent(event);
+        //TODO set scale on touch event
+        double scale = this.game.getScale();
+        this.game.touchEvent(event, scale);
         return true;
        // return super.onTouchEvent(event);
     }

@@ -7,7 +7,6 @@ import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.geometry.Vector2;
 
-
 public class Circle extends org.dyn4j.geometry.Circle implements Renderable {
 
     private static final String TAG = "Circle";
