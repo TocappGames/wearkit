@@ -26,6 +26,11 @@ public class TouchRound extends AbstractGame {
 
 
     @Override
+    public double getScale() {
+        return 10;
+    }
+
+    @Override
     public void init() {
         this.world.setGravity(World.ZERO_GRAVITY);
         Paint paint = new Paint();
@@ -35,15 +40,15 @@ public class TouchRound extends AbstractGame {
         paint2.setColor(Color.BLUE);
 
         GameObject box = new GameObject(paint);
-        Rectangle floor = new Rectangle(720, 20);
-        floor.translate(389, 1280);
-        Rectangle ceiling = new Rectangle(700, 20);
-        ceiling.translate(360, 20);
+        Rectangle floor = new Rectangle(72, 2);
+        floor.translate(38, 128);
+        Rectangle ceiling = new Rectangle(70, 2);
+        ceiling.translate(36, 2);
 
-        Rectangle left = new Rectangle(20, 1380);
-        left.translate(20, 720);
-        Rectangle right = new Rectangle(20, 1380);
-        right.translate(700, 720);
+        Rectangle left = new Rectangle(2, 138);
+        left.translate(2, 72);
+        Rectangle right = new Rectangle(2, 138);
+        right.translate(70, 72);
 
         box.addFixture(floor);
         box.addFixture(ceiling);
@@ -70,9 +75,9 @@ public class TouchRound extends AbstractGame {
         paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
 
         GameObject ball = new GameObject(paint);
-        ball.addFixture(new Circle(10), 1.0, 0.0, 5.0);
+        ball.addFixture(new Circle(1), 1.0, 0.0, 5.0);
 
-        ball.translate(40 + Math.random() * 600 , 100 + Math.random() * 800);
+        ball.translate(4 + Math.random() * 60 , 10 + Math.random() * 80);
         ball.setMass(MassType.NORMAL);
         ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 1e10, (Math.random() - 0.5) * 1e10));
 
@@ -85,7 +90,7 @@ public class TouchRound extends AbstractGame {
         paint.setColor(Color.RED);
 
         GameObject ball = new GameObject(paint);
-        ball.addFixture(new Circle(30), 0.4, 0.0, 5.0);
+        ball.addFixture(new Circle(3), 0.4, 0.0, 5.0);
 
         ball.translate(x, y);
         ball.setMass(MassType.NORMAL);
@@ -94,17 +99,12 @@ public class TouchRound extends AbstractGame {
         return ball;
     }
 
-    private float previousX;
-    private float previousY;
-
-
     @Override
     public void update() {
         if(System.currentTimeMillis() -this.start > 2000){
             Log.d("", "");
         }
     }
-
 
     @Override
     public void finish() {
@@ -132,8 +132,8 @@ public class TouchRound extends AbstractGame {
                 //stick.translate(event.getRawX(), event.getRawY());
                 //stick = addMasterStick(event.getRawX(), event.getRawY());
 
-                stick.setLinearVelocity(new Vector2(stick.getMass().getMass()*1e9*(event.getX()-stick.getWorldCenter().x),stick.getMass().getMass()*1e9*(event.getY()-stick.getWorldCenter().y)));
-                //stick.applyForce(new Vector2(stick.getMass().getMass()*1e9*(event.getX()-stick.getWorldCenter().x),stick.getMass().getMass()*1e9*(event.getY()-stick.getWorldCenter().y)));
+                //stick.setLinearVelocity(new Vector2(stick.getMass().getMass()*1e9*(event.getX()-stick.getWorldCenter().x),stick.getMass().getMass()*1e9*(event.getY()-stick.getWorldCenter().y)));
+                stick.applyForce(new Vector2(stick.getMass().getMass()*1e9*(event.getX()-stick.getWorldCenter().x),stick.getMass().getMass()*1e9*(event.getY()-stick.getWorldCenter().y)));
                 Log.d("", "");
                 break;
         }

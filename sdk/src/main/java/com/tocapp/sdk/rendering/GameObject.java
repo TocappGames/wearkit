@@ -16,19 +16,19 @@ public class GameObject extends Body implements Renderable {
     }
 
     @Override
-    public void render(Canvas canvas) {
+    public void render(Canvas canvas, double scale) {
 
         // keep the current coordinate system
         canvas.save();
 
         // go to Body's coordinate system
         Vector2 translation = this.transform.getTranslation();
-        canvas.translate((float) translation.x, (float) translation.y);
+        canvas.translate((float) (translation.x * scale), (float) (translation.y * scale));
 
         // render all the fixtures in the Body
         for(BodyFixture fixture: this.getFixtures()){
             Renderable renderable = (Renderable) fixture.getShape();
-            renderable.render(canvas, this.paint);
+            renderable.render(canvas, this.paint, scale);
         }
 
         // restore previous coordinate system
@@ -36,7 +36,7 @@ public class GameObject extends Body implements Renderable {
     }
 
     @Override
-    public void render(Canvas canvas, Paint ignored) {
-        this.render(canvas);
+    public void render(Canvas canvas, Paint ignored, double scale) {
+        this.render(canvas, scale);
     }
 }

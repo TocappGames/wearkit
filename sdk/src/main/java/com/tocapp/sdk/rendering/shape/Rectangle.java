@@ -27,20 +27,22 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Renderabl
     }
 
     @Override
-    public void render(Canvas canvas) {
-        this.render(canvas, new Paint());
+    public void render(Canvas canvas, double scale) {
+        this.render(canvas, new Paint(), scale);
     }
 
     @Override
-    public void render(Canvas canvas, Paint paint) {
+    public void render(Canvas canvas, Paint paint, double scale) {
         Vector2 center = this.getCenter();
-        double halfWidth = this.getWidth() / 2;
-        double halfHeight = this.getHeight() / 2;
+        double cx = center.x * scale;
+        double cy = center.y * scale;
+        double halfWidth = this.getWidth() / 2 * scale;
+        double halfHeight = this.getHeight() / 2 *  scale;
         canvas.drawRect(
-                (float) (center.x - halfWidth),
-                (float) (center.y - halfHeight),
-                (float) (center.x + halfWidth),
-                (float) (center.y + halfHeight),
+                (float) (cx - halfWidth),
+                (float) (cy - halfHeight),
+                (float) (cx + halfWidth),
+                (float) (cy + halfHeight),
                 paint
         );
     }

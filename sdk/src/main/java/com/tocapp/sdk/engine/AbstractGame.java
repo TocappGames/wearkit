@@ -15,4 +15,11 @@ abstract public class AbstractGame implements Game {
     public World getWorld() {
         return this.world;
     }
+
+
+    @Override
+    public double getScale() {
+        return 1.0;
+    }
+
 }

@@ -26,15 +26,15 @@ public class Circle extends org.dyn4j.geometry.Circle implements Renderable {
     }
 
     @Override
-    public void render(Canvas canvas) {
-        this.render(canvas, new Paint());
+    public void render(Canvas canvas, double scale) {
+        this.render(canvas, new Paint(), scale);
     }
 
     @Override
-    public void render(Canvas canvas, Paint paint) {
+    public void render(Canvas canvas, Paint paint, double scale) {
         Vector2 center = this.getCenter();
         double radius = this.getRadius();
-        canvas.drawCircle((float) center.x, (float) center.y, (float) radius, paint);
+        canvas.drawCircle((float) (center.x * scale), (float) (center.y * scale), (float) (radius * scale), paint);
 
     }
 }

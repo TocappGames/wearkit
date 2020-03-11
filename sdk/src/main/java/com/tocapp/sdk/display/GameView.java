@@ -51,7 +51,7 @@ public class GameView extends View {
         world.update(time);
         this.game.update();
         for(Body body: world.getBodies()){
-            ((Renderable) body).render(canvas);
+            ((Renderable) body).render(canvas, game.getScale());
         }
     }
 
