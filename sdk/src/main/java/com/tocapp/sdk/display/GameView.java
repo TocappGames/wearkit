@@ -1,6 +1,9 @@
 package com.tocapp.sdk.display;
 
 import android.content.Context;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
@@ -9,6 +12,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.annotation.Dimension;
+
+import com.tocapp.sdk.R;
 import com.tocapp.sdk.engine.Game;
 import com.tocapp.sdk.rendering.GameObject;
 import com.tocapp.sdk.rendering.Renderable;
@@ -16,12 +22,15 @@ import com.tocapp.sdk.rendering.Renderable;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
 
+import java.util.Vector;
+
 public class GameView extends View {
 
     private static final String TAG = "GameView";
     private static final String STATUS_READY = "ready";
     private static final String STATUS_INITIALIZED = "initialized";
     private final Matrix matrix;
+    private Vector<Integer> displaySize;
     private Game game;
     private String status;
     private double startTime;
@@ -32,22 +41,21 @@ public class GameView extends View {
         this.matrix = new Matrix();
     }
 
-    public void setGame(Game game){
+    public void setGame(Game game, Vector<Integer> displaySize){
         this.game = game;
+        this.displaySize = displaySize;
     }
 
 
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-
         if(this.status.equals(STATUS_READY)){
             this.game.init();
             this.status = STATUS_INITIALIZED;
@@ -57,6 +65,7 @@ public class GameView extends View {
         World world = this.game.getWorld();
         world.update(time);
         this.game.update();
+
         for(Body body: world.getBodies()){
             ((Renderable) body).render(canvas, game.getScale());
         }

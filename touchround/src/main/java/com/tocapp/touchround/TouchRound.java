@@ -1,7 +1,10 @@
 package com.tocapp.touchround;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 
@@ -11,11 +14,15 @@ import com.tocapp.sdk.rendering.Renderable;
 import com.tocapp.sdk.rendering.shape.Circle;
 import com.tocapp.sdk.rendering.shape.Rectangle;
 
+import org.dyn4j.collision.continuous.ConservativeAdvancement;
+import org.dyn4j.collision.manifold.ClippingManifoldSolver;
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.ContinuousDetectionMode;
+import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.MassType;
@@ -23,7 +30,9 @@ import org.dyn4j.geometry.Vector2;
 
 public class TouchRound extends AbstractGame {
 
-    public static final Vector2 MY_GRAVITY = new Vector2(0.0, 9.8);
+    private static final int mobileWidth = 1080;
+    private static final int mobileHeight = 1920;
+    private static final Vector2 MY_GRAVITY = new Vector2(0.0, 9.8);
     private static final String TAG = "TouchRound";
     private static Boolean touch = false;
     private GameObject userStick;
@@ -60,16 +69,18 @@ public class TouchRound extends AbstractGame {
                 Paint paint = new Paint();
                 paint.setColor(Color.BLACK);
                 paint.setTextSize(50);
-                canvas.drawText(userGoals.toString(), 2000 / (float) scale, (float) 35, paint);
-                canvas.drawText(iaGoals.toString(), 25000 / (float) scale, (float) 35, paint);
+                canvas.drawText(userGoals.toString(), mobileWidth / 8, mobileHeight / 2 - 100 , paint);
+                canvas.drawText(iaGoals.toString(), mobileWidth / 8, mobileHeight / 2 + 100, paint);
             }
 
             @Override
             public void render(Canvas canvas, Paint paint, double scale) {
+
             }
         });
 
         this.world.setGravity(World.ZERO_GRAVITY);
+
         initWorld();
 
         this.world.addListener(new CollisionListener() {
@@ -124,36 +135,45 @@ public class TouchRound extends AbstractGame {
     }
 
     private void initWorld() {
+        double sidesMargin = 20 / getScale();
+        double boxHeight = 20 / getScale();
+
         boxPaint.setColor(Color.RED);
         iaPaint.setColor(Color.BLUE);
         userPaint.setColor(Color.MAGENTA);
 
-        Rectangle rightBorderGoalIa = new Rectangle(170 / getScale(), 20 / getScale());
-        rightBorderGoalIa.translate(620 / getScale(), 50 / getScale());
+        double borderGoalWidth = 400 / getScale();
+        double borderGoalHeight = boxHeight;
+        double goalWidth = 240 /getScale();
+        double goalHeight = 20/getScale();
 
-        Rectangle leftBorderGoalIa = new Rectangle(170 / getScale(), 20 / getScale());
-        leftBorderGoalIa.translate(100 / getScale(), 50 / getScale());
+        Rectangle leftBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight);
+        leftBorderGoalIa.translate(borderGoalWidth / 2 + sidesMargin, goalHeight);
 
-        goalUser = new Rectangle(350 / getScale(), 50 / getScale());
-        goalUser.translate(360 / getScale(), 1370 / getScale());
+        Rectangle rightBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight);
+        rightBorderGoalIa.translate(mobileWidth/ getScale() - borderGoalWidth/ 2 - sidesMargin , goalHeight);
 
-        Rectangle rightBorderGoalUser = new Rectangle(170 / getScale(), 20 / getScale());
-        rightBorderGoalUser.translate(620 / getScale(), 1350 / getScale());
+        goalUser = new Rectangle(goalWidth, goalHeight);
+        goalUser.translate(mobileWidth / 2 / getScale(), mobileHeight /getScale() - sidesMargin);
 
-        Rectangle leftBorderGoalUser = new Rectangle(170 / getScale(), 20 / getScale());
-        leftBorderGoalUser.translate(100 / getScale(), 1350 / getScale());
+        Rectangle rightBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
+        rightBorderGoalUser.translate(mobileWidth/ getScale() - borderGoalWidth/ 2 - sidesMargin, mobileHeight /getScale() - sidesMargin);
+
+        Rectangle leftBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
+        leftBorderGoalUser.translate(borderGoalWidth / 2 + sidesMargin, mobileHeight /getScale() - sidesMargin);
 
 
-        goalIa = new Rectangle(350 / getScale(), 50 / getScale());
-        goalIa.translate(360 / getScale(), 20 / getScale());
+        goalIa = new Rectangle(goalWidth, goalHeight);
+        goalIa.translate(mobileWidth / 2 / getScale(), sidesMargin);
 
-        Rectangle left = new Rectangle(20 / getScale(), 1290 / getScale());
-        left.translate(20 / getScale(), 700 / getScale());
-        Rectangle right = new Rectangle(20 / getScale(), 1290 / getScale());
-        right.translate(700 / getScale(), 700 / getScale());
+        Rectangle left = new Rectangle(sidesMargin, mobileHeight / getScale() - sidesMargin);
+        left.translate(sidesMargin, mobileHeight / 2 / getScale());
+
+        Rectangle right = new Rectangle(sidesMargin, mobileHeight / getScale() - sidesMargin);
+        right.translate(mobileWidth / getScale() - sidesMargin, mobileHeight / 2 / getScale());
         goals = new GameObject(iaPaint);
         box = new GameObject(boxPaint);
-
+        box.setMass(MassType.INFINITE);
         goals.addFixture(goalIa);
         box.addFixture(leftBorderGoalIa);
         box.addFixture(rightBorderGoalIa);
@@ -195,8 +215,8 @@ public class TouchRound extends AbstractGame {
         paint.setColor(Color.BLACK);
 
         GameObject ball = new GameObject(paint);
-        ball.addFixture(new Circle(0.7), 0.2, 0.0, 0.5);
-        ball.translate(iaGoalX, leftWallY);
+        ball.addFixture(new Circle(0.7), 10, 0.0, 0.5);
+        ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale());
         ball.setMass(MassType.NORMAL);
         ball.setLinearDamping(1);
 
@@ -212,7 +232,7 @@ public class TouchRound extends AbstractGame {
         paint.setColor(Color.BLUE);
 
         GameObject iaStick = new GameObject(paint);
-        iaStick.addFixture(new Circle(2), 1, 0, 0.050);
+        iaStick.addFixture(new Circle(2), 30, 0, 0.002);
         iaStick.translate(x, y);
         iaStick.setMass(MassType.NORMAL);
         iaStick.setLinearDamping(5);
@@ -231,7 +251,7 @@ public class TouchRound extends AbstractGame {
         // System.out.println("Posicion del stick: X - " + x + " Y: " + y);
 
         GameObject userStick = new GameObject(paint);
-        userStick.addFixture(new Circle(2), 1, 0.0, 0.05);
+        userStick.addFixture(new Circle(2), 30, 0.0, 0.002 );
         userStick.setMass(MassType.NORMAL);
         userStick.translate(x, y);
         userStick.setLinearDamping(5);
@@ -249,28 +269,38 @@ public class TouchRound extends AbstractGame {
     }
 
     private void checkBall() {
+        double corner = 20 / getScale() + 20 / getScale();
+        double cornerX = mobileWidth / getScale() - corner;
+        double cornerY = mobileHeight / getScale() - corner;
         double ballX = ball.getWorldCenter().x;
         double ballY = ball.getWorldCenter().y;
-        if (ballX < 0 || ballX > 700 / getScale() || ballY < 0 || ballY > 1400 / getScale()) {
+
+        if (ballX < corner || ballX > cornerX  || ballY < corner || ballY > cornerY) {
             System.out.println("Bola recolocada por haber salido");
+            System.out.println(corner);
+            System.out.println(cornerX);
+            System.out.println(cornerY);
+
             world.removeBody(ball);
             ball = addBall();
         }
     }
 
     private void checkUserStick() {
+        double corner = 20 / getScale() + 20 / getScale();
         double userStickX = userStick.getWorldCenter().x;
         double userStickY = userStick.getWorldCenter().y;
-        if (userStickX < 0 || userStickX > 700 / getScale() || userStickY < 0 || userStickY > 1400 / getScale()) {
+        if (userStickX < corner || userStickX > mobileWidth / getScale() - corner  || userStickY < corner || userStickY > mobileHeight / getScale() - corner) {
             world.removeBody(userStick);
             userStick = addUserStick();
         }
     }
 
     private void checkIaStick() {
+        double corner = 20 / getScale() + 20 / getScale();
         double iaStickX = iaStick.getWorldCenter().x;
         double iaStickY = iaStick.getWorldCenter().y;
-        if (iaStickX < 0 || iaStickX > 700 / getScale() || iaStickY < 0 || iaStickY > 1400 / getScale()) {
+        if (iaStickX < corner || iaStickX > mobileWidth / getScale() - corner  || iaStickY < corner || iaStickY > mobileHeight / getScale() - corner) {
             world.removeBody(iaStick);
             iaStick = addIaStick();
         }
@@ -332,12 +362,12 @@ public class TouchRound extends AbstractGame {
         if (distancia2 < radius * radius /3) {
             userStick.setLinearVelocity(0, 0);
         } else
-            userStick.applyForce(new Vector2(userStick.getMass().getMass() * distancia2 * 100 * (event.getX() / scale - userStick.getWorldCenter().x) * 10, userStick.getMass().getMass() * distancia2 * 100 * (event.getY() / scale - userStick.getWorldCenter().y) * 10));
+            userStick.applyForce(new Vector2(userStick.getMass().getMass() * distancia2 * 10 * (event.getX() / scale - userStick.getWorldCenter().x) * 10, userStick.getMass().getMass() * distancia2 * 10 * (event.getY() / scale - userStick.getWorldCenter().y) * 10));
     }
 
     @Override
     public void touchEvent(MotionEvent event, double scale) {
-        if (event.getY() / scale > 700 / getScale()) {
+        if (event.getY() / scale > mobileHeight / 2 / getScale()) {
             switch (event.getAction() & MotionEvent.ACTION_MASK) {
                 case MotionEvent.ACTION_DOWN:
                 case MotionEvent.ACTION_UP:
