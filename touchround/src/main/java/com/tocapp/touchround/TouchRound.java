@@ -3,7 +3,6 @@ package com.tocapp.touchround;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 
 import com.tocapp.sdk.engine.AbstractGame;
@@ -41,8 +40,10 @@ public class TouchRound extends AbstractGame {
     Integer userGoals = 0;
     Integer iaGoals = 0;
     double lastAttack = 1000;
+
     boolean iaStickColliedWithBall;
     boolean iaIsHome;
+
 
     @Override
     public double getScale() {
@@ -73,9 +74,12 @@ public class TouchRound extends AbstractGame {
 
         this.world.addListener(new CollisionListener() {
             @Override
-            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2) {
+            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+
                 if (body1 == ball && body2 == iaStick || body1 == iaStick && body2 == ball) {
                     System.out.println("Returning home");
+                    System.out.println("Penetration: " + penetration);
+
                     iaStickColliedWithBall = true;
                     iaIsHome = false;
                 }
@@ -101,7 +105,7 @@ public class TouchRound extends AbstractGame {
             }
 
             @Override
-            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+            public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2) {
                 return true;
             }
 
@@ -153,7 +157,6 @@ public class TouchRound extends AbstractGame {
         goals.addFixture(goalIa);
         box.addFixture(leftBorderGoalIa);
         box.addFixture(rightBorderGoalIa);
-
         goals.addFixture(goalUser);
         box.addFixture(leftBorderGoalUser);
         box.addFixture(rightBorderGoalUser);
@@ -161,8 +164,13 @@ public class TouchRound extends AbstractGame {
         box.addFixture(left);
         box.addFixture(right);
 
-        box.setMass(MassType.INFINITE);
+        // TODO PREGUNTAR POR QUE NO SE PUEDE RENDERIZAR ESTO
+       /* GameObject something = new GameObject(new Paint(Color.LTGRAY));
+        something.addFixture(Geometry.createIsoscelesTriangle(300 /getScale(), 300/getScale()));
+        something.translate(300, 700);
+        box.setMass(MassType.INFINITE);*/
 
+        //this.world.addBody(something);
         this.world.addBody(goals);
         this.world.addBody(box);
         iaStick = addIaStick();
@@ -187,7 +195,7 @@ public class TouchRound extends AbstractGame {
         paint.setColor(Color.BLACK);
 
         GameObject ball = new GameObject(paint);
-        ball.addFixture(new Circle(0.7), 0.1, 0.0, 0.5);
+        ball.addFixture(new Circle(0.7), 0.2, 0.0, 0.5);
         ball.translate(iaGoalX, leftWallY);
         ball.setMass(MassType.NORMAL);
         ball.setLinearDamping(1);
@@ -204,10 +212,10 @@ public class TouchRound extends AbstractGame {
         paint.setColor(Color.BLUE);
 
         GameObject iaStick = new GameObject(paint);
-        iaStick.addFixture(new Circle(1.5), 1000, 0, 0.1);
+        iaStick.addFixture(new Circle(2), 1, 0, 0.050);
         iaStick.translate(x, y);
         iaStick.setMass(MassType.NORMAL);
-        iaStick.setLinearDamping(1);
+        iaStick.setLinearDamping(5);
 
         this.world.addBody(iaStick);
         return iaStick;
@@ -223,10 +231,10 @@ public class TouchRound extends AbstractGame {
         // System.out.println("Posicion del stick: X - " + x + " Y: " + y);
 
         GameObject userStick = new GameObject(paint);
-        userStick.addFixture(new Circle(1.5), 30, 0.0, 0.05);
+        userStick.addFixture(new Circle(2), 1, 0.0, 0.05);
         userStick.setMass(MassType.NORMAL);
         userStick.translate(x, y);
-        userStick.setLinearDamping(1);
+        userStick.setLinearDamping(5);
         this.world.addBody(userStick);
         return userStick;
     }
@@ -237,6 +245,7 @@ public class TouchRound extends AbstractGame {
         checkBall();
         checkUserStick();
         checkIaStick();
+
     }
 
     private void checkBall() {
@@ -244,7 +253,6 @@ public class TouchRound extends AbstractGame {
         double ballY = ball.getWorldCenter().y;
         if (ballX < 0 || ballX > 700 / getScale() || ballY < 0 || ballY > 1400 / getScale()) {
             System.out.println("Bola recolocada por haber salido");
-
             world.removeBody(ball);
             ball = addBall();
         }
@@ -279,12 +287,16 @@ public class TouchRound extends AbstractGame {
             double bdy = goals.getFixture(0).getShape().getCenter().y - iaStick.getWorldCenter().y;
             double bradius = goals.getFixture(0).getShape().getRadius();
             double bdistancia2 = bdx * bdx + bdy * bdy / 2;
-            if (bdistancia2 > bradius) {
+            // Si está más lejos del radio de la porteria se acerca
+            if (bdistancia2 > bradius * bradius) {
                 iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * bdistancia2 * (goals.getFixture(0).getShape().getCenter().x - iaStick.getWorldCenter().x), iaStick.getMass().getMass() * bdistancia2 * (goals.getFixture(0).getShape().getCenter().y - iaStick.getWorldCenter().y)));
+
             } else {
+                // En cuanto se acerca , se aplica la misma fuerza contraria
                 iaIsHome = true;
                 iaStickColliedWithBall = false;
-                iaStick.applyForce(new Vector2(0, 0));
+                iaStick.applyForce(new Vector2(iaStick.getWorldCenter().x - iaStick.getMass().getMass() * bdistancia2 * (goals.getFixture(0).getShape().getCenter().x), iaStick.getWorldCenter().y - iaStick.getMass().getMass() * bdistancia2 * (goals.getFixture(0).getShape().getCenter().y)));
+                iaStick.setAngularVelocity(0);
             }
         } else {
             double dx = ball.getWorldCenter().x - iaStick.getWorldCenter().x;
@@ -293,19 +305,19 @@ public class TouchRound extends AbstractGame {
             double distancia2 = dx * dx + dy * dy;
             // Si pasa del centro la bola, el stick la sigue en el eje y
             if (ball.getWorldCenter().y > 725 / getScale()) {
-                iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 1 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 1, 0));
-                iaStick.setLinearVelocity(0, 0);
-                iaStick.setAngularVelocity(0);
+                iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 0.5 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 0.5, 0));
             } else {
                 // Cuando la bola está en su campo y lejano al stick ataca
                 if (distancia2 > radius) {
                     if ((System.currentTimeMillis() - this.start) > lastAttack) {
-                        iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 10 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 10, iaStick.getMass().getMass() * distancia2 * 10 * (ball.getWorldCenter().y - iaStick.getWorldCenter().y) * 10));
+                        iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 5 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 5, iaStick.getMass().getMass() * distancia2 * 5 * (ball.getWorldCenter().y - iaStick.getWorldCenter().y) * 5));
                         iaStick.setLinearVelocity(0, 0);
                         lastAttack += 2500;
                     }
                 } else {
-                    iaStick.applyForce(new Vector2(0, 0));
+                    iaStick.applyForce(new Vector2(iaStick.getForce().x * (-1), iaStick.getForce().y * (-1)));
+                    iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 0.5 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 0.5, 0));
+
                 }
             }
         }
@@ -317,40 +329,22 @@ public class TouchRound extends AbstractGame {
         double radius = userStick.getFixture(0).getShape().getRadius();
         double distancia2 = dx * dx + dy * dy;
         // Si el dedo se encuentra dentro de la bola se frena
-        if (distancia2 < radius * radius / 4) {
+        if (distancia2 < radius * radius /3) {
             userStick.setLinearVelocity(0, 0);
-            userStick.setAngularVelocity(0);
         } else
             userStick.applyForce(new Vector2(userStick.getMass().getMass() * distancia2 * 100 * (event.getX() / scale - userStick.getWorldCenter().x) * 10, userStick.getMass().getMass() * distancia2 * 100 * (event.getY() / scale - userStick.getWorldCenter().y) * 10));
     }
 
     @Override
     public void touchEvent(MotionEvent event, double scale) {
-        if (event.getY()/scale > box.getFixture(4).getShape().getCenter().y) {
-        calculaMovimiento(event, scale);
-        switch (event.getAction() & MotionEvent.ACTION_MASK) {
-            case MotionEvent.ACTION_DOWN:
-                //calculaMovimiento(event,scale);
-
-                Log.d("", "");
-                break;
-            case MotionEvent.ACTION_UP:
-                break;
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-            case MotionEvent.ACTION_MOVE:
-                //this.world.removeBody(stick);
-                //stick.translate(event.getRawX(), event.getRawY());
-                //  calculaMovimiento(event, scale);
-//                stick.removeAllFixtures();
-//                stick = addMasterStick( event.getX() / (float) scale, event.getY() / (float) scale);
-
-                //stick.setLinearVelocity(new Vector2(stick.getMass().getMass()*1e9*(event.getX()-stick.getWorldCenter().x),stick.getMass().getMass()*1e9*(event.getY()-stick.getWorldCenter().y)));
-
-                break;
-        }
+        if (event.getY() / scale > 700 / getScale()) {
+            switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                case MotionEvent.ACTION_DOWN:
+                case MotionEvent.ACTION_UP:
+                case MotionEvent.ACTION_MOVE:
+                    calculaMovimiento(event, scale);
+                    break;
+            }
         }
     }
 }
