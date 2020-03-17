@@ -3,6 +3,8 @@ package com.tocapp.sdk.activity;
 import androidx.annotation.Dimension;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Window;
@@ -18,7 +20,7 @@ import java.util.Vector;
 public abstract class MobileGameActivity extends AppCompatActivity {
 
     private GameView gameView;
-
+    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,14 +34,10 @@ public abstract class MobileGameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        DisplayMetrics display = getResources().getDisplayMetrics();
-        int width = display.widthPixels;
-        int height = display.heightPixels;
-        float density = display.density;
-
         this.gameView = findViewById(R.id.game_view);
-        this.gameView.setGame(this.getGame(), new Vector<Integer>(width,height));
-        new GameRenderer(this.gameView, this, 500).start();
+        this.gameView.setGame(this.getGame());
+        this.gameView.setContext(this);
+        new GameRenderer(this.gameView, this, 60).start();
     }
 
     abstract protected Game getGame();

@@ -1,6 +1,8 @@
 package com.tocapp.sdk.engine;
 
 
+import android.content.Context;
+
 import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.dynamics.World;
@@ -10,6 +12,7 @@ import java.util.List;
 
 abstract public class AbstractGame implements Game {
 
+    protected Context context;
     protected World world;
     protected List<Renderable> landscape;
 

@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -34,23 +35,29 @@ public class GameView extends View {
     private Game game;
     private String status;
     private double startTime;
+    DisplayMetrics display = getResources().getDisplayMetrics();
+
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.status = STATUS_READY;
         this.matrix = new Matrix();
+
+
     }
 
-    public void setGame(Game game, Vector<Integer> displaySize){
+    public void setGame(Game game){
         this.game = game;
-        this.displaySize = displaySize;
     }
 
-
+    public void setContext(Context context) {
+        this.game.setContext(context);
+    }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        this.game.setDimensions(display.widthPixels,display.heightPixels);
     }
 
     @Override
