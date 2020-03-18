@@ -1,7 +1,6 @@
 package com.tocapp.touchround;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -23,7 +22,7 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactConstraint;
-import org.dyn4j.geometry.Geometry;
+import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
@@ -33,21 +32,29 @@ public class TouchRound extends AbstractGame {
     private static int mobileHeight;
     private static final Vector2 MY_GRAVITY = new Vector2(0.0, 9.8);
     private static final String TAG = "TouchRound";
-    private static Boolean touch = false;
     private GameObject userStick;
     private GameObject iaStick;
     private GameObject ball;
-    private GameObject centerLine;
+    private GameObject centerRect;
+    private GameObject centerCirc;
     private long start;
+
     Paint boxPaint = new Paint();
     Paint iaPaint = new Paint();
     Paint userPaint = new Paint();
+    Paint centerLinePaint = new Paint();
+    Paint centerCirclePaint = new Paint();
+
     GameObject box;
     GameObject goals;
+    GameObject background;
+
     Rectangle goalIa;
     Rectangle goalUser;
+
     Integer userGoals = 0;
     Integer iaGoals = 0;
+
     double lastAttack = 1000;
     private Context context;
     private Bitmap ballBmp;
@@ -61,36 +68,42 @@ public class TouchRound extends AbstractGame {
         return 40;
     }
 
-    private static Bitmap getImage(Context context, int resId,int[] sizes,int size) {
-        Bitmap bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ball);
+    private Bitmap getImage(Context context, int resId,int[] sizes,int size) {
+        Bitmap bmp = null;
         if (bmp == null) {
             Matrix matrix = new Matrix();
-            float scale = ((float) size) / sizes[0] / 5;
+            float scale = ((float) (size) / sizes[0]) /(float) getScale();
             matrix.postScale(scale, scale);
-            bmp = BitmapFactory.decodeResource(context.getResources(), resId);
+            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ball);
             bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
         }
         return bmp;
     }
 
-
-
     @Override
     public void init() {
-        int[] sizes = { 320, 800, 480, 320 };
+        // Una regla de tres para calcular en otros mobiles, siendo en el mio 800
+        int[] sizes = {800 * mobileWidth / 1080};
         int size = mobileWidth;
         ballBmp = getImage(context,0 , sizes,size);
-        this.landscape.add(new Renderable() {
 
+        this.landscape.add(new Renderable() {
             // Render goal numbers on screen
             @Override
             public void render(Canvas canvas, double scale) {
-                Paint paint1 = new Paint(Color.BLACK);
-                canvas.drawBitmap(ballBmp,(float)(mobileWidth / scale /  2) , (float)(mobileHeight / scale / 2), paint1 );
 
+                // Render ball image
+                Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
+                float radius = (float) ball.getFixture(0).getShape().getRadius();
+                canvas.save();
+                // Rotate the ball?
+               // canvas.rotate((float) (180 * body.getAngle() / Math.PI), scale * position.x, scale * position.y);
+                canvas.drawBitmap(ballBmp,(float) getScale() * (float) (ball.getWorldCenter().x - radius)  , (float) getScale() * (float)(ball.getWorldCenter().y - radius) , paint1 );
+                canvas.restore();
 
+                // Render punctuation
                 Paint paint = new Paint();
-                paint.setColor(Color.BLACK);
+                paint.setColor(Color.WHITE);
                 paint.setTextSize(50);
                 canvas.drawText(userGoals.toString(), mobileWidth / 8, mobileHeight / 2 - 100 , paint);
                 canvas.drawText(iaGoals.toString(), mobileWidth / 8, mobileHeight / 2 + 100, paint);
@@ -104,62 +117,76 @@ public class TouchRound extends AbstractGame {
         });
 
         this.world.setGravity(World.ZERO_GRAVITY);
-
         initWorld();
 
         this.world.addListener(new CollisionListener() {
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
-
-                if (body1 == ball && body2 == centerLine
-                        || body2 == ball && body1 == centerLine) {
+                // False collision ball with centerline
+                if (body1 == ball && body2 == centerRect
+                        || body2 == ball && body1 == centerRect) {
+                    return false;
+                }
+                if (body1 == userStick && body2 == centerCirc
+                        || body2 == userStick && body1 == centerCirc
+                        || body1 == iaStick && body2 == centerCirc
+                        || body2 == iaStick && body1 == centerCirc
+                        || body1 == ball && body2 == centerCirc
+                        || body2 == ball && body1 == centerCirc) {
                     return false;
                 }
 
-                if (body1 == ball && body2 == iaStick || body1 == iaStick && body2 == ball) {
-                    System.out.println("Returning home");
-                    System.out.println("Penetration: " + penetration);
-
-                    iaStickColliedWithBall = true;
-                    iaIsHome = false;
-                }
 
                 if (body1 == goals && body2 == ball || body1 == ball && body2 == goals) {
                     if (fixture1.getShape() == goalIa && fixture2.getShape() == ball.getFixture(0).getShape()) {
-                        System.out.println("Gol del jugador");
-                        world.removeBody(ball);
-                        ball = addBall();
-                        userGoals++;
-                        System.out.println("Bola añadida por gol");
+                        goal("user");
                     }
 
                     if (fixture1.getShape() == goalUser && fixture2.getShape() == ball.getFixture(0).getShape()) {
-                        iaGoals++;
-                        System.out.println("Gol de la ia");
-                        world.removeBody(ball);
-                        ball = addBall();
-                        System.out.println("Bola añadida por gol");
+                        goal("ia");
+
                     }
                 }
+
                 return true;
             }
 
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2) {
-                if (body1 == ball && body2 == centerLine
-                        || body2 == ball && body1 == centerLine) {
+                // False collision ball with centerline
+                if (body1 == ball && body2 == centerRect
+                        || body2 == ball && body1 == centerRect) {
                     return false;
                 }
+                if (body1 == userStick && body2 == centerCirc
+                        || body2 == userStick && body1 == centerCirc
+                        || body1 == iaStick && body2 == centerCirc
+                        || body2 == iaStick && body1 == centerCirc
+                        || body1 == ball && body2 == centerCirc
+                        || body2 == ball && body1 == centerCirc) {
+                    return false;
+                }
+
 
                 return true;
             }
 
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Manifold manifold) {
-                if (body1 == ball && body2 == centerLine
-                        || body2 == ball && body1 == centerLine) {
+                // False collision ball with centerline
+                if (body1 == ball && body2 == centerRect
+                        || body2 == ball && body1 == centerRect) {
                     return false;
                 }
+                if (body1 == userStick && body2 == centerCirc
+                        || body2 == userStick && body1 == centerCirc
+                        || body1 == iaStick && body2 == centerCirc
+                        || body2 == iaStick && body1 == centerCirc
+                        || body1 == ball && body2 == centerCirc
+                        || body2 == ball && body1 == centerCirc) {
+                    return false;
+                }
+
 
                 return true;
             }
@@ -173,48 +200,83 @@ public class TouchRound extends AbstractGame {
         this.start = System.currentTimeMillis();
     }
 
+    private void goal(String goal) {
+        world.removeBody(ball);
+        world.removeBody(iaStick);
+        world.removeBody(userStick);
+        iaStick = addIaStick();
+        userStick = addUserStick();
+
+        if (goal == "user") {
+            userGoals++;
+            ball = addBall("ia");
+            lastAttack += 1000;
+        }
+        else if (goal == "ia") {
+            ball = addBall("user");
+            iaGoals++;
+        }
+    }
+
     private void initWorld() {
-        double sidesMargin = 20 / getScale();
-        double boxHeight = 20 / getScale();
+        double sidesMargin = 10 / getScale();
+        double boxHeight = 10 / getScale();
 
-        boxPaint.setColor(Color.RED);
-        iaPaint.setColor(Color.BLUE);
-        userPaint.setColor(Color.MAGENTA);
-
-        double borderGoalWidth = 400 / getScale();
+        double borderGoalWidth = mobileWidth / getScale() * 35 / 100;
         double borderGoalHeight = boxHeight;
-        double goalWidth = 240 /getScale();
-        double goalHeight = 20/getScale();
+        double goalWidth = mobileWidth / getScale() * 30 / 100;
+        double goalHeight = 10 / getScale();
 
-        Rectangle leftBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight +3);
-        leftBorderGoalIa.translate(borderGoalWidth / 2 + sidesMargin, goalHeight);
+        boxPaint.setColor(Color.GRAY);
+        iaPaint.setColor(Color.RED);
+        userPaint.setColor(Color.MAGENTA);
+        centerLinePaint.setColor(Color.GRAY);
+        centerCirclePaint.setColor(Color.GRAY);
+        centerCirclePaint.setStrokeWidth( (float) sidesMargin * (float)getScale());
+        centerCirclePaint.setStyle(Paint.Style.STROKE);
 
-        Rectangle rightBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight+3);
-        rightBorderGoalIa.translate(mobileWidth/ getScale() - borderGoalWidth/ 2 - sidesMargin , goalHeight);
+        Rectangle backgroundRect = new Rectangle(mobileWidth / getScale() - sidesMargin , mobileHeight / getScale() - sidesMargin);
+        backgroundRect.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale());
 
-        goalUser = new Rectangle(goalWidth, goalHeight+3);
+        Rectangle leftBorderGoalIa = new Rectangle(borderGoalWidth, goalHeight);
+        leftBorderGoalIa.translate(borderGoalWidth / 2 + sidesMargin, sidesMargin);
+
+        Rectangle rightBorderGoalIa = new Rectangle(borderGoalWidth, goalHeight);
+        rightBorderGoalIa.translate(mobileWidth/ getScale() - borderGoalWidth/ 2 - sidesMargin , sidesMargin);
+
+        goalUser = new Rectangle(goalWidth, goalHeight);
         goalUser.translate(mobileWidth / 2 / getScale(), mobileHeight /getScale() - sidesMargin);
 
-        Rectangle rightBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight+3);
+        Rectangle rightBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
         rightBorderGoalUser.translate(mobileWidth/ getScale() - borderGoalWidth/ 2 - sidesMargin, mobileHeight /getScale() - sidesMargin);
 
-        Rectangle leftBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight+3);
+        Rectangle leftBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
         leftBorderGoalUser.translate(borderGoalWidth / 2 + sidesMargin, mobileHeight /getScale() - sidesMargin);
 
-        goalIa = new Rectangle(goalWidth, goalHeight+3);
+        goalIa = new Rectangle(goalWidth, goalHeight);
         goalIa.translate(mobileWidth / 2 / getScale(), sidesMargin);
 
-        Rectangle left = new Rectangle(sidesMargin + 3, mobileHeight / getScale() - sidesMargin);
+        Rectangle left = new Rectangle(boxHeight, mobileHeight / getScale() - sidesMargin * 2);
         left.translate(sidesMargin, mobileHeight / 2 / getScale());
 
-        Rectangle right = new Rectangle(sidesMargin + 3, mobileHeight / getScale() - sidesMargin);
+        Rectangle right = new Rectangle(boxHeight, mobileHeight / getScale() - sidesMargin * 2 );
         right.translate(mobileWidth / getScale() - sidesMargin, mobileHeight / 2 / getScale());
 
-        Rectangle center = new Rectangle(mobileWidth / getScale() - sidesMargin * 2, sidesMargin);
-        center.translate(mobileWidth/ 2 / getScale(), mobileHeight / 2/  getScale() );
-        centerLine = new GameObject(boxPaint);
-        centerLine.addFixture(center);
+        Circle centerC = new Circle(200 / getScale());
+        centerC.translate(mobileWidth/ 2 / getScale(), mobileHeight / 2/  getScale() );
 
+
+        Rectangle centerR = new Rectangle(mobileWidth / getScale() - sidesMargin * 2, boxHeight);
+        centerR.translate(mobileWidth/ 2 / getScale(), mobileHeight / 2/  getScale() );
+        centerRect = new GameObject(centerLinePaint);
+        centerCirc = new GameObject(centerCirclePaint);
+        centerRect.addFixture(centerR);
+        centerCirc.addFixture(centerC);
+
+
+        background = new GameObject(centerLinePaint);
+        background.addFixture(backgroundRect);
+        background.setMass(new Mass(new Vector2(0,0),0,0));
         goals = new GameObject(iaPaint);
         box = new GameObject(boxPaint);
         box.setMass(MassType.INFINITE);
@@ -227,21 +289,16 @@ public class TouchRound extends AbstractGame {
         box.addFixture(left);
         box.addFixture(right);
 
-
-        /*// TODO PREGUNTAR POR QUE NO SE PUEDE RENDERIZAR ESTO
-        GameObject something = new GameObject(new Paint(Color.LTGRAY));
-        something.addFixture(Geometry.createIsoscelesTriangle(300 /getScale(), 300/getScale()));
-        something.translate(300, 700);
-        this.world.addBody(something);*/
-
         box.setMass(MassType.INFINITE);
 
+        //this.world.addBody(background);
         this.world.addBody(goals);
         this.world.addBody(box);
-        this.world.addBody(centerLine);
+        this.world.addBody(centerRect);
+        this.world.addBody(centerCirc);
         iaStick = addIaStick();
         userStick = addUserStick();
-        ball = addBall();
+        ball = addBall("user");
     }
 
 
@@ -262,7 +319,7 @@ public class TouchRound extends AbstractGame {
 
         GameObject ball = new GameObject(paint);
         //ball.setUserData(new Object());
-        ball.addFixture(new Circle(0.7), 10, 0.0, 1);
+        ball.addFixture(new Circle(28 / getScale()), 10, 0.0, 1);
         ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale());
         ball.setMass(MassType.NORMAL);
         ball.setLinearDamping(1);
@@ -271,18 +328,21 @@ public class TouchRound extends AbstractGame {
         return ball;
     }
 
-    private GameObject addBall() {
-        double iaGoalX = goals.getFixture(0).getShape().getCenter().x;
-        double leftWallY = box.getFixture(4).getShape().getCenter().y;
-
+    private GameObject addBall(String position) {
         Paint paint = new Paint();
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.MAGENTA);
 
         GameObject ball = new GameObject(paint);
-        ball.addFixture(new Circle(0.7), 10, 0.0, 1);
-        ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale());
+        ball.addFixture(new Circle(28 / getScale()), 0.001, 0.0, 1);
+        if (position == "user") {
+            ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale() + 50 / getScale());
+
+        } else if (position == "ia") {
+            ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale() - 50 / getScale());
+
+        }
         ball.setMass(MassType.NORMAL);
-        ball.setLinearDamping(1);
+        ball.setLinearDamping(0.5);
 
         this.world.addBody(ball);
         return ball;
@@ -296,7 +356,7 @@ public class TouchRound extends AbstractGame {
         paint.setColor(Color.BLUE);
 
         GameObject iaStick = new GameObject(paint);
-        iaStick.addFixture(new Circle(2), 30, 0, 0.002);
+        iaStick.addFixture(new Circle(80 / getScale()), 20, 0, 0.002);
         iaStick.translate(x, y);
         iaStick.setMass(MassType.NORMAL);
         iaStick.setLinearDamping(3);
@@ -310,12 +370,10 @@ public class TouchRound extends AbstractGame {
         double y = goals.getFixture(1).getShape().getCenter().y - 5;
 
         Paint paint = new Paint();
-        paint.setColor(Color.MAGENTA);
-
-        // System.out.println("Posicion del stick: X - " + x + " Y: " + y);
+        paint.setColor(Color.BLUE);
 
         GameObject userStick = new GameObject(paint);
-        userStick.addFixture(new Circle(2), 30, 0.0, 0.002 );
+        userStick.addFixture(new Circle(80 / getScale()), 20, 0.0, 0.002 );
         userStick.setMass(MassType.NORMAL);
         userStick.translate(x, y);
         userStick.setLinearDamping(20);
@@ -325,11 +383,12 @@ public class TouchRound extends AbstractGame {
 
     @Override
     public void update() {
-        calculateIaStickPosition();
+        //calculateIaStickPosition();
+        calculateIa();
         checkBall();
         checkUserStick();
         checkIaStick();
-
+        System.out.println( "Ball X: " +  ball.getWorldCenter().x + "Ball Y: ");
     }
 
     @Override
@@ -345,8 +404,11 @@ public class TouchRound extends AbstractGame {
 
     private void checkBall() {
         double corner = 20 / getScale() + 20 / getScale();
+        corner = 0;
         double cornerX = mobileWidth / getScale() - corner;
+        cornerX = mobileWidth;
         double cornerY = mobileHeight / getScale() - corner;
+        cornerY = mobileHeight;
         double ballX = ball.getWorldCenter().x;
         double ballY = ball.getWorldCenter().y;
 
@@ -357,7 +419,7 @@ public class TouchRound extends AbstractGame {
             System.out.println(cornerY);
 
             world.removeBody(ball);
-            ball = addBall();
+            ball = addBall("user");
         }
     }
 
@@ -385,44 +447,29 @@ public class TouchRound extends AbstractGame {
     public void finish() {
     }
 
-
-    private void calculateIaStickPosition() {
-        if (!iaIsHome && iaStickColliedWithBall) {
-            double bdx = goals.getFixture(0).getShape().getCenter().x - iaStick.getWorldCenter().x;
-            double bdy = goals.getFixture(0).getShape().getCenter().y - iaStick.getWorldCenter().y;
-            double bradius = goals.getFixture(0).getShape().getRadius();
-            double bdistancia2 = bdx * bdx + bdy * bdy / 2;
-            // Si está más lejos del radio de la porteria se acerca
-            if (bdistancia2 > bradius * bradius) {
-                iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * bdistancia2 * (goals.getFixture(0).getShape().getCenter().x - iaStick.getWorldCenter().x), iaStick.getMass().getMass() * bdistancia2 * (goals.getFixture(0).getShape().getCenter().y - iaStick.getWorldCenter().y)));
-
-            } else {
-                // En cuanto se acerca , se aplica la misma fuerza contraria
-                iaIsHome = true;
-                iaStickColliedWithBall = false;
-                iaStick.applyForce(new Vector2(iaStick.getForce().x * -1 , iaStick.getForce().y * -1));
-            }
-        } else {
+    public void calculateIa() {
+        double homeX = goals.getFixture(0).getShape().getCenter().x;
+        double homeY = goals.getFixture(0).getShape().getCenter().y + 5;
             double dx = ball.getWorldCenter().x - iaStick.getWorldCenter().x;
             double dy = ball.getWorldCenter().y - iaStick.getWorldCenter().y;
             double radius = ball.getFixture(0).getShape().getRadius();
             double distancia2 = dx * dx + dy * dy;
-            // Si pasa del centro la bola, el stick la sigue en el eje X
+            // Si pasa del centro la bola se dirige al eje y de su casa
             if (ball.getWorldCenter().y > mobileHeight / 2 / getScale()) {
-                iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 0.05 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 0.05, 0));
+                iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 0.5 * (homeX - iaStick.getWorldCenter().x) * 0.5, iaStick.getMass().getMass() * distancia2 * 0.5 * (homeY - iaStick.getWorldCenter().y) * 0.5));
+                iaStick.setLinearVelocity(0,0);
             } else {
                 // Cuando la bola está en su campo y lejano al stick ataca
-                iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 0.05 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 0.05, 0));
                 if (distancia2 > radius) {
                     if ((System.currentTimeMillis() - this.start) > lastAttack) {
-                        iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * (ball.getWorldCenter().x - iaStick.getWorldCenter().x) * 5, iaStick.getMass().getMass() * distancia2 * (ball.getWorldCenter().y - iaStick.getWorldCenter().y) * 5));
+                        iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * 400 *  (ball.getWorldCenter().x - iaStick.getWorldCenter().x), iaStick.getMass().getMass() * 400 *  (ball.getWorldCenter().y - iaStick.getWorldCenter().y)));
                         iaStick.setLinearVelocity(0, 0);
-                        lastAttack += 2500;
+                        lastAttack += 100;
                     }
                 }
             }
         }
-    }
+
 
     private void calculaMovimiento(MotionEvent event, double scale) {
         double dx = event.getX() / scale - userStick.getWorldCenter().x;
