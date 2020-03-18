@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.Window;
@@ -35,6 +36,7 @@ public abstract class MobileGameActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         this.gameView = findViewById(R.id.game_view);
+        this.gameView.setBackgroundColor(Color.BLACK);
         this.gameView.setGame(this.getGame());
         this.gameView.setContext(this);
         new GameRenderer(this.gameView, this, 60).start();
