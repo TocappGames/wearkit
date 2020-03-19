@@ -27,12 +27,14 @@ import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.Random;
+
 import static java.lang.Math.abs;
 
-enum Level {EASY, MEDIUM, DIFFICULT};
+;
 
 public class TouchRound extends AbstractGame {
-    private Level level;
+    public int level;
     private static int mobileWidth;
     private static int mobileHeight;
     private static final Vector2 MY_GRAVITY = new Vector2(0.0, 9.8);
@@ -69,6 +71,9 @@ public class TouchRound extends AbstractGame {
     boolean iaStickColliedWithBall;
     boolean iaIsHome;
 
+    public TouchRound(int level) {
+        this.level = level;
+    }
 
     @Override
     public double getScale() {
@@ -108,14 +113,14 @@ public class TouchRound extends AbstractGame {
             public void render(Canvas canvas, double scale) {
                 String text = "as";
                 switch (level) {
-                    case EASY:
+                    case 1:
                         text = "Easy";
                         break;
-                    case MEDIUM:
+                    case 2:
                         text = "Medium";
                         break;
-                    case DIFFICULT:
-                        text = "Difficult";
+                    case 3:
+                        text = "Hard";
                         break;
                 }
                         Paint paint2 = new Paint();
@@ -179,16 +184,6 @@ public class TouchRound extends AbstractGame {
 
                     if (fixture1.getShape() == goalUser && fixture2.getShape() == ball.getFixture(0).getShape()) {
                         goal("ia");
-                        if (iaGoals % 2 == 0) {
-                            if (level == Level.EASY) {
-                                level = Level.MEDIUM;
-                            } else if (level == Level.MEDIUM) {
-                                level = Level.DIFFICULT;
-                            } else if (level == Level.DIFFICULT) {
-                                level = Level.EASY;
-                            }
-
-                        }
                         if (iaGoals == 7) {
                             win("ia");
                         }
@@ -265,7 +260,6 @@ public class TouchRound extends AbstractGame {
     }
 
     private void initWorld() {
-        level = Level.EASY;
         double sidesMargin = 100 / getScale();
         double boxHeight = 10 / getScale();
 
@@ -354,14 +348,15 @@ public class TouchRound extends AbstractGame {
     private GameObject addBall(String position) {
         Paint paint = new Paint();
         paint.setColor(Color.MAGENTA);
-
         GameObject ball = new GameObject(paint);
+        Random r = new Random();
+        int xRange = r.nextInt(((200 + 200) - 200) / (int) getScale());
         ball.addFixture(new Circle(28 / getScale()), 0.001, 0.0, 1);
         if (position == "user") {
-            ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale() + 50 / getScale());
+            ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale() + 400 / getScale());
 
         } else if (position == "ia") {
-            ball.translate(mobileWidth / 2 /getScale(), mobileHeight / 2 /getScale() - 50 / getScale());
+            ball.translate(mobileWidth / 2 /getScale() + xRange, mobileHeight / 2 /getScale() - 400 / getScale());
         }
         else if (position == "relocate") {
             // Recolocar la bola a quien se le haya salido
@@ -501,23 +496,23 @@ public class TouchRound extends AbstractGame {
             double force = 1;
             double ballVel = 60;
             switch (level) {
-                case EASY:
+                case 1:
                     ballVel = 50;
-                    nextAttack = 200;
-                    force = 0.5;
+                    nextAttack = 300;
+                    force = 500;
                     break;
-                case MEDIUM:
+                case 2:
+                    ballVel = 60;
+                    nextAttack = 120;
+                    force = 500;
+                    break;
+                case 3:
                     ballVel = 70;
-                    nextAttack = 150;
-                    force = 2;
-                    break;
-                case DIFFICULT:
-                    ballVel = 90;
                     nextAttack = 100;
-                    force = 3;
+                    force = 550;
             }
             if (abs(ball.getLinearVelocity().x) < ballVel && abs(ball.getLinearVelocity().y) < ballVel)
-                    iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * 400 * force * (ball.getWorldCenter().x - iaStick.getWorldCenter().x), iaStick.getMass().getMass() * 400 *  (ball.getWorldCenter().y - iaStick.getWorldCenter().y)));
+                    iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * force * (ball.getWorldCenter().x - iaStick.getWorldCenter().x), iaStick.getMass().getMass() * force * (ball.getWorldCenter().y - iaStick.getWorldCenter().y)));
                     iaStick.setLinearVelocity(0, 0);
                 }
 
