@@ -39,11 +39,6 @@ public class GameView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        this.matrix.reset();
-        this.matrix.postRotate(180);
-        this.matrix.postTranslate(getWidth(), getHeight());
-        canvas.setMatrix(this.matrix);
-
         if(this.status.equals(STATUS_READY)){
             this.game.init();
             this.status = STATUS_INITIALIZED;
