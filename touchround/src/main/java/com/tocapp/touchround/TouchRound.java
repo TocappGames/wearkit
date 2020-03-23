@@ -287,10 +287,10 @@ public class TouchRound extends AbstractGame {
         userStick = addUserStick();
 
         if (goal == "user") {
-            userGoals++;
             this.userScores = true;
             this.goalTime = System.currentTimeMillis();
             ball = addBall("ia");
+            userGoals++;
             //lastAttack += System.currentTimeMillis() - this.start + lastAttack;
         } else if (goal == "ia") {
             ball = addBall("user");
@@ -301,14 +301,14 @@ public class TouchRound extends AbstractGame {
     }
 
     private void initWorld() {
-        sidesMargin = 50 / getScale();
-        boxHeight = 5 / getScale();
+        sidesMargin = mobileWidth / getScale() * 1 / 100;
+        boxHeight = mobileWidth / getScale() * 3 / 100;;
 
         double borderGoalWidth = (mobileWidth / getScale() - sidesMargin * 2) * 35 / 100;
         double borderGoalHeight = boxHeight;
 
         double goalWidth = (mobileWidth / getScale() - sidesMargin * 2) * 30 / 100;
-        double goalHeight = 20 / getScale();
+        double goalHeight = boxHeight;
 
         boxPaint.setColor(Color.GRAY);
         iaPaint.setColor(Color.RED);
@@ -392,13 +392,14 @@ public class TouchRound extends AbstractGame {
         GameObject ball = new GameObject(paint);
         Random r = new Random();
         double xRange = r.nextInt(((200 + 200) - 200) / (int) getScale());
+        System.out.println("Rango: " + xRange);
         ball.addFixture(new Circle(mobileWidth / getScale() * 5 / 100), 0.001, 0.0, 1);
         if (position == "user") {
-            ball.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale() + mobileHeight /getScale() * 5 / 100 + sidesMargin);
+            ball.translate(mobileWidth / 2 / getScale(), mobileHeight /getScale() * 70 / 100 + sidesMargin);
             System.out.println("Ball position");
             System.out.println(ball.getWorldCenter().x + " " + ball.getWorldCenter().y);
         } else if (position == "ia") {
-            ball.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale() - mobileHeight /getScale() * 5 / 100 - sidesMargin);
+            ball.translate(mobileWidth / 2 / getScale() + xRange, mobileHeight /getScale() * 30 / 100 - sidesMargin);
         } else if (position == "relocate") {
             // Recolocar la bola a quien se le haya salido
         }
@@ -467,12 +468,9 @@ public class TouchRound extends AbstractGame {
     }
 
     private void checkBall() {
-        double corner = 20 / getScale() + 20 / getScale();
-        corner = 0;
+        double corner = sidesMargin;
         double cornerX = mobileWidth / getScale() - corner;
-        cornerX = mobileWidth / getScale();
         double cornerY = mobileHeight / getScale() - corner;
-        cornerY = mobileHeight / getScale();
         double ballX = ball.getWorldCenter().x;
         double ballY = ball.getWorldCenter().y;
 
