@@ -30,8 +30,6 @@ public class GameView extends View {
     private static final String TAG = "GameView";
     private static final String STATUS_READY = "ready";
     private static final String STATUS_INITIALIZED = "initialized";
-    private final Matrix matrix;
-    private Vector<Integer> displaySize;
     private Game game;
     private String status;
     private double startTime;
@@ -41,7 +39,6 @@ public class GameView extends View {
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.status = STATUS_READY;
-        this.matrix = new Matrix();
 
 
     }
@@ -57,7 +54,7 @@ public class GameView extends View {
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-        this.game.setDimensions(display.widthPixels,display.heightPixels);
+        this.game.setDimensions(display.widthPixels,display.heightPixels, display.density);
     }
 
     @Override

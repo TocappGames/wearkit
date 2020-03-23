@@ -16,7 +16,7 @@ public interface Game {
     double getScale();
     void init();
     void update();
-    void setDimensions(int width, int height);
+    void setDimensions(int width, int height, float dpi);
     void setContext(Context context);
     void finish();
     void touchEvent(MotionEvent event, double scale);
