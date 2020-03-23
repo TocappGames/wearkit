@@ -2,6 +2,7 @@ package com.tocapp.dyn4jtest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,11 +12,6 @@ import com.tocapp.sdk.engine.Game;
 import com.tocapp.touchround.TouchRound;
 
 public class NewActivity extends AppCompatActivity {
-
-    private int level;
-    protected Game getGame() {
-        return new TouchRound(level);
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,23 +23,29 @@ public class NewActivity extends AppCompatActivity {
         easy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                level = 1;
-                getGame();
+                MainActivity.level = 1;
+
+                Intent i = new Intent(NewActivity.this, MainActivity.class);
+                startActivity(i);
             }
         });
 
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                level = 2;
-                getGame();
+                MainActivity.level = 2;
+
+                Intent i = new Intent(NewActivity.this, MainActivity.class);
+                startActivity(i);
             }
         });
         hard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                level = 3;
-                getGame();
+                MainActivity.level = 3;
+
+                Intent i = new Intent(NewActivity.this, MainActivity.class);
+                startActivity(i);
 
             }
         });

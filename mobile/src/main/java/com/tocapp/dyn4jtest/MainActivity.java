@@ -10,8 +10,11 @@ import com.tocapp.sdk.engine.Game;
 import com.tocapp.touchround.TouchRound;
 
 public class MainActivity extends MobileGameActivity {
+
+    static public int level = 1;
+
     protected Game getGame() {
-        return new TouchRound(3);
+        return new TouchRound(level);
     }
 
 }
