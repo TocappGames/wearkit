@@ -77,6 +77,9 @@ public class GameView extends View {
         for (Renderable r: this.game.getLandscape()) {
             r.render(canvas, this.game.getScale());
         }
+
+        this.game.postRender();
+
     }
 
     @Override
