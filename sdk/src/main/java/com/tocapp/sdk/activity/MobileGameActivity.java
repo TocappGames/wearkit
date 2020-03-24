@@ -21,7 +21,6 @@ import java.util.Vector;
 public abstract class MobileGameActivity extends AppCompatActivity {
 
     private GameView gameView;
-    private Context context;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

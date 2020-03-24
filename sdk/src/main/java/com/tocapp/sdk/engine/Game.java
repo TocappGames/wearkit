@@ -18,6 +18,7 @@ public interface Game {
     void update();
     void setDimensions(int width, int height, float dpi);
     void setContext(Context context);
+    void postRender();
     void finish();
     void touchEvent(MotionEvent event, double scale);
 

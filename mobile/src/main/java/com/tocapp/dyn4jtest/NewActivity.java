@@ -7,10 +7,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.tocapp.sdk.display.GameView;
-import com.tocapp.sdk.engine.Game;
-import com.tocapp.touchround.TouchRound;
-
 public class NewActivity extends AppCompatActivity {
 
     @Override
