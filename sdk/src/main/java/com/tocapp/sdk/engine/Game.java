@@ -23,5 +23,6 @@ public interface Game {
     void touchEvent(MotionEvent event, double scale);
 
     World getWorld();
+    List<Renderable> getBackgroundLandscape();
     List<Renderable> getLandscape();
 }

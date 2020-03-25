@@ -15,9 +15,12 @@ abstract public class AbstractGame implements Game {
     protected Context context;
     protected World world;
     protected List<Renderable> landscape;
+    protected List<Renderable> backgroundLandscape;
+
 
     public AbstractGame() {
         this.landscape = new ArrayList<>();
+        this.backgroundLandscape = new ArrayList<>();
         this.world = new World();
     }
 
@@ -25,6 +28,9 @@ abstract public class AbstractGame implements Game {
     public List<Renderable> getLandscape() {
         return landscape;
     }
+
+    @Override
+    public List<Renderable> getBackgroundLandscape() {return backgroundLandscape;}
 
     @Override
     public World getWorld() {

@@ -5,7 +5,6 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 
@@ -24,7 +23,6 @@ import org.dyn4j.dynamics.ContinuousDetectionMode;
 import org.dyn4j.dynamics.Settings;
 import org.dyn4j.dynamics.World;
 import org.dyn4j.dynamics.contact.ContactConstraint;
-import org.dyn4j.geometry.Mass;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
@@ -51,10 +49,15 @@ public class AirHockey extends AbstractGame {
     private long start;
 
     private Paint boxPaint = new Paint();
-    private Paint iaPaint = new Paint();
-    private Paint userPaint = new Paint();
+    private Paint goalsPaint = new Paint();
+    private Paint ballPaint = new Paint();
+    private Paint sticksPaint = new Paint();
     private Paint centerLinePaint = new Paint();
     private Paint centerCirclePaint = new Paint();
+
+    private int backgroundImage;
+    private Bitmap backgroundImageBmp;
+    private Bitmap backgroundImageBmp2;
 
     private GameObject box;
     private GameObject goals;
@@ -81,7 +84,12 @@ public class AirHockey extends AbstractGame {
     private boolean iaWin;
     private double goalTime;
 
-    public AirHockey(int level) {
+    public AirHockey(int level, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
+        this.ballPaint.setColor(ballColor);
+        this.backgroundImage = backgroundImage;
+        this.sticksPaint.setColor(sticksColor);
+        this.boxPaint.setColor(boxColor);
+        this.goalsPaint.setColor(goalsColor);
         this.level = level;
     }
 
@@ -98,29 +106,43 @@ public class AirHockey extends AbstractGame {
         }
     }
 
-    private Bitmap getImage(Context context, int resId, int[] sizes, int size) {
-        Bitmap bmp = null;
-        if (bmp == null) {
-            Matrix matrix = new Matrix();
-            float scale = ((float) (size) / sizes[0]) / (float) getScale();
-            matrix.postScale(scale, scale);
-            bmp = BitmapFactory.decodeResource(context.getResources(), R.drawable.ball);
-            bmp = Bitmap.createBitmap(bmp, 0, 0, bmp.getWidth(), bmp.getHeight(), matrix, true);
-        }
-        return bmp;
-    }
 
     @Override
     public void init() {
+        initWorld();
 
         Settings settings = this.world.getSettings();
         settings.setContinuousDetectionMode(ContinuousDetectionMode.ALL);
         //settings.setMaximumTranslation(1);
+        backgroundImageBmp = null;
+        if (backgroundImage != 0) {
+            backgroundImageBmp = BitmapFactory.decodeResource(
+                    context.getResources(),
+                    backgroundImage
+            );
+            backgroundImageBmp2 = Bitmap.createScaledBitmap(backgroundImageBmp, mobileWidth - (int) (sidesMargin * getScale()) * 2 - (int) (boxHeight * getScale()), mobileHeight - (int) (sidesMargin * getScale()) * 2 - (int) (boxHeight * getScale()), false);
 
-        // Una regla de tres para calcular en otros mobiles, siendo en el mio 800
-        /*int[] sizes = {800 * mobileWidth / 1080};
-        int size = mobileWidth;
-        ballBmp = getImage(context, 0, sizes, size);*/
+        }
+
+        this.backgroundLandscape.add(new Renderable() {
+            @Override
+            public void render(Canvas canvas, double scale) {
+                System.out.println(scale);
+                if (backgroundImageBmp != null) {
+                    canvas.drawBitmap(
+                            backgroundImageBmp2, // Bitmap
+                            (int) (sidesMargin * scale) + (int) (boxHeight * getScale() / 2), // Left
+                            (int) (sidesMargin * scale) + (int) (boxHeight * getScale() / 2), // Top
+                            null // Paint
+                    );
+                }
+            }
+
+            @Override
+            public void render(Canvas canvas, Paint paint, double scale) {
+
+            }
+        });
 
         this.landscape.add(new Renderable() {
             @Override
@@ -143,15 +165,6 @@ public class AirHockey extends AbstractGame {
                 paint2.setColor(Color.WHITE);
                 paint2.setTextSize(5 / (int) getScale());
                 canvas.drawText(text, mobileWidth / 8, mobileHeight / 8, paint2);
-
-                // Render ball
-               /* Paint paint1 = new Paint(Paint.ANTI_ALIAS_FLAG);
-                float radius = (float) ball.getFixture(0).getShape().getRadius();
-                canvas.save();
-                // Rotate the ball?
-                // canvas.rotate((float) (180 * body.getAngle() / Math.PI), scale * position.x, scale * position.y);
-                canvas.drawBitmap(ballBmp, (float) getScale() * (float) (ball.getWorldCenter().x - radius), (float) getScale() * (float) (ball.getWorldCenter().y - radius), paint1);
-                canvas.restore();*/
 
                 // Render punctuation
                 Paint paint = new Paint();
@@ -193,7 +206,6 @@ public class AirHockey extends AbstractGame {
         });
 
         this.world.setGravity(World.ZERO_GRAVITY);
-        initWorld();
 
         this.world.addListener(new CollisionListener() {
             @Override
@@ -290,26 +302,14 @@ public class AirHockey extends AbstractGame {
     }
 
     private void initWorld() {
-        sidesMargin = mobileWidth / getScale() * 1 / 100;
-        boxHeight = mobileWidth / getScale() * 3 / 100;
-
+        sidesMargin = mobileWidth / getScale() * 5 / 100;
+        boxHeight = mobileWidth / getScale() * 2 / 100;
 
         double borderGoalWidth = (mobileWidth / getScale() - sidesMargin * 2) * 35 / 100;
         double borderGoalHeight = boxHeight;
 
         double goalWidth = (mobileWidth / getScale() - sidesMargin * 2) * 30 / 100;
         double goalHeight = boxHeight;
-
-        boxPaint.setColor(Color.GRAY);
-        iaPaint.setColor(Color.RED);
-        userPaint.setColor(Color.MAGENTA);
-        centerLinePaint.setColor(Color.GRAY);
-        centerCirclePaint.setColor(Color.GRAY);
-        centerCirclePaint.setStrokeWidth((float) boxHeight * (float) getScale());
-        centerCirclePaint.setStyle(Paint.Style.STROKE);
-
-        Rectangle backgroundRect = new Rectangle(mobileWidth / getScale() - sidesMargin, mobileHeight / getScale() - sidesMargin);
-        backgroundRect.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale());
 
         Rectangle leftBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight);
         leftBorderGoalIa.translate(borderGoalWidth / 2 + sidesMargin, sidesMargin);
@@ -340,16 +340,18 @@ public class AirHockey extends AbstractGame {
 
         Rectangle centerR = new Rectangle(mobileWidth / getScale() - sidesMargin * 2, boxHeight);
         centerR.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale());
-        centerRect = new GameObject(centerLinePaint);
+
+        centerCirclePaint.setColor(boxPaint.getColor());
+        centerCirclePaint.setStrokeWidth((float) boxHeight * (float) getScale());
+        centerCirclePaint.setStyle(Paint.Style.STROKE);
+
+        centerRect = new GameObject(boxPaint);
         centerCirc = new GameObject(centerCirclePaint);
         centerRect.addFixture(centerR);
         centerCirc.addFixture(centerC);
 
 
-        background = new GameObject(centerLinePaint);
-        background.addFixture(backgroundRect);
-        background.setMass(new Mass(new Vector2(0, 0), 0, 0));
-        goals = new GameObject(iaPaint);
+        goals = new GameObject(goalsPaint);
         box = new GameObject(boxPaint);
         box.setMass(MassType.INFINITE);
         goals.addFixture(goalIa);
@@ -363,7 +365,6 @@ public class AirHockey extends AbstractGame {
 
         box.setMass(MassType.INFINITE);
 
-        //this.world.addBody(background);
         this.world.addBody(goals);
         this.world.addBody(box);
         this.world.addBody(centerRect);
@@ -377,9 +378,7 @@ public class AirHockey extends AbstractGame {
     /* ----------------------------------------------------------------------------------------- */
 
     private GameObject addBall(String position) {
-        Paint paint = new Paint();
-        paint.setColor(Color.MAGENTA);
-        GameObject ball = new GameObject(paint);
+        GameObject ball = new GameObject(ballPaint);
         Random r = new Random();
         double xRange = r.nextInt(((200 + 200) - 200) / (int) getScale());
         System.out.println("Rango: " + xRange);
@@ -402,8 +401,7 @@ public class AirHockey extends AbstractGame {
         double x = goals.getFixture(0).getShape().getCenter().x;
         double y = goals.getFixture(0).getShape().getCenter().y + mobileHeight / getScale() * 10 / 100;
 
-        Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
+        Paint paint = new Paint(sticksPaint);
 
         GameObject iaStick = new GameObject(paint);
         iaStick.addFixture(new Circle(mobileWidth / getScale() * 7 / 100), 2, 0, 0.002);
@@ -419,10 +417,7 @@ public class AirHockey extends AbstractGame {
         double x = goals.getFixture(1).getShape().getCenter().x;
         double y = goals.getFixture(1).getShape().getCenter().y - mobileHeight / getScale() * 10 / 100;
 
-        Paint paint = new Paint();
-        paint.setColor(Color.BLUE);
-
-        GameObject userStick = new GameObject(paint);
+        GameObject userStick = new GameObject(sticksPaint);
         userStick.addFixture(new Circle(mobileWidth / getScale() * 7 / 100), 2, 0.0, 0.002);
         userStick.setMass(MassType.NORMAL);
         userStick.translate(x, y);
@@ -467,6 +462,7 @@ public class AirHockey extends AbstractGame {
         mobileHeight = height;
 
     }
+
 
     @Override
     public void setContext(Context context) {
@@ -587,32 +583,35 @@ public class AirHockey extends AbstractGame {
         double stickMass = userStick.getMass().getMass();
 
         // Si el dedo se encuentra fuera de la bola, se mueve
-        if (distancia2 > radius * radius / 16)
-            userStick.applyForce(new Vector2(stickMass * distancia2 * 60 * dx * 10, stickMass * distancia2 * 60 * dy * 10));
+        if (distancia2 > radius * radius / 22)
+            userStick.applyForce(new Vector2(stickMass * distancia2 * dx * 10000, stickMass * distancia2 * dy * 10000));
         else
             this.event = null;
-            userStick.setLinearVelocity(0, 0);
+        userStick.setLinearVelocity(0, 0);
     }
 
     @Override
     public void touchEvent(MotionEvent event, double scale) {
         // Mientras nadie haya ganado
+        double ballRadius = ball.getFixture(0).getShape().getRadius();
         if (!userWin && !iaWin) {
             double eventX = event.getX() / scale;
             double eventY = event.getY() / scale;
             // Si el evento se encuentra dentro del tablero
-            if (eventX < mobileWidth / scale - sidesMargin - boxHeight / 2
-                    && eventX > sidesMargin + boxHeight / 2
-                    && eventY < mobileHeight / scale - sidesMargin - boxHeight / 2
-                    && eventY > sidesMargin + boxHeight / 2)
+            if (eventX < mobileWidth / scale - sidesMargin - boxHeight - ballRadius
+                    && eventX > sidesMargin + boxHeight + ballRadius
+                    && eventY < mobileHeight / scale - sidesMargin - boxHeight
+                    && eventY > mobileHeight / 2 / getScale() + boxHeight + ballRadius * 2) {
                 // Si el evento se encuentra en su campo
-                if (eventY > mobileHeight / 2 / getScale() + boxHeight / 2)
-                    switch (event.getAction() & MotionEvent.ACTION_MASK) {
-                        case MotionEvent.ACTION_DOWN:
-                        case MotionEvent.ACTION_MOVE:
-                            this.event = event;
-                            break;
-                    }
+                switch (event.getAction() & MotionEvent.ACTION_MASK) {
+                    case MotionEvent.ACTION_DOWN:
+                    case MotionEvent.ACTION_MOVE:
+                        this.event = event;
+                        break;
+                }
+            } else {
+                this.event = null;
+            }
         }
     }
 }

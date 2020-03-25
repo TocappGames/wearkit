@@ -70,6 +70,10 @@ public class GameView extends View {
         world.update(time);
         this.game.update();
 
+        for (Renderable r: this.game.getBackgroundLandscape()) {
+            r.render(canvas, this.game.getScale());
+        }
+
         for(Body body: world.getBodies()){
             ((Renderable) body).render(canvas, game.getScale());
         }
@@ -78,17 +82,16 @@ public class GameView extends View {
             r.render(canvas, this.game.getScale());
         }
 
+
         this.game.postRender();
 
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //TODO set scale on touch event
         double scale = this.game.getScale();
         this.game.touchEvent(event, scale);
         return true;
-       // return super.onTouchEvent(event);
     }
 
 }
