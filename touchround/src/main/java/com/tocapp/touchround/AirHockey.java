@@ -302,7 +302,7 @@ public class AirHockey extends AbstractGame {
     }
 
     private void initWorld() {
-        sidesMargin = mobileWidth / getScale() * 5 / 100;
+        sidesMargin = mobileWidth / getScale() * 10 / 100;
         boxHeight = mobileWidth / getScale() * 2 / 100;
 
         double borderGoalWidth = (mobileWidth / getScale() - sidesMargin * 2) * 35 / 100;
@@ -380,18 +380,19 @@ public class AirHockey extends AbstractGame {
     private GameObject addBall(String position) {
         GameObject ball = new GameObject(ballPaint);
         Random r = new Random();
-        double xRange = r.nextInt(((200 + 200) - 200) / (int) getScale());
+        int tenPercent = (int) (mobileWidth / getScale() * 20 / 100);
+        double xRange = r.nextInt((tenPercent + tenPercent) - tenPercent );
         System.out.println("Rango: " + xRange);
-        ball.addFixture(new Circle(mobileWidth / getScale() * 5 / 100), 0.5, 0.0, 1);
+        ball.addFixture(new Circle(mobileWidth / getScale() * 5 / 100), 1, 0.0, 1);
         if (position == "user") {
-            ball.translate(mobileWidth / 2 / getScale(), mobileHeight / getScale() * 70 / 100 + sidesMargin);
+            ball.translate(mobileWidth / 2 / getScale(), mobileHeight / getScale() * 60 / 100 - sidesMargin);
         } else if (position == "ia") {
-            ball.translate(mobileWidth / 2 / getScale() + xRange, mobileHeight / getScale() * 30 / 100 - sidesMargin);
+            ball.translate(mobileWidth / 2 / getScale() + xRange, mobileHeight / getScale() * 40 / 100 + sidesMargin);
         } else if (position == "relocate") {
             // Recolocar la bola a quien se le haya salido
         }
         ball.setMass(MassType.NORMAL);
-        ball.setLinearDamping(0.3);
+        ball.setLinearDamping(1);
         ball.setBullet(true);
         this.world.addBody(ball);
         return ball;
@@ -535,7 +536,7 @@ public class AirHockey extends AbstractGame {
         double distancia2 = dx * dx + dy * dy;
         // Si pasa del centro la bola se dirige a su casa
         if (ball.getWorldCenter().y > mobileHeight / 2 / getScale()) {
-            iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 0.5 * (homeX - iaStick.getWorldCenter().x) * 0.5, iaStick.getMass().getMass() * distancia2 * 0.5 * (homeY - iaStick.getWorldCenter().y) * 0.5));
+            iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * 2 * (homeX - iaStick.getWorldCenter().x), iaStick.getMass().getMass()* 2 * (homeY - iaStick.getWorldCenter().y)));
             iaStick.setLinearVelocity(0, 0);
         } else {
             // Cuando la bola está en su campo y lejano al stick ataca
