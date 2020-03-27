@@ -1,9 +1,10 @@
-package com.tocapp.touchround;
+package com.tocapp.example;
 
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.tocapp.sdk.rendering.GameObject;
+import com.tocapp.sdk.rendering.GameBody;
+import com.tocapp.sdk.rendering.GameThing;
 import com.tocapp.sdk.engine.AbstractGame;
 import com.tocapp.sdk.rendering.shape.Circle;
 import com.tocapp.sdk.rendering.shape.Rectangle;
@@ -12,12 +13,19 @@ import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
-public class TouchRound extends AbstractGame {
+public class FloatingBalls extends AbstractGame {
 
-    private static final String TAG = "TouchRound";
+    private static final String TAG = "FloatingBalls";
 
     @Override
     public void init() {
+
+        Paint bgCircleColor = new Paint();
+        bgCircleColor.setColor(Color.GRAY);
+        GameThing bg = new GameThing(bgCircleColor, -1);
+        bg.addFixture(new Circle(500));
+        this.world.getDecoration().add(bg);
+
         this.world.setGravity(World.ZERO_GRAVITY);
         Paint paint = new Paint();
         paint.setColor(Color.RED);
@@ -25,7 +33,7 @@ public class TouchRound extends AbstractGame {
         Paint paint2 = new Paint();
         paint2.setColor(Color.BLUE);
 
-        GameObject box = new GameObject(paint);
+        GameBody box = new GameBody(paint);
         Rectangle floor = new Rectangle(720, 20);
         floor.translate(389, 1280);
         Rectangle ceiling = new Rectangle(720, 20);
@@ -60,7 +68,7 @@ public class TouchRound extends AbstractGame {
         Paint paint = new Paint();
         paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
 
-        GameObject ball = new GameObject(paint);
+        GameBody ball = new GameBody(paint);
         ball.addFixture(new Circle(10), 1.0, 0.0, 5.0);
         ball.translate(40 + Math.random() * 600 , 100 + Math.random() * 800);
         ball.setMass(MassType.NORMAL);
@@ -78,4 +86,5 @@ public class TouchRound extends AbstractGame {
     public void finish() {
 
     }
+
 }

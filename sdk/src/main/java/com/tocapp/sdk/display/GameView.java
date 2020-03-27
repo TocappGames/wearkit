@@ -2,38 +2,51 @@ package com.tocapp.sdk.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.tocapp.sdk.engine.Game;
+import com.tocapp.sdk.engine.World;
+import com.tocapp.sdk.exceptions.PaintRequiredException;
+import com.tocapp.sdk.rendering.Indexable;
 import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.dynamics.Body;
-import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.Vector2;
+
+import java.util.SortedSet;
 
 public class GameView extends View {
 
     private static final String TAG = "GameView";
     private static final String STATUS_READY = "ready";
     private static final String STATUS_INITIALIZED = "initialized";
-    private final Matrix matrix;
     private Game game;
     private String status;
     private double startTime;
+    private Vector2 viewSize = new Vector2(0, 0);
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.status = STATUS_READY;
-        this.matrix = new Matrix();
     }
 
     public void setGame(Game game){
         this.game = game;
     }
 
+
+    @Override
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
+        int widthSize = MeasureSpec.getSize(widthMeasureSpec);
+        int heightSize = MeasureSpec.getSize(heightMeasureSpec);
+        this.viewSize.x = widthSize;
+        this.viewSize.y = heightSize;
+        this.game.getWorld().setSize(this.viewSize);
+        this.game.onWorldMeasureChange(widthSize, heightSize);
+    }
 
     @Override
     protected void onDraw(Canvas canvas) {
@@ -46,15 +59,30 @@ public class GameView extends View {
         }
         double time = System.currentTimeMillis() / 1000.0 - this.startTime;
         World world = this.game.getWorld();
+        SortedSet<Renderable> decoration = world.getDecoration();
+        for(Renderable renderable: decoration){
+            if (((Indexable) renderable).getIndex() > 0){
+                for(Body body: world.getBodies()){
+                    try {
+                        ((Renderable) body).render(canvas);
+                    } catch (PaintRequiredException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            try {
+                renderable.render(canvas);
+            } catch (PaintRequiredException e) {
+                e.printStackTrace();
+            }
+        }
         world.update(time);
         this.game.update();
-        for(Body body: world.getBodies()){
-            ((Renderable) body).render(canvas);
-        }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+        this.game.onTouchEvent(event);
         return super.onTouchEvent(event);
     }
 }

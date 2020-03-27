@@ -1,4 +1,4 @@
-package com.tocapp.touchround;
+package com.tocapp.example;
 
 import org.junit.Test;
 
