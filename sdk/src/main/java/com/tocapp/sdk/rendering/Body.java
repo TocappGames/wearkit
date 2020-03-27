@@ -5,15 +5,14 @@ import android.graphics.Paint;
 
 import com.tocapp.sdk.exceptions.PaintRequiredException;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Vector2;
 
-public class GameBody extends Body implements Renderable {
+public class Body extends org.dyn4j.dynamics.Body implements Renderable {
 
     private Paint paint;
 
-    public GameBody(Paint paint) {
+    public Body(Paint paint) {
         this.paint = paint;
     }
 

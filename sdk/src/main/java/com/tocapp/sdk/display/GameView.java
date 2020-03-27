@@ -60,15 +60,11 @@ public class GameView extends View {
         double time = System.currentTimeMillis() / 1000.0 - this.startTime;
         World world = this.game.getWorld();
         SortedSet<Renderable> decoration = world.getDecoration();
+        boolean isWorldDrawn = false;
         for(Renderable renderable: decoration){
             if (((Indexable) renderable).getIndex() > 0){
-                for(Body body: world.getBodies()){
-                    try {
-                        ((Renderable) body).render(canvas);
-                    } catch (PaintRequiredException e) {
-                        e.printStackTrace();
-                    }
-                }
+                isWorldDrawn = true;
+                this.drawWorld(world, canvas);
             }
             try {
                 renderable.render(canvas);
@@ -76,8 +72,21 @@ public class GameView extends View {
                 e.printStackTrace();
             }
         }
+        if(!isWorldDrawn){
+            this.drawWorld(world, canvas);
+        }
         world.update(time);
         this.game.update();
+    }
+
+    private void drawWorld(World world, Canvas canvas){
+        for(Body body: world.getBodies()){
+            try {
+                ((Renderable) body).render(canvas);
+            } catch (PaintRequiredException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
