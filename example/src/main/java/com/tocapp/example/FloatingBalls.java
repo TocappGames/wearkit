@@ -3,11 +3,11 @@ package com.tocapp.example;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import com.tocapp.sdk.rendering.Body;
-import com.tocapp.sdk.rendering.Thing;
-import com.tocapp.sdk.engine.AbstractGame;
-import com.tocapp.sdk.rendering.shape.Circle;
-import com.tocapp.sdk.rendering.shape.Rectangle;
+import com.tocapp.wearkit.rendering.Body;
+import com.tocapp.wearkit.rendering.Thing;
+import com.tocapp.wearkit.engine.AbstractGame;
+import com.tocapp.wearkit.rendering.shape.Circle;
+import com.tocapp.wearkit.rendering.shape.Rectangle;
 
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.MassType;
@@ -19,8 +19,9 @@ public class FloatingBalls extends AbstractGame {
 
     @Override
     public void init() {
+        world.setScale(10.0);
 
-        float borderWidth = 10;
+        double borderWidth = world.getSize().x / 50;
 
         Paint bgCircleColor = new Paint();
         bgCircleColor.setColor(Color.GRAY);
@@ -86,10 +87,10 @@ public class FloatingBalls extends AbstractGame {
         paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
 
         Body ball = new Body(paint);
-        ball.addFixture(new Circle(10), 1.0, 0.0, 5.0);
-        ball.translate(40 + Math.random() * 600 , 100 + Math.random() * 800);
+        ball.addFixture(new Circle(1), 1.0, 0.0, 1.0);
+        ball.translate(world.getSize().x / 2, world.getSize().y / 2);
         ball.setMass(MassType.NORMAL);
-        ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 200, (Math.random() - 0.5) * 200));
+        ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20));
 
         this.world.addBody(ball);
     }
