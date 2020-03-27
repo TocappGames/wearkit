@@ -13,6 +13,7 @@ import com.tocapp.sdk.rendering.GameObject;
 import com.tocapp.sdk.rendering.Renderable;
 import com.tocapp.sdk.rendering.shape.Circle;
 import com.tocapp.sdk.rendering.shape.Rectangle;
+import com.tocapp.sdk.rendering.shape.StrokeCircle;
 
 import org.dyn4j.collision.manifold.Manifold;
 import org.dyn4j.collision.narrowphase.Penetration;
@@ -36,6 +37,7 @@ public class AirHockey extends AbstractGame {
     public int level;
     private static int mobileWidth;
     private static int mobileHeight;
+    private static boolean displayIsRound;
     double sidesMargin;
     double boxHeight;
 
@@ -84,13 +86,14 @@ public class AirHockey extends AbstractGame {
     private boolean iaWin;
     private double goalTime;
 
-    public AirHockey(int level, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
-        this.ballPaint.setColor(ballColor);
+    public AirHockey(int level, boolean displayIsRound, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
+        this.level = level;
+        this.displayIsRound = displayIsRound;
         this.backgroundImage = backgroundImage;
+        this.ballPaint.setColor(ballColor);
         this.sticksPaint.setColor(sticksColor);
         this.boxPaint.setColor(boxColor);
         this.goalsPaint.setColor(goalsColor);
-        this.level = level;
     }
 
     @Override
@@ -127,7 +130,6 @@ public class AirHockey extends AbstractGame {
         this.backgroundLandscape.add(new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
-                System.out.println(scale);
                 if (backgroundImageBmp != null) {
                     canvas.drawBitmap(
                             backgroundImageBmp2, // Bitmap
@@ -210,6 +212,7 @@ public class AirHockey extends AbstractGame {
         this.world.addListener(new CollisionListener() {
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
+                System.out.println("Collision" + body1.toString() + "   " + body2.toString());
                 // False collision ball with centerline
                 if (body1 == ball && body2 == centerRect
                         || body2 == ball && body1 == centerRect) {
@@ -296,7 +299,6 @@ public class AirHockey extends AbstractGame {
             userGoals++;
         } else if (goal == "ia") {
             iaScores = true;
-            System.out.println(iaScores);
             iaGoals++;
         }
     }
@@ -311,67 +313,86 @@ public class AirHockey extends AbstractGame {
         double goalWidth = (mobileWidth / getScale() - sidesMargin * 2) * 30 / 100;
         double goalHeight = boxHeight;
 
-        Rectangle leftBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight);
-        leftBorderGoalIa.translate(borderGoalWidth / 2 + sidesMargin, sidesMargin);
+        if (!displayIsRound) {
+            // Ia map
+            Rectangle leftBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight);
+            leftBorderGoalIa.translate(borderGoalWidth / 2 + sidesMargin, sidesMargin);
 
-        Rectangle rightBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight);
-        rightBorderGoalIa.translate(mobileWidth / getScale() - borderGoalWidth / 2 - sidesMargin, sidesMargin);
+            goalIa = new Rectangle(goalWidth, goalHeight);
+            goalIa.translate(mobileWidth / 2 / getScale(), sidesMargin);
 
-        goalUser = new Rectangle(goalWidth, goalHeight);
-        goalUser.translate(mobileWidth / 2 / getScale(), mobileHeight / getScale() - sidesMargin);
+            Rectangle rightBorderGoalIa = new Rectangle(borderGoalWidth, borderGoalHeight);
+            rightBorderGoalIa.translate(mobileWidth / getScale() - borderGoalWidth / 2 - sidesMargin, sidesMargin);
 
-        Rectangle rightBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
-        rightBorderGoalUser.translate(mobileWidth / getScale() - borderGoalWidth / 2 - sidesMargin, mobileHeight / getScale() - sidesMargin);
+            // User map
+            Rectangle leftBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
+            leftBorderGoalUser.translate(borderGoalWidth / 2 + sidesMargin, mobileHeight / getScale() - sidesMargin);
 
-        Rectangle leftBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
-        leftBorderGoalUser.translate(borderGoalWidth / 2 + sidesMargin, mobileHeight / getScale() - sidesMargin);
+            Rectangle rightBorderGoalUser = new Rectangle(borderGoalWidth, borderGoalHeight);
+            rightBorderGoalUser.translate(mobileWidth / getScale() - borderGoalWidth / 2 - sidesMargin, mobileHeight / getScale() - sidesMargin);
 
-        goalIa = new Rectangle(goalWidth, goalHeight);
-        goalIa.translate(mobileWidth / 2 / getScale(), sidesMargin);
+            goalUser = new Rectangle(goalWidth, goalHeight);
+            goalUser.translate(mobileWidth / 2 / getScale(), mobileHeight / getScale() - sidesMargin);
 
-        Rectangle left = new Rectangle(boxHeight, mobileHeight / getScale() - sidesMargin * 2);
-        left.translate(sidesMargin, mobileHeight / 2 / getScale());
+            // Sides walls
+            Rectangle left = new Rectangle(boxHeight, mobileHeight / getScale() - sidesMargin * 2);
+            left.translate(sidesMargin, mobileHeight / 2 / getScale());
 
-        Rectangle right = new Rectangle(boxHeight, mobileHeight / getScale() - sidesMargin * 2);
-        right.translate(mobileWidth / getScale() - sidesMargin, mobileHeight / 2 / getScale());
+            Rectangle right = new Rectangle(boxHeight, mobileHeight / getScale() - sidesMargin * 2);
+            right.translate(mobileWidth / getScale() - sidesMargin, mobileHeight / 2 / getScale());
 
-        Circle centerC = new Circle(mobileWidth / 4 / getScale());
-        centerC.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale());
+            // Center objects
+            Circle centerC = new Circle(mobileWidth / 4 / getScale());
+            centerC.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale());
 
-        Rectangle centerR = new Rectangle(mobileWidth / getScale() - sidesMargin * 2, boxHeight);
-        centerR.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale());
+            Rectangle centerR = new Rectangle(mobileWidth / getScale() - sidesMargin * 2, boxHeight);
+            centerR.translate(mobileWidth / 2 / getScale(), mobileHeight / 2 / getScale());
 
-        centerCirclePaint.setColor(boxPaint.getColor());
-        centerCirclePaint.setStrokeWidth((float) boxHeight * (float) getScale());
-        centerCirclePaint.setStyle(Paint.Style.STROKE);
+            centerCirclePaint.setColor(boxPaint.getColor());
+            centerCirclePaint.setStrokeWidth((float) boxHeight * (float) getScale());
+            centerCirclePaint.setStyle(Paint.Style.STROKE);
 
-        centerRect = new GameObject(boxPaint);
-        centerCirc = new GameObject(centerCirclePaint);
-        centerRect.addFixture(centerR);
-        centerCirc.addFixture(centerC);
+            centerRect = new GameObject(boxPaint);
+            centerCirc = new GameObject(centerCirclePaint);
+            centerRect.addFixture(centerR);
+            centerCirc.addFixture(centerC);
 
 
-        goals = new GameObject(goalsPaint);
-        box = new GameObject(boxPaint);
-        box.setMass(MassType.INFINITE);
-        goals.addFixture(goalIa);
-        box.addFixture(leftBorderGoalIa);
-        box.addFixture(rightBorderGoalIa);
-        goals.addFixture(goalUser);
-        box.addFixture(leftBorderGoalUser);
-        box.addFixture(rightBorderGoalUser);
-        box.addFixture(left);
-        box.addFixture(right);
+            goals = new GameObject(goalsPaint);
+            box = new GameObject(boxPaint);
+            box.setMass(MassType.INFINITE);
 
-        box.setMass(MassType.INFINITE);
+            //Ia map
+            box.addFixture(leftBorderGoalIa);
+            goals.addFixture(goalIa);
+            box.addFixture(rightBorderGoalIa);
 
-        this.world.addBody(goals);
-        this.world.addBody(box);
-        this.world.addBody(centerRect);
-        this.world.addBody(centerCirc);
+            //User map
+            box.addFixture(leftBorderGoalUser);
+            goals.addFixture(goalUser);
+            box.addFixture(rightBorderGoalUser);
+
+            // Sides wallsa
+            box.addFixture(left);
+            box.addFixture(right);
+
+            this.world.addBody(goals);
+            this.world.addBody(box);
+            this.world.addBody(centerRect);
+            this.world.addBody(centerCirc);
+        } else {
+            box = new GameObject(boxPaint);
+            box.addFixture(new StrokeCircle(mobileHeight/ getScale() / 2 - sidesMargin));
+            box.translate(mobileWidth / getScale() / 2, mobileHeight / getScale() / 2);
+            this.world.addBody(box);
+        }
         iaStick = addIaStick();
         userStick = addUserStick();
         ball = addBall("user");
+    }
+
+    private void addObject() {
+
     }
 
 
@@ -382,7 +403,6 @@ public class AirHockey extends AbstractGame {
         Random r = new Random();
         int tenPercent = (int) (mobileWidth / getScale() * 20 / 100);
         double xRange = r.nextInt((tenPercent + tenPercent) - tenPercent );
-        System.out.println("Rango: " + xRange);
         ball.addFixture(new Circle(mobileWidth / getScale() * 5 / 100), 1, 0.0, 1);
         if (position == "user") {
             ball.translate(mobileWidth / 2 / getScale(), mobileHeight / getScale() * 60 / 100 - sidesMargin);
@@ -399,9 +419,15 @@ public class AirHockey extends AbstractGame {
     }
 
     private GameObject addIaStick() {
-        double x = goals.getFixture(0).getShape().getCenter().x;
-        double y = goals.getFixture(0).getShape().getCenter().y + mobileHeight / getScale() * 10 / 100;
-
+        double x;
+        double y;
+        if (!displayIsRound) {
+            x = goals.getFixture(0).getShape().getCenter().x;
+            y = goals.getFixture(0).getShape().getCenter().y + mobileHeight / getScale() * 10 / 100;
+        } else {
+            x = mobileWidth / getScale() * 50 / 100;
+            y = mobileHeight / getScale() * 20 / 100;
+        }
         Paint paint = new Paint(sticksPaint);
 
         GameObject iaStick = new GameObject(paint);
@@ -415,8 +441,15 @@ public class AirHockey extends AbstractGame {
     }
 
     private GameObject addUserStick() {
-        double x = goals.getFixture(1).getShape().getCenter().x;
-        double y = goals.getFixture(1).getShape().getCenter().y - mobileHeight / getScale() * 10 / 100;
+        double x;
+        double y;
+        if (!displayIsRound) {
+            x = goals.getFixture(1).getShape().getCenter().x;
+            y = goals.getFixture(1).getShape().getCenter().y - mobileHeight / getScale() * 10 / 100;
+        } else {
+            x = mobileWidth / getScale() * 50 / 100;
+            y = mobileHeight / getScale() * 80 / 100;
+        }
 
         GameObject userStick = new GameObject(sticksPaint);
         userStick.addFixture(new Circle(mobileWidth / getScale() * 7 / 100), 2, 0.0, 0.002);
@@ -429,6 +462,14 @@ public class AirHockey extends AbstractGame {
 
     @Override
     public void update() {
+
+        if (ball.getLinearVelocity().x > 30)
+            ball.setLinearVelocity(30, ball.getLinearVelocity().y);
+        else
+        if (ball.getLinearVelocity().y > 30) {
+            ball.setLinearVelocity(ball.getLinearVelocity().x, 30);
+        }
+
 
         if (this.event != null) {
             calculaMovimiento(event, getScale());
@@ -451,9 +492,9 @@ public class AirHockey extends AbstractGame {
             if (System.currentTimeMillis() - goalTime > 1000) {
                 calculateIa();
             }
-            checkBall();
-            checkUserStick();
-            checkIaStick();
+            // checkBall();
+            // checkUserStick();
+            // checkIaStick();
         }
     }
 
@@ -495,16 +536,15 @@ public class AirHockey extends AbstractGame {
         double cornerY = mobileHeight / getScale() - corner;
         double ballX = ball.getWorldCenter().x;
         double ballY = ball.getWorldCenter().y;
-
         if (ballX < corner || ballX > cornerX || ballY < corner || ballY > cornerY) {
-            System.out.println("Bola recolocada por haber salido");
+
             world.removeBody(ball);
             ball = addBall("user");
         }
     }
 
     private void checkUserStick() {
-        double corner = 20 / getScale() + 20 / getScale();
+        double corner = sidesMargin;
         double userStickX = userStick.getWorldCenter().x;
         double userStickY = userStick.getWorldCenter().y;
         if (userStickX < corner || userStickX > mobileWidth / getScale() - corner || userStickY < corner || userStickY > mobileHeight / getScale() - corner) {
@@ -514,7 +554,7 @@ public class AirHockey extends AbstractGame {
     }
 
     private void checkIaStick() {
-        double corner = 20 / getScale() + 20 / getScale();
+        double corner = sidesMargin;
         double iaStickX = iaStick.getWorldCenter().x;
         double iaStickY = iaStick.getWorldCenter().y;
         if (iaStickX < corner || iaStickX > mobileWidth / getScale() - corner || iaStickY < corner || iaStickY > mobileHeight / getScale() - corner) {
@@ -528,8 +568,15 @@ public class AirHockey extends AbstractGame {
     }
 
     public void calculateIa() {
-        double homeX = goals.getFixture(0).getShape().getCenter().x;
-        double homeY = goals.getFixture(0).getShape().getCenter().y + mobileHeight / getScale() * 10 / 100;
+        double homeX;
+        double homeY;
+        if (!displayIsRound) {
+            homeX = goals.getFixture(0).getShape().getCenter().x;
+            homeY = goals.getFixture(0).getShape().getCenter().y + mobileHeight / getScale() * 10 / 100;
+        } else {
+            homeX = mobileWidth / getScale() * 50 / 100;
+            homeY = mobileHeight / getScale() * 20 / 100;
+        }
         double dx = ball.getWorldCenter().x - iaStick.getWorldCenter().x;
         double dy = ball.getWorldCenter().y - iaStick.getWorldCenter().y;
         double radius = ball.getFixture(0).getShape().getRadius();

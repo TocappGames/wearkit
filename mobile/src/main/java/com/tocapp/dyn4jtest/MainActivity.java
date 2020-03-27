@@ -14,9 +14,11 @@ public class MainActivity extends MobileGameActivity {
     static public int boxColor = Color.WHITE;
     static public int goalsColor = Color.RED;
     static public int backgroundImage = 0;
+    public static boolean displayIsRound = false;
+
     protected Game getGame() {
 
-        return new AirHockey(level,backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
+        return new AirHockey(level, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
     }
 
 }

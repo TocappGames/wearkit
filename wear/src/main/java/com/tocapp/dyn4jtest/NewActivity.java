@@ -1,6 +1,7 @@
 package com.tocapp.dyn4jtest;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
@@ -19,6 +20,9 @@ public class NewActivity extends WearableActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            MainActivity.displayIsRound = getResources().getConfiguration().isScreenRound();
+        }
         Button easy = findViewById(R.id.easy);
         Button medium = findViewById(R.id.medium);
         Button hard = findViewById(R.id.hard);
@@ -26,6 +30,7 @@ public class NewActivity extends WearableActivity {
         easy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                onBackPressed();
                 MainActivity.level = 1;
 
                 Intent i = new Intent(NewActivity.this, MainActivity.class);

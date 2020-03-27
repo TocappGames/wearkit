@@ -1,29 +1,17 @@
 package com.tocapp.sdk.display;
 
 import android.content.Context;
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Toast;
 
-import androidx.annotation.Dimension;
-
-import com.tocapp.sdk.R;
 import com.tocapp.sdk.engine.Game;
-import com.tocapp.sdk.rendering.GameObject;
 import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
-
-import java.util.Vector;
 
 public class GameView extends View {
 
@@ -35,10 +23,21 @@ public class GameView extends View {
     private double startTime;
     DisplayMetrics display = getResources().getDisplayMetrics();
 
-
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.status = STATUS_READY;
+        double cmX = Math.pow(display.widthPixels/display.xdpi,2);
+        double cmY = Math.pow(display.heightPixels/display.ydpi,2);
+        double screenInches = Math.sqrt(cmX+ cmY);
+        double area = cmX * cmY;
+        System.out.println(display.widthPixels);
+        System.out.println(display.heightPixels);
+        System.out.println(display.xdpi);
+        System.out.println(display.ydpi);
+        System.out.println(cmX);
+        System.out.println(cmY);
+        System.out.println(screenInches);
+        System.out.println(area);
 
 
     }
@@ -93,5 +92,4 @@ public class GameView extends View {
         this.game.touchEvent(event, scale);
         return true;
     }
-
 }

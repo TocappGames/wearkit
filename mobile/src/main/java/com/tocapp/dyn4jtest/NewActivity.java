@@ -8,14 +8,22 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
+import com.google.android.gms.wearable.CapabilityClient;
+import com.google.android.gms.wearable.CapabilityInfo;
+import com.google.android.gms.wearable.Node;
+import com.google.android.gms.wearable.Wearable;
+
+import java.util.Set;
+import java.util.concurrent.ExecutionException;
+
 public class NewActivity extends AppCompatActivity {
 
     public static int ballColor;
     public static int sticksColor;
     public static int boxColor;
     public static int goalsColor;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,10 +64,12 @@ public class NewActivity extends AppCompatActivity {
         map.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-            Intent i = new Intent(NewActivity.this, SelectMap.class);
-            startActivity(i);
+                Intent i = new Intent(NewActivity.this, SelectMap.class);
+                startActivity(i);
             }
         });
 
     }
+
+
 }
