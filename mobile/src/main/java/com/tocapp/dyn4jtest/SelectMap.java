@@ -5,16 +5,13 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 
-import androidx.annotation.MainThread;
-import androidx.annotation.NonNull;
 import androidx.annotation.WorkerThread;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.CapabilityClient;
@@ -32,6 +29,7 @@ import com.google.android.gms.wearable.Wearable;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -39,8 +37,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
-import static android.util.Config.LOGD;
 
 public class SelectMap extends AppCompatActivity implements DataClient.OnDataChangedListener, MessageClient.OnMessageReceivedListener, CapabilityClient.OnCapabilityChangedListener {
     private static final Object TAG = "Debug";
@@ -57,10 +53,11 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     // Send DataItems.
     private ScheduledExecutorService mGeneratorExecutor;
     private ScheduledFuture<?> mDataItemGeneratorFuture;
-    private static final String COUNT_PATH = "/count";
-    private static final String COUNT_KEY = "count";
+    private static final String VIDEO_CONFIRMATION_PATH = "/confirmation";
+    private static final String VIDEO_CONFIRMATION_TIME = "time";
     private static final String START_ACTIVITY_PATH = "/start-activity";
-
+    public static final String COUNT_PATH = "/count";
+    private static final String COUNT_KEY = "count";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +99,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
             @Override
             public void onClick(View view) {
                 onStartWearableActivityClick(view);
+                sendVideoViewedConfirmation();
                 switch (selection) {
                     case 0:
                         MainActivity.ballColor = Color.WHITE;
@@ -211,7 +209,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
 
     @WorkerThread
     private void sendStartActivityMessage(String node) {
-        System.out.println("Sending message");
+        System.out.println("Sending message to start activity");
         Task<Integer> sendMessageTask =
                 Wearable.getMessageClient(this).sendMessage(node, START_ACTIVITY_PATH, new byte[0]);
 
@@ -219,7 +217,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
             // Block on a task and get the result synchronously (because this is on a background
             // thread).
             Integer result = Tasks.await(sendMessageTask);
-            System.out.println("Message sent: " + result);
+            System.out.println("Message start activity sent: " + result);
 
         } catch (ExecutionException exception) {
             System.out.println("Task failed: " + exception);
@@ -228,6 +226,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
             System.out.println("Interrupt occurred: " + exception);
         }
     }
+
 
     @WorkerThread
     private Collection<String> getNodes() {
@@ -261,7 +260,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
             for (String node : nodes) {
-                System.out.println("Nodes" + node);
+                System.out.println("Nodes: " + node);
                 sendStartActivityMessage(node);
             }
             return null;
@@ -302,16 +301,25 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         }
     }
 
+    /**
+     * Sends the asset that was created from the photo we took by adding it to the Data Item store.
+     */
+    private void sendVideoViewedConfirmation() {
+        PutDataMapRequest dataMap = PutDataMapRequest.create(VIDEO_CONFIRMATION_PATH);
+        System.out.println(new Date().getTime());
+        dataMap.getDataMap().putLong(VIDEO_CONFIRMATION_TIME, new Date().getTime());
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
 
-    private class Event {
+        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
 
-        String title;
-        String text;
-
-        public Event(String title, String text) {
-            this.title = title;
-            this.text = text;
-        }
+        dataItemTask.addOnSuccessListener(
+                new OnSuccessListener<DataItem>() {
+                    @Override
+                    public void onSuccess(DataItem dataItem) {
+                       System.out.println("Send video confirmation was successful: " + dataItem);
+                    }
+                });
     }
 
 

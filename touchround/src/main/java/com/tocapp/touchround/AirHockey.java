@@ -212,7 +212,6 @@ public class AirHockey extends AbstractGame {
         this.world.addListener(new CollisionListener() {
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
-                System.out.println("Collision" + body1.toString() + "   " + body2.toString());
                 // False collision ball with centerline
                 if (body1 == ball && body2 == centerRect
                         || body2 == ball && body1 == centerRect) {

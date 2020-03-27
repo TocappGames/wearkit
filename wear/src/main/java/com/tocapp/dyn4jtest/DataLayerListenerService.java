@@ -36,12 +36,12 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String START_ACTIVITY_PATH = "/start-activity";
     private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
     public static final String COUNT_PATH = "/count";
-    public static final String IMAGE_PATH = "/image";
-    public static final String IMAGE_KEY = "photo";
+    public static final String VIDEO_CONFIRMATION_PATH = "/confirmation";
+    public static final String VIDEO_CONFIRMATION_TIME = "time";
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
-        Log.d(TAG, "onDataChanged: " + dataEvents);
+       System.out.println("onDataChanged: " + dataEvents);
 
         // Loop through the events and send a message back to the node that created the data item.
         for (DataEvent event : dataEvents) {
@@ -67,9 +67,9 @@ public class DataLayerListenerService extends WearableListenerService {
                             @Override
                             public void onComplete(Task<Integer> task) {
                                 if (task.isSuccessful()) {
-                                    Log.d(TAG, "Message sent successfully");
+                                    System.out.println( "Message sent successfully");
                                 } else {
-                                    Log.d(TAG, "Message failed.");
+                                    System.out.println( "Message failed.");
                                 }
                             }
                         });
@@ -79,7 +79,7 @@ public class DataLayerListenerService extends WearableListenerService {
 
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-        Log.d(TAG, "onMessageReceived: " + messageEvent);
+        System.out.println( "onMessageReceived: " + messageEvent);
 
         // Check to see if the message is to start an activity
         if (messageEvent.getPath().equals(START_ACTIVITY_PATH)) {
