@@ -11,9 +11,9 @@ public class MainActivity extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(RESULT_CANCELED.layout.activity_main);
+        setContentView(R.layout.activity_main);
 
-        mTextView = (TextView) findViewById(RESULT_CANCELED.id.text);
+        mTextView = (TextView) findViewById(R.id.text);
 
         // Enables Always-on
         setAmbientEnabled();

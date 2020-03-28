@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("dev.wearkit.dyn4jtest", appContext.getPackageName());
+        assertEquals("dev.wearkit.sample", appContext.getPackageName());
     }
 }

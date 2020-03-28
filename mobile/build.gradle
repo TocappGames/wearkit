@@ -32,7 +32,6 @@ dependencies {
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    wearApp project(':wear')
     implementation project(path: ':example')
     implementation project(path: ':core')
 }

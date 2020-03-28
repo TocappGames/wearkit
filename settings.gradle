@@ -1,5 +1,5 @@
 rootProject.name='wearkit'
 include ':mobile'
-include ':wear'
 include ':core'
 include ':example'
+include ':wear'
