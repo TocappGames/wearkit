@@ -1,5 +1,5 @@
-rootProject.name='Dyn4jTest'
+rootProject.name='wearkit'
 include ':mobile'
 include ':wear'
-include ':sdk'
+include ':core'
 include ':example'

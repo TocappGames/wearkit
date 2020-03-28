@@ -1,4 +1,4 @@
-package dev.wearkit.example;
+package dev.wearkit.sample;
 
 import android.content.Context;
 
@@ -22,6 +22,6 @@ public class ExampleInstrumentedTest {
         // Context of the app under test.
         Context appContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 
-        assertEquals("dev.wearkit.touchround.test", appContext.getPackageName());
+        assertEquals("dev.wearkit.dyn4jtest", appContext.getPackageName());
     }
 }

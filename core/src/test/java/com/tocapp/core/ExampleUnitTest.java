@@ -1,4 +1,4 @@
-package dev.wearkit.example;
+package dev.wearkit.core;
 
 import org.junit.Test;
 
