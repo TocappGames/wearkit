@@ -5,7 +5,7 @@ android {
     buildToolsVersion "29.0.2"
 
     defaultConfig {
-        applicationId "dev.wearkit.example.wear"
+        applicationId "dev.wearkit.sample"
         minSdkVersion 28
         targetSdkVersion 29
         versionCode 1
