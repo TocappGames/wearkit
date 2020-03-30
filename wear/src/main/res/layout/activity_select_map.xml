@@ -8,48 +8,59 @@
     android:padding="@dimen/box_inset_layout_padding"
     tools:context=".MainActivity"
     tools:deviceIds="wear">
-<androidx.constraintlayout.widget.ConstraintLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dark_grey"
-    tools:context=".SelectMap">
 
-    <ImageButton
-        android:id="@+id/image"
-        android:layout_width="76dp"
-        android:layout_height="103dp"
-        android:contentDescription=""
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonRight"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toEndOf="@+id/buttonLeft"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.504"
-        app:srcCompat="@drawable/mapa1" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dark_grey"
+        tools:context=".SelectMap">
 
-    <ImageButton
-        android:id="@+id/buttonLeft"
-        android:layout_width="40dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="40dp"
-        android:background="@drawable/triangle_selector_left"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <ImageButton
+            android:id="@+id/image"
+            android:layout_width="54dp"
+            android:layout_height="81dp"
+            android:contentDescription=""
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.295"
+            app:srcCompat="@drawable/mapa1" />
 
-    <ImageButton
-        android:id="@+id/buttonRight"
-        android:layout_width="40dp"
-        android:layout_height="68dp"
-        android:layout_marginEnd="16dp"
-        android:background="@drawable/triangle_selector_left"
-        android:rotation="180"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.536" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/buttonRight"
+            android:layout_width="40dp"
+            android:layout_height="68dp"
+            android:layout_marginEnd="28dp"
+            android:background="@drawable/triangle_selector_left"
+            android:rotation="180"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <ImageButton
+            android:id="@+id/buttonLeft"
+            android:layout_width="40dp"
+            android:layout_height="68dp"
+            android:background="@drawable/triangle_selector_left"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintEnd_toStartOf="@+id/image"
+            app:layout_constraintHorizontal_bias="0.692"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <Button
+            android:id="@+id/selectBtn"
+            android:layout_width="103dp"
+            android:layout_height="36dp"
+            android:text="Select Map"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.wear.widget.BoxInsetLayout>

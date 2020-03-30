@@ -37,10 +37,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
-public class MainActivity extends WearGameActivity implements AmbientModeSupport.AmbientCallbackProvider,
-        DataClient.OnDataChangedListener,
-        MessageClient.OnMessageReceivedListener,
-        CapabilityClient.OnCapabilityChangedListener {
+public class MainActivity extends WearGameActivity{
 
     private TextView mTextView;
 
@@ -78,64 +75,13 @@ public class MainActivity extends WearGameActivity implements AmbientModeSupport
 
         // Instantiates clients without member variables, as clients are inexpensive to create and
         // won't lose their listeners. (They are cached and shared between GoogleApi instances.)
-        Wearable.getDataClient(this).addListener(this);
-        Wearable.getMessageClient(this).addListener(this);
-        Wearable.getCapabilityClient(this)
-                .addListener(this, Uri.parse("wear://"), CapabilityClient.FILTER_REACHABLE);
+
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        Wearable.getDataClient(this).removeListener(this);
-        Wearable.getMessageClient(this).removeListener(this);
-        Wearable.getCapabilityClient(this).removeListener(this);
     }
 
-
-
-    @Override
-    public AmbientModeSupport.AmbientCallback getAmbientCallback() {
-        return null;
-    }
-
-    @Override
-    public void onCapabilityChanged(@NonNull CapabilityInfo capabilityInfo) {
-
-    }
-
-    @Override
-    public void onDataChanged(DataEventBuffer dataEvents) {
-       System.out.println( "onDataChanged(): " + dataEvents);
-
-        for (DataEvent event : dataEvents) {
-            if (event.getType() == DataEvent.TYPE_CHANGED) {
-                String path = event.getDataItem().getUri().getPath();
-                if (DataLayerListenerService.VIDEO_CONFIRMATION_PATH.equals(path)) {
-                    DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    long confirmationTime =
-                            dataMapItem.getDataMap().getLong(DataLayerListenerService.VIDEO_CONFIRMATION_TIME);
-                    DateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss:SSS Z");
-                   String date = formatter.format(new Date(confirmationTime));
-                    Toast.makeText(getApplicationContext(), "Confirmation recived. Time =" + date, Toast.LENGTH_LONG).show();
-                } else if (DataLayerListenerService.COUNT_PATH.equals(path)) {
-
-                } else {
-                    System.out.println("Unrecognized path: " + path);
-                }
-
-            } else if (event.getType() == DataEvent.TYPE_DELETED) {
-                System.out.println("Data item deleted");
-
-            } else {
-               System.out.println("Unknown data event Type = " + event.getType());
-            }
-        }
-    }
-
-    @Override
-    public void onMessageReceived(@NonNull MessageEvent messageEvent) {
-    System.out.println("Message recived: " + messageEvent.getData().toString());
-    }
 }

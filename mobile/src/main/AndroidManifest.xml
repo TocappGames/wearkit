@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.tocapp.dyn4jtest">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -11,12 +12,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/FullScreenTheme">
-        <activity android:name=".SelectMap"></activity>
+        <service android:name=".ListenerServiceFromWear">
+            <intent-filter>
+                <action android:name="com.google.android.gms.wearable.BIND_LISTENER"
+                    tools:ignore="WearableBindListener" />
+            </intent-filter>
+        </service>
+        <activity android:name=".SelectMap">
+            <intent-filter>
+                <!-- listeners receive events that match the action and data filters -->
+                <action android:name="com.tocapp.dyn4jtest.SelectMap" />
+            </intent-filter>
+        </activity>
         <activity android:name=".MainActivity" />
         <activity android:name=".NewActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
