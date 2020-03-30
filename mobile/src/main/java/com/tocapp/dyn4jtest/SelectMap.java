@@ -1,11 +1,14 @@
 package com.tocapp.dyn4jtest;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.WorkerThread;
@@ -50,23 +53,26 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     private ArrayList<Integer> images;
     private ImageButton image;
 
-    // Send DataItems.
-    private ScheduledExecutorService mGeneratorExecutor;
-    private ScheduledFuture<?> mDataItemGeneratorFuture;
+
     private static final String VIDEO_CONFIRMATION_PATH = "/confirmation";
     private static final String VIDEO_CONFIRMATION_TIME = "time";
+    private static final String UNLOCKED_MAP_ID = "id";
     private static final String START_ACTIVITY_PATH = "/start-activity";
-    public static final String COUNT_PATH = "/count";
-    private static final String COUNT_KEY = "count";
+
+    private SharedPreferences sharedPref;
+    private SharedPreferences.Editor editor;
+    private Button buttonSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_map);
-        mGeneratorExecutor = new ScheduledThreadPoolExecutor(1);
-
+        sharedPref = getPreferences(Context.MODE_PRIVATE);
+        editor = sharedPref.edit();
         ImageButton buttonLeft = findViewById(R.id.buttonLeft);
         ImageButton buttonRight = findViewById(R.id.buttonRight);
+        buttonSelect = findViewById(R.id.selectBtn);
+
         image = findViewById(R.id.image);
 
         images = new ArrayList<>();
@@ -81,16 +87,24 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         buttonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selection < numMaps -1) selection++;
-                image.setImageResource(images.get(selection));
+                if (selection < numMaps -1) {
+                    selection++;
+                    mapChanged();
+                    image.setImageResource(images.get(selection));
+                }
+
             }
         });
 
         buttonLeft.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selection > 0) selection--;
-                image.setImageResource(images.get(selection));
+                if (selection > 0) {
+                    selection--;
+                    mapChanged();
+                    image.setImageResource(images.get(selection));
+
+                }
             }
         });
 
@@ -98,63 +112,107 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         image.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onStartWearableActivityClick(view);
-                sendVideoViewedConfirmation();
-                switch (selection) {
-                    case 0:
-                        MainActivity.ballColor = Color.WHITE;
-                        MainActivity.sticksColor = Color.BLUE;
-                        MainActivity.boxColor = Color.WHITE;
-                        MainActivity.goalsColor = Color.RED;
-                        break;
-                case 1:
-                    MainActivity.ballColor = Color.YELLOW;
-                    MainActivity.sticksColor = Color.GREEN;
-                    MainActivity.boxColor = Color.MAGENTA;
-                    MainActivity.goalsColor = Color.CYAN;
-                    MainActivity.backgroundImage = R.drawable.fondo_2;
-                    break;
-                    case 2:
-                        MainActivity.ballColor = Color.CYAN;
-                        MainActivity.sticksColor = Color.YELLOW;
-                        MainActivity.boxColor = Color.MAGENTA;
-                        MainActivity.goalsColor = Color.GREEN;
-                        MainActivity.backgroundImage = R.drawable.fondo_3;
+                onMapSelected();
 
-                        break;
-                    case 3:
-                        MainActivity.ballColor = Color.GREEN;
-                        MainActivity.sticksColor = Color.MAGENTA;
-                        MainActivity.boxColor = Color.WHITE;
-                        MainActivity.goalsColor = Color.RED;
-                        MainActivity.backgroundImage = R.drawable.fondo_4;
-
-                        break;
-                    case 4:
-                        MainActivity.ballColor = Color.BLACK;
-                        MainActivity.sticksColor = Color.GREEN;
-                        MainActivity.boxColor = Color.YELLOW;
-                        MainActivity.goalsColor = Color.MAGENTA;
-                        MainActivity.backgroundImage = R.drawable.fondo_5;
-
-                        break;
-                }
-
-
-                Intent i = new Intent(SelectMap.this, NewActivity.class);
-                startActivity(i);
 
             }
         });
 
+        buttonSelect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onMapSelected();
+            }
+        });
     }
+
+    private void onMapSelected() {
+        switch (selection) {
+            case 0:
+                MainActivity.ballColor = Color.WHITE;
+                MainActivity.sticksColor = Color.BLUE;
+                MainActivity.boxColor = Color.WHITE;
+                MainActivity.goalsColor = Color.RED;
+                break;
+        case 1:
+            viewVideo(1);
+
+            // get if video is viewed
+            boolean mapa1Viewed = sharedPref.getBoolean("1", false);
+            if (mapa1Viewed) {
+            MainActivity.ballColor = Color.YELLOW;
+            MainActivity.sticksColor = Color.GREEN;
+            MainActivity.boxColor = Color.MAGENTA;
+            MainActivity.goalsColor = Color.CYAN;
+            MainActivity.backgroundImage = R.drawable.fondo_2;
+        }
+            break;
+            case 2:
+                // When the video is viewed
+                viewVideo(2);
+                // get if video is viewed
+                boolean mapa2Viewed = sharedPref.getBoolean("2", false);
+                if (mapa2Viewed) {
+                    MainActivity.ballColor = Color.CYAN;
+                    MainActivity.sticksColor = Color.YELLOW;
+                    MainActivity.boxColor = Color.MAGENTA;
+                    MainActivity.goalsColor = Color.GREEN;
+                    MainActivity.backgroundImage = R.drawable.fondo_3;
+                }
+                break;
+            case 3:
+                // When the video is viewed
+                viewVideo(3);
+
+                // get if video is viewed
+                boolean mapa3Viewed = sharedPref.getBoolean("3", false);
+                if (mapa3Viewed) {
+                    MainActivity.ballColor = Color.GREEN;
+                    MainActivity.sticksColor = Color.MAGENTA;
+                    MainActivity.boxColor = Color.WHITE;
+                    MainActivity.goalsColor = Color.RED;
+                    MainActivity.backgroundImage = R.drawable.fondo_4;
+                }
+                break;
+            case 4:
+                // When the video is viewed
+                viewVideo(4);
+
+                // get if video is viewed
+                boolean mapa4Viewed = sharedPref.getBoolean("4", false);
+                if (mapa4Viewed) {
+                    MainActivity.ballColor = Color.BLACK;
+                    MainActivity.sticksColor = Color.GREEN;
+                    MainActivity.boxColor = Color.YELLOW;
+                    MainActivity.goalsColor = Color.MAGENTA;
+                    MainActivity.backgroundImage = R.drawable.fondo_5;
+                }
+                break;
+        }
+        Intent i = new Intent(SelectMap.this, NewActivity.class);
+        startActivity(i);
+    }
+
+    private void viewVideo(int numMap) {
+        // When the video is viewed
+        editor.putBoolean(Integer.toString(numMap), true);
+        editor.commit();
+        sendVideoViewedConfirmation(numMap);
+    }
+
+    private void mapChanged() {
+        boolean mapIsUnlocked = sharedPref.getBoolean(Integer.toString(selection), false);
+        if (selection == 0) mapIsUnlocked = true;
+        if (mapIsUnlocked) {
+            buttonSelect.setText("Select map");
+        } else {
+            buttonSelect.setText("You need to see a video");
+        }
+    }
+
     @Override
     public void onResume() {
     super.onResume();
-        mDataItemGeneratorFuture =
-                mGeneratorExecutor.scheduleWithFixedDelay(
-                        new DataItemGenerator(), 1, 5, TimeUnit.SECONDS);
-
         // Instantiates clients without member variables, as clients are inexpensive to create and
         // won't lose their listeners. (They are cached and shared between GoogleApi instances.)
         Wearable.getDataClient(this).addListener(this);
@@ -166,8 +224,6 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     @Override
     public void onPause() {
         super.onPause();
-        mDataItemGeneratorFuture.cancel(true /* mayInterruptIfRunning */);
-
         Wearable.getDataClient(this).removeListener(this);
         Wearable.getMessageClient(this).removeListener(this);
         Wearable.getCapabilityClient(this).removeListener(this);
@@ -267,47 +323,12 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         }
     }
 
-    /** Generates a DataItem based on an incrementing count. */
-    private class DataItemGenerator implements Runnable {
 
-        private int count = 0;
-
-        @Override
-        public void run() {
-            PutDataMapRequest putDataMapRequest = PutDataMapRequest.create(COUNT_PATH);
-            putDataMapRequest.getDataMap().putInt(COUNT_KEY, count++);
-
-            PutDataRequest request = putDataMapRequest.asPutDataRequest();
-            request.setUrgent();
-
-           System.out.println("Generating DataItem: " + request);
-
-            Task<DataItem> dataItemTask =
-                    Wearable.getDataClient(getApplicationContext()).putDataItem(request);
-
-            try {
-                // Block on a task and get the result synchronously (because this is on a background
-                // thread).
-                DataItem dataItem = Tasks.await(dataItemTask);
-
-                System.out.println("DataItem saved: " + dataItem);
-
-            } catch (ExecutionException exception) {
-                System.out.println("Task failed: " + exception);
-
-            } catch (InterruptedException exception) {
-                System.out.println("Interrupt occurred: " + exception);
-            }
-        }
-    }
-
-    /**
-     * Sends the asset that was created from the photo we took by adding it to the Data Item store.
-     */
-    private void sendVideoViewedConfirmation() {
+    private void sendVideoViewedConfirmation(int mapId) {
         PutDataMapRequest dataMap = PutDataMapRequest.create(VIDEO_CONFIRMATION_PATH);
         System.out.println(new Date().getTime());
         dataMap.getDataMap().putLong(VIDEO_CONFIRMATION_TIME, new Date().getTime());
+        dataMap.getDataMap().putInt(UNLOCKED_MAP_ID, mapId );
         PutDataRequest request = dataMap.asPutDataRequest();
         request.setUrgent();
 
