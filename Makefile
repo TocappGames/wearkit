@@ -1,4 +1,4 @@
-
+PWD := $(PWD)
 
 version:
-	docker run --rm -it -v $(pwd):/app detouched/standard-version
+	docker run --rm -it -v $(PWD):/app detouched/standard-version
