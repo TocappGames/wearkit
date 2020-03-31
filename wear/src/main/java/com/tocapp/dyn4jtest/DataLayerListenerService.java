@@ -42,30 +42,33 @@ public class DataLayerListenerService extends WearableListenerService {
     private static final String TAG = "DataLayerService";
 
     private static final String START_ACTIVITY_PATH = "/start-activity";
-    private static final String DATA_ITEM_RECEIVED_PATH = "/data-item-received";
-    public static final String COUNT_PATH = "/count";
     public static final String VIDEO_CONFIRMATION_PATH = "/confirmation";
     private static final String UNLOCKED_MAP_ID = "id";
     public static final String VIDEO_CONFIRMATION_TIME = "time";
     private SharedPreferences sharedPref;
     private SharedPreferences.Editor editor;
+
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
         for (DataEvent event : dataEvents) {
             if (event.getType() == DataEvent.TYPE_CHANGED) {
                 String path = event.getDataItem().getUri().getPath();
+                // If data is about video confirmation
                 if (DataLayerListenerService.VIDEO_CONFIRMATION_PATH.equals(path)) {
-
                     sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplication());
                     editor = sharedPref.edit();
+                    // get map id and put it true on shared prefs
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
-                    long confirmationTime =
-                            dataMapItem.getDataMap().getLong(DataLayerListenerService.VIDEO_CONFIRMATION_TIME);
-                    int mapId = dataMapItem.getDataMap().getInt(DataLayerListenerService.UNLOCKED_MAP_ID);
+                    int mapId = dataMapItem.getDataMap().getInt(UNLOCKED_MAP_ID);
                     editor.putBoolean(Integer.toString(mapId), true);
                     editor.commit();
+
+                    // Get time confirmation
+                    long confirmationTime =
+                            dataMapItem.getDataMap().getLong(VIDEO_CONFIRMATION_TIME);
                     DateFormat formatter = new SimpleDateFormat("dd MMM yyyy HH:mm:ss:SSS Z");
                     String date = formatter.format(new Date(confirmationTime));
+
                     System.out.println("Evento de confirmacion de video recibido, datos:" + dataMapItem.getDataMap().getLong(DataLayerListenerService.VIDEO_CONFIRMATION_TIME) + "Id del mapa: " + mapId);
                     Toast.makeText(getApplicationContext(), "Confirmation recived. Time =" + date, Toast.LENGTH_LONG).show();
                 }

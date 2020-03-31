@@ -36,31 +36,24 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+
 
 public class SelectMap extends AppCompatActivity implements DataClient.OnDataChangedListener, MessageClient.OnMessageReceivedListener, CapabilityClient.OnCapabilityChangedListener {
     private static final Object TAG = "Debug";
     int selection = 0;
     int numMaps = 5;
 
-    int ballColor;
-    int sticksColor;
-    int boxColor;
-    int goalsColor;
     private ArrayList<Integer> images;
     private ImageButton image;
 
-
+    // Variables to contact with wear
     private static final String VIDEO_CONFIRMATION_PATH = "/confirmation";
     private static final String VIDEO_CONFIRMATION_TIME = "time";
     private static final String UNLOCKED_MAP_ID = "id";
     private static final String START_ACTIVITY_PATH = "/start-activity";
 
     private SharedPreferences sharedPref;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor sharedPrefEditor;
     private Button buttonSelect;
 
     @Override
@@ -68,7 +61,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_map);
         sharedPref = getPreferences(Context.MODE_PRIVATE);
-        editor = sharedPref.edit();
+        sharedPrefEditor = sharedPref.edit();
         ImageButton buttonLeft = findViewById(R.id.buttonLeft);
         ImageButton buttonRight = findViewById(R.id.buttonRight);
         buttonSelect = findViewById(R.id.selectBtn);
@@ -87,12 +80,11 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         buttonRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (selection < numMaps -1) {
+                if (selection < numMaps - 1) {
                     selection++;
                     mapChanged();
                     image.setImageResource(images.get(selection));
                 }
-
             }
         });
 
@@ -103,7 +95,6 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                     selection--;
                     mapChanged();
                     image.setImageResource(images.get(selection));
-
                 }
             }
         });
@@ -113,8 +104,6 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
             @Override
             public void onClick(View view) {
                 onMapSelected();
-
-
             }
         });
 
@@ -134,25 +123,25 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 MainActivity.boxColor = Color.WHITE;
                 MainActivity.goalsColor = Color.RED;
                 break;
-        case 1:
-            viewVideo(1);
 
-            // get if video is viewed
-            boolean mapa1Viewed = sharedPref.getBoolean("1", false);
-            if (mapa1Viewed) {
-            MainActivity.ballColor = Color.YELLOW;
-            MainActivity.sticksColor = Color.GREEN;
-            MainActivity.boxColor = Color.MAGENTA;
-            MainActivity.goalsColor = Color.CYAN;
-            MainActivity.backgroundImage = R.drawable.fondo_2;
-        }
-            break;
+            case 1:
+                boolean mapa1Viewed = sharedPref.getBoolean("1", false);
+                if (!mapa1Viewed)
+                    seeVideo(1);
+                else {
+                    MainActivity.ballColor = Color.YELLOW;
+                    MainActivity.sticksColor = Color.GREEN;
+                    MainActivity.boxColor = Color.MAGENTA;
+                    MainActivity.goalsColor = Color.CYAN;
+                    MainActivity.backgroundImage = R.drawable.fondo_2;
+                }
+                break;
+
             case 2:
-                // When the video is viewed
-                viewVideo(2);
-                // get if video is viewed
                 boolean mapa2Viewed = sharedPref.getBoolean("2", false);
-                if (mapa2Viewed) {
+                if (!mapa2Viewed)
+                    seeVideo(2);
+                else {
                     MainActivity.ballColor = Color.CYAN;
                     MainActivity.sticksColor = Color.YELLOW;
                     MainActivity.boxColor = Color.MAGENTA;
@@ -160,13 +149,12 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                     MainActivity.backgroundImage = R.drawable.fondo_3;
                 }
                 break;
-            case 3:
-                // When the video is viewed
-                viewVideo(3);
 
-                // get if video is viewed
-                boolean mapa3Viewed = sharedPref.getBoolean("3", false);
-                if (mapa3Viewed) {
+            case 3:
+                boolean mapa3Viewed = sharedPref.getBoolean("2", false);
+                if (!mapa3Viewed)
+                    seeVideo(3);
+                else {
                     MainActivity.ballColor = Color.GREEN;
                     MainActivity.sticksColor = Color.MAGENTA;
                     MainActivity.boxColor = Color.WHITE;
@@ -174,13 +162,12 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                     MainActivity.backgroundImage = R.drawable.fondo_4;
                 }
                 break;
-            case 4:
-                // When the video is viewed
-                viewVideo(4);
 
-                // get if video is viewed
-                boolean mapa4Viewed = sharedPref.getBoolean("4", false);
-                if (mapa4Viewed) {
+            case 4:
+                boolean mapa4Viewed = sharedPref.getBoolean("2", false);
+                if (!mapa4Viewed)
+                    seeVideo(2);
+                else {
                     MainActivity.ballColor = Color.BLACK;
                     MainActivity.sticksColor = Color.GREEN;
                     MainActivity.boxColor = Color.YELLOW;
@@ -189,17 +176,24 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 }
                 break;
         }
+
         Intent i = new Intent(SelectMap.this, NewActivity.class);
         startActivity(i);
     }
 
-    private void viewVideo(int numMap) {
-        // When the video is viewed
-        editor.putBoolean(Integer.toString(numMap), true);
-        editor.commit();
-        sendVideoViewedConfirmation(numMap);
+    private void seeVideo(int numMap) {
+        boolean videoViewed = false;
+        System.out.println("Watching video");
+        videoViewed = true;
+        if (videoViewed) {
+            // Put true on sharedPrefs with numMap reference
+            sharedPrefEditor.putBoolean(Integer.toString(numMap), true);
+            sharedPrefEditor.commit();
+            sendVideoViewedConfirmation(numMap);
+        }
     }
 
+    // Check text on button
     private void mapChanged() {
         boolean mapIsUnlocked = sharedPref.getBoolean(Integer.toString(selection), false);
         if (selection == 0) mapIsUnlocked = true;
@@ -210,9 +204,10 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         }
     }
 
+    // Initialization of clients to dataLayer
     @Override
     public void onResume() {
-    super.onResume();
+        super.onResume();
         // Instantiates clients without member variables, as clients are inexpensive to create and
         // won't lose their listeners. (They are cached and shared between GoogleApi instances.)
         Wearable.getDataClient(this).addListener(this);
@@ -244,45 +239,15 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         }
     }
 
-    /** Sends an RPC to start a fullscreen Activity on the wearable. */
-    public void onStartWearableActivityClick(View view) {
-        System.out.println("Generating RPC");
-
-        // Trigger an AsyncTask that will query for a list of connected nodes and send a
-        // "start-activity" message to each connected node.
-        new StartWearableActivityTask().execute();
-    }
-
     @Override
     public void onMessageReceived(MessageEvent messageEvent) {
-      System.out.println("Message recived " + messageEvent);
+        System.out.println("Message recived " + messageEvent);
     }
 
     @Override
     public void onCapabilityChanged(final CapabilityInfo capabilityInfo) {
         System.out.println("Capability changed: " + capabilityInfo.toString());
     }
-
-    @WorkerThread
-    private void sendStartActivityMessage(String node) {
-        System.out.println("Sending message to start activity");
-        Task<Integer> sendMessageTask =
-                Wearable.getMessageClient(this).sendMessage(node, START_ACTIVITY_PATH, new byte[0]);
-
-        try {
-            // Block on a task and get the result synchronously (because this is on a background
-            // thread).
-            Integer result = Tasks.await(sendMessageTask);
-            System.out.println("Message start activity sent: " + result);
-
-        } catch (ExecutionException exception) {
-            System.out.println("Task failed: " + exception);
-
-        } catch (InterruptedException exception) {
-            System.out.println("Interrupt occurred: " + exception);
-        }
-    }
-
 
     @WorkerThread
     private Collection<String> getNodes() {
@@ -310,6 +275,57 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         return results;
     }
 
+    // Add confrmation video data to dataMap, and send it to wear
+    private void sendVideoViewedConfirmation(int mapId) {
+        PutDataMapRequest dataMap = PutDataMapRequest.create(VIDEO_CONFIRMATION_PATH);
+        System.out.println(new Date().getTime());
+        dataMap.getDataMap().putLong(VIDEO_CONFIRMATION_TIME, new Date().getTime());
+        dataMap.getDataMap().putInt(UNLOCKED_MAP_ID, mapId);
+        PutDataRequest request = dataMap.asPutDataRequest();
+        request.setUrgent();
+
+        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
+
+        dataItemTask.addOnSuccessListener(
+                new OnSuccessListener<DataItem>() {
+                    @Override
+                    public void onSuccess(DataItem dataItem) {
+                        System.out.println("Send video confirmation was successful: " + dataItem);
+                    }
+                });
+    }
+
+    /**
+     * Code to start an activity on wear
+     */
+    /* public void onStartWearableActivityClick(View view) {
+        System.out.println("Generating RPC");
+
+        // Trigger an AsyncTask that will query for a list of connected nodes and send a
+        // "start-activity" message to each connected node.
+        new StartWearableActivityTask().execute();
+    }
+
+    @WorkerThread
+    private void sendStartActivityMessage(String node) {
+        System.out.println("Sending message to start activity");
+        Task<Integer> sendMessageTask =
+                Wearable.getMessageClient(this).sendMessage(node, START_ACTIVITY_PATH, new byte[0]);
+
+        try {
+            // Block on a task and get the result synchronously (because this is on a background
+            // thread).
+            Integer result = Tasks.await(sendMessageTask);
+            System.out.println("Message start activity sent: " + result);
+
+        } catch (ExecutionException exception) {
+            System.out.println("Task failed: " + exception);
+
+        } catch (InterruptedException exception) {
+            System.out.println("Interrupt occurred: " + exception);
+        }
+    }
+
     private class StartWearableActivityTask extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -321,27 +337,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
             }
             return null;
         }
-    }
-
-
-    private void sendVideoViewedConfirmation(int mapId) {
-        PutDataMapRequest dataMap = PutDataMapRequest.create(VIDEO_CONFIRMATION_PATH);
-        System.out.println(new Date().getTime());
-        dataMap.getDataMap().putLong(VIDEO_CONFIRMATION_TIME, new Date().getTime());
-        dataMap.getDataMap().putInt(UNLOCKED_MAP_ID, mapId );
-        PutDataRequest request = dataMap.asPutDataRequest();
-        request.setUrgent();
-
-        Task<DataItem> dataItemTask = Wearable.getDataClient(this).putDataItem(request);
-
-        dataItemTask.addOnSuccessListener(
-                new OnSuccessListener<DataItem>() {
-                    @Override
-                    public void onSuccess(DataItem dataItem) {
-                       System.out.println("Send video confirmation was successful: " + dataItem);
-                    }
-                });
-    }
+    }*/
 
 
 }

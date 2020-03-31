@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryDark"
+    android:background="@color/colorBlack"
     tools:context=".SelectMap">
 
     <ImageButton
@@ -13,12 +13,13 @@
         android:layout_height="122dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="300dp"
-        android:background="@drawable/triangle_selector_left"
+        android:background="@drawable/left"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.518" />
+        app:layout_constraintVertical_bias="0.499" />
 
     <ImageButton
         android:id="@+id/buttonRight"
@@ -26,11 +27,10 @@
         android:layout_height="122dp"
         android:layout_marginStart="300dp"
         android:layout_marginEnd="20dp"
-        android:background="@drawable/triangle_selector_left"
-        android:rotation="180"
+        android:background="@drawable/right"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499" />
@@ -53,6 +53,8 @@
         android:layout_width="185dp"
         android:layout_height="108dp"
         android:text="Select map"
+        android:textColor="@color/colorWhite"
+        android:background="@drawable/button_stroke"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.48"

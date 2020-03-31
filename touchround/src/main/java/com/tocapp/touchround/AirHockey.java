@@ -6,7 +6,9 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.tocapp.sdk.engine.AbstractGame;
 import com.tocapp.sdk.rendering.GameObject;
@@ -27,6 +29,7 @@ import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import static java.lang.Math.abs;
@@ -49,6 +52,11 @@ public class AirHockey extends AbstractGame {
     private GameObject centerRect;
     private GameObject centerCirc;
     private long start;
+
+    private MediaPlayer goalSound;
+    private MediaPlayer loseSound;
+    private MediaPlayer tapSound;
+    private long lastSoundTime;
 
     private Paint boxPaint = new Paint();
     private Paint goalsPaint = new Paint();
@@ -114,6 +122,9 @@ public class AirHockey extends AbstractGame {
     public void init() {
         initWorld();
 
+        goalSound = MediaPlayer.create(context, R.raw.goal);
+        tapSound = MediaPlayer.create(context, R.raw.tap);
+        loseSound = MediaPlayer.create(context, R.raw.lose);
         Settings settings = this.world.getSettings();
         settings.setContinuousDetectionMode(ContinuousDetectionMode.ALL);
         //settings.setMaximumTranslation(1);
@@ -213,6 +224,16 @@ public class AirHockey extends AbstractGame {
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
                 // False collision ball with centerline
+                if (body1 == ball && body2 != centerRect
+                        || body2 == ball && body1 != centerRect
+                        || body1 == ball && body2 != centerCirc
+                        || body2 == ball && body1 != centerCirc) {
+                    if (lastSoundTime + 400 > System.currentTimeMillis())
+                    lastSoundTime = System.currentTimeMillis();
+                    tapSound.start();
+
+                }
+
                 if (body1 == ball && body2 == centerRect
                         || body2 == ball && body1 == centerRect) {
                     return false;
@@ -284,9 +305,12 @@ public class AirHockey extends AbstractGame {
         });
 
         this.start = System.currentTimeMillis();
+        lastSoundTime =  this.start;
+
     }
 
     private void goal(String goal) {
+        goalSound.start();
         world.removeBody(ball);
         world.removeBody(iaStick);
         world.removeBody(userStick);
@@ -387,7 +411,7 @@ public class AirHockey extends AbstractGame {
         }
         iaStick = addIaStick();
         userStick = addUserStick();
-        ball = addBall("user");
+        ball = addBall("center");
     }
 
     private void addObject() {
@@ -402,16 +426,18 @@ public class AirHockey extends AbstractGame {
         Random r = new Random();
         int tenPercent = (int) (mobileWidth / getScale() * 20 / 100);
         double xRange = r.nextInt((tenPercent + tenPercent) - tenPercent );
-        ball.addFixture(new Circle(mobileWidth / getScale() * 5 / 100), 1, 0.0, 1);
+        ball.addFixture(new Circle(mobileWidth / getScale() * 5 / 100), 0.5, 0.0, 1);
         if (position == "user") {
             ball.translate(mobileWidth / 2 / getScale(), mobileHeight / getScale() * 60 / 100 - sidesMargin);
         } else if (position == "ia") {
             ball.translate(mobileWidth / 2 / getScale() + xRange, mobileHeight / getScale() * 40 / 100 + sidesMargin);
         } else if (position == "relocate") {
             // Recolocar la bola a quien se le haya salido
+        } else if (position == "center") {
+            ball.translate(mobileWidth / 2 / getScale(), mobileHeight / 2/ getScale());
         }
         ball.setMass(MassType.NORMAL);
-        ball.setLinearDamping(1);
+        ball.setLinearDamping(0.3);
         ball.setBullet(true);
         this.world.addBody(ball);
         return ball;
@@ -462,10 +488,10 @@ public class AirHockey extends AbstractGame {
     @Override
     public void update() {
 
-        if (ball.getLinearVelocity().x > 30)
+        if (ball.getLinearVelocity().x > 29)
             ball.setLinearVelocity(30, ball.getLinearVelocity().y);
         else
-        if (ball.getLinearVelocity().y > 30) {
+        if (ball.getLinearVelocity().y > 29) {
             ball.setLinearVelocity(ball.getLinearVelocity().x, 30);
         }
 
@@ -491,9 +517,9 @@ public class AirHockey extends AbstractGame {
             if (System.currentTimeMillis() - goalTime > 1000) {
                 calculateIa();
             }
-            // checkBall();
-            // checkUserStick();
-            // checkIaStick();
+             checkBall();
+             checkUserStick();
+             checkIaStick();
         }
     }
 
@@ -524,6 +550,7 @@ public class AirHockey extends AbstractGame {
             goal("ia");
             goalUserCollision = false;
             if (iaGoals == 7) {
+                loseSound.start();
                 win("ia");
             }
         }
@@ -535,6 +562,7 @@ public class AirHockey extends AbstractGame {
         double cornerY = mobileHeight / getScale() - corner;
         double ballX = ball.getWorldCenter().x;
         double ballY = ball.getWorldCenter().y;
+
         if (ballX < corner || ballX > cornerX || ballY < corner || ballY > cornerY) {
 
             world.removeBody(ball);
@@ -573,8 +601,8 @@ public class AirHockey extends AbstractGame {
             homeX = goals.getFixture(0).getShape().getCenter().x;
             homeY = goals.getFixture(0).getShape().getCenter().y + mobileHeight / getScale() * 10 / 100;
         } else {
-            homeX = mobileWidth / getScale() * 50 / 100;
-            homeY = mobileHeight / getScale() * 20 / 100;
+            homeX = mobileWidth / getScale() * 50 / 100 + sidesMargin;
+            homeY = mobileHeight / getScale() * 20 / 100 + sidesMargin;
         }
         double dx = ball.getWorldCenter().x - iaStick.getWorldCenter().x;
         double dy = ball.getWorldCenter().y - iaStick.getWorldCenter().y;
@@ -582,15 +610,15 @@ public class AirHockey extends AbstractGame {
         double distancia2 = dx * dx + dy * dy;
         // Si pasa del centro la bola se dirige a su casa
         if (ball.getWorldCenter().y > mobileHeight / 2 / getScale()) {
-            iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * 2 * (homeX - iaStick.getWorldCenter().x), iaStick.getMass().getMass()* 2 * (homeY - iaStick.getWorldCenter().y)));
+            iaStick.applyForce(new Vector2(iaStick.getMass().getMass() * distancia2 * 0.5 * (homeX - iaStick.getWorldCenter().x) * 0.5, iaStick.getMass().getMass() * distancia2 * 0.5 * (homeY - iaStick.getWorldCenter().y) * 0.5));
             iaStick.setLinearVelocity(0, 0);
         } else {
             // Cuando la bola está en su campo y lejano al stick ataca
             if (distancia2 > radius) {
                 if (ball.getWorldCenter().y < mobileHeight / 2 / getScale()) {
-                    if (ball.getWorldCenter().x < mobileWidth / getScale() * 80 / 100 + sidesMargin
-                            && ball.getWorldCenter().x > mobileWidth / getScale() * 20 / 100 + sidesMargin
-                            && ball.getWorldCenter().y > mobileWidth / getScale() * 20 / 100 + sidesMargin)
+//                    if (ball.getWorldCenter().x < mobileWidth / getScale() * 90 / 100 + sidesMargin
+//                            && ball.getWorldCenter().x > mobileWidth / getScale() * 10 / 100 + sidesMargin
+//                            && ball.getWorldCenter().y > mobileWidth / getScale() * 10 / 100 + sidesMargin)
                         attack();
                 }
             }
@@ -637,6 +665,8 @@ public class AirHockey extends AbstractGame {
         userStick.setLinearVelocity(0, 0);
     }
 
+
+
     @Override
     public void touchEvent(MotionEvent event, double scale) {
         // Mientras nadie haya ganado
@@ -660,6 +690,11 @@ public class AirHockey extends AbstractGame {
                 this.event = null;
             }
         }
+    }
+
+    @Override
+    public void rotatoryEvent(View v, MotionEvent ev) {
+
     }
 }
 

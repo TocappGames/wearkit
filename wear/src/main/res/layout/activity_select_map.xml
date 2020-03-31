@@ -4,21 +4,39 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
-    android:padding="@dimen/box_inset_layout_padding"
+    android:background="@color/black"
     tools:context=".MainActivity"
     tools:deviceIds="wear">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
+<FrameLayout android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/dark_grey"
+    android:padding="5dp"
+    app:boxedEdges="all"
+    android:background="@color/black"
         tools:context=".SelectMap">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageButton
+            android:id="@+id/buttonLeft"
+            android:layout_width="29dp"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/left"
+            android:cropToPadding="false"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image"
+            app:layout_constraintVertical_bias="0.0" />
 
         <ImageButton
             android:id="@+id/image"
-            android:layout_width="54dp"
-            android:layout_height="81dp"
+            android:layout_width="55dp"
+            android:layout_height="89dp"
+            android:layout_gravity="center"
             android:contentDescription=""
             android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -30,37 +48,33 @@
 
         <ImageButton
             android:id="@+id/buttonRight"
-            android:layout_width="40dp"
-            android:layout_height="68dp"
-            android:layout_marginEnd="28dp"
-            android:background="@drawable/triangle_selector_left"
-            android:rotation="180"
+            android:layout_width="30dp"
+            android:layout_height="51dp"
+            android:layout_gravity="center"
+            android:layout_marginEnd="4dp"
+            android:background="@drawable/right"
+            android:cropToPadding="false"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="@+id/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/image"
             app:layout_constraintVertical_bias="0.0" />
 
-        <ImageButton
-            android:id="@+id/buttonLeft"
-            android:layout_width="40dp"
-            android:layout_height="68dp"
-            android:background="@drawable/triangle_selector_left"
-            app:layout_constraintBottom_toBottomOf="@+id/image"
-            app:layout_constraintEnd_toStartOf="@+id/image"
-            app:layout_constraintHorizontal_bias="0.692"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/image"
-            app:layout_constraintVertical_bias="0.0" />
+    </LinearLayout>
 
-        <Button
-            android:id="@+id/selectBtn"
-            android:layout_width="103dp"
-            android:layout_height="36dp"
-            android:text="Select Map"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/image" />
+    <Button
+        android:id="@+id/selectBtn"
+        android:layout_width="103dp"
+        android:layout_height="20dp"
+        android:layout_gravity="bottom|center"
+        android:background="@drawable/button_stroke"
+        android:paddingBottom="3dp"
+        android:text="Select Map"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/image" />
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
-</androidx.wear.widget.BoxInsetLayout>
+</FrameLayout>
+    </androidx.wear.widget.BoxInsetLayout>

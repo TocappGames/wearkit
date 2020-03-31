@@ -5,6 +5,8 @@ import android.content.Intent;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.WearableListenerService;
 
+// DEPRECATED EN EL MANIFEST
+// Listener para abrir la clase SelectMap desde el wear, al intentar desbloquear un mapa
 public class ListenerServiceFromWear extends WearableListenerService {
 
     private static final String OPEN_MAP_SELECTOR = "/open_map_selector";

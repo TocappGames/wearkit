@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
+import android.support.wearable.input.RotaryEncoder;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 
@@ -66,4 +68,19 @@ public class NewActivity extends WearableActivity {
         });
 
     }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_SCROLL
+                && RotaryEncoder.isFromRotaryEncoder(ev)) {
+            // Note that we negate the delta value here in order to get the right scroll direction.
+            float delta = -RotaryEncoder.getRotaryAxisValue(ev)
+                    * RotaryEncoder.getScaledScrollFactor(getApplicationContext());
+            System.out.println(delta);
+            //scrollBy(0, Math.round(delta));
+            return true;
+        }
+        return super.onGenericMotionEvent(ev);
+    }
+
 }

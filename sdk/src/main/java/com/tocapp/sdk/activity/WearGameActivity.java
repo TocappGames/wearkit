@@ -2,6 +2,9 @@ package com.tocapp.sdk.activity;
 
 import android.graphics.Color;
 import android.os.Bundle;
+import android.support.wearable.input.RotaryEncoder;
+import android.view.MotionEvent;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
@@ -35,6 +38,8 @@ public abstract class WearGameActivity extends WearableActivity {
         this.gameView.setContext(this);
         new GameRenderer(this.gameView, this, 60).start();
     }
+
+
 
     abstract protected Game getGame();
 }

@@ -21,7 +21,7 @@ public class GameView extends View {
     private Game game;
     private String status;
     private double startTime;
-    DisplayMetrics display = getResources().getDisplayMetrics();
+    private DisplayMetrics display = getResources().getDisplayMetrics();
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);

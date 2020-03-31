@@ -4,83 +4,101 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/dark_grey"
-    android:padding="@dimen/box_inset_layout_padding"
+    android:background="@color/black"
+    android:padding="15dp"
     tools:context=".MainActivity"
     tools:deviceIds="wear">
-<androidx.constraintlayout.widget.ConstraintLayout
+
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:padding="5dp"
     tools:context=".NewActivity">
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="93dp"
-        android:layout_height="22dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|top"
         android:layout_marginStart="12dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="12dp"
         android:gravity="center"
-        android:text="@string/app_name"
+        android:text="Air Hockey Wear"
+        android:textColor="@color/white"
         android:textSize="18sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.53"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/map"
-        android:layout_width="108dp"
-        android:layout_height="32dp"
-        android:layout_gravity="center"
-        android:layout_marginTop="8dp"
-        android:gravity="center"
-        android:text="Select a map"
-        android:textSize="10sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.493"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
-        android:layout_width="129dp"
-        android:layout_height="107dp"
-        android:layout_marginTop="8dp"
-        android:gravity="center|top"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/map"
-        app:layout_constraintVertical_bias="1.0">
+        android:layout_width="164dp"
+        android:layout_height="110dp"
+        android:layout_gravity="center"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="20dp"
+        android:gravity="center"
+        android:orientation="vertical">
 
         <Button
             android:id="@+id/easy"
             android:layout_width="88dp"
-            android:layout_height="32dp"
+            android:layout_height="17dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/button_stroke"
+            android:strokeColor="@color/white"
             android:text="Easy"
-            android:textSize="6sp" />
-
-        <Button
-            android:id="@+id/hard"
-            android:layout_width="88dp"
-            android:layout_height="32dp"
-            android:text="Hard"
-            android:textSize="6sp" />
+            android:textColor="@color/white"
+            android:textSize="8sp" />
 
         <Button
             android:id="@+id/medium"
             android:layout_width="88dp"
-            android:layout_height="32dp"
-            android:text="Medium"
-            android:textSize="6sp" />
+            android:layout_height="17dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/button_stroke"
+            android:text="Normal"
+            android:textColor="@color/white"
+            android:textSize="8sp" />
+
+        <Button
+            android:id="@+id/hard"
+            android:layout_width="wrap_content"
+            android:layout_height="17dp"
+            android:layout_margin="3dp"
+            android:background="@drawable/button_stroke"
+            android:text="Hard"
+            android:textColor="@color/white"
+            android:textSize="8sp" />
+
+        <Button
+            android:id="@+id/map"
+            android:layout_width="88dp"
+            android:layout_height="17dp"
+            android:layout_gravity="center"
+            android:layout_margin="3dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/button_stroke"
+            android:gravity="center"
+            android:text="Select a map"
+            android:textColor="@color/white"
+            android:textSize="8sp" />
 
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/imageButton"
+        android:layout_width="28dp"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_gravity="bottom|left"
+        android:layout_marginTop="2dp"
+        android:src="@drawable/ic_volume_up_black_24dp"
+       />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>
 </androidx.wear.widget.BoxInsetLayout>

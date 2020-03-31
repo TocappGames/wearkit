@@ -1,10 +1,8 @@
 package com.tocapp.dyn4jtest;
 
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,14 +12,12 @@ import android.widget.Button;
 import android.widget.ImageButton;
 
 import androidx.annotation.WorkerThread;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
+
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
-import com.google.android.wearable.intent.RemoteIntent;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -29,32 +25,27 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-import static android.provider.CalendarContract.EXTRA_EVENT_ID;
-
 public class SelectMap extends WearableActivity {
     int selection = 0;
     int numMaps = 5;
     private static final String OPEN_MAP_SELECTOR = "/open_map_selector";
 
-    int ballColor;
-    int sticksColor;
-    int boxColor;
-    int goalsColor;
     private ArrayList<Integer> images;
     private ImageButton image;
 
     static final String GAME_PATH = "com.tocapp.dyn4jtest.SelectMap";
 
     private SharedPreferences sharedPref;
-    private SharedPreferences.Editor editor;
+    private SharedPreferences.Editor sharedPrefEditor;
 
     private Button buttonSelect;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_map);
+
         sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        editor = sharedPref.edit();
+        sharedPrefEditor = sharedPref.edit();
 
         ImageButton buttonLeft = findViewById(R.id.buttonLeft);
         ImageButton buttonRight = findViewById(R.id.buttonRight);
@@ -129,6 +120,7 @@ public class SelectMap extends WearableActivity {
                     MainActivity.goalsColor = Color.CYAN;
                     MainActivity.backgroundImage = R.drawable.fondo_2;
                 } else {
+                    // If map is not viewed, start mobile activity to see it.
                     onStartMobileActivity(view);
                 }
                 break;
@@ -208,10 +200,12 @@ public class SelectMap extends WearableActivity {
     @WorkerThread
     private void sendStartActivityMessage(String node) {
         System.out.println("Sending message to start activity");
-       /* RemoteIntent.startRemoteActivity(getApplicationContext(), new Intent(Intent.ACTION_VIEW).addCategory(Intent.CATEGORY_BROWSABLE)
+            // Open play store with remote intent, it works
+        /* RemoteIntent.startRemoteActivity(getApplicationContext(), new Intent(Intent.ACTION_VIEW).addCategory(Intent.CATEGORY_BROWSABLE)
                         .setData(Uri.parse("https://play.google.com/store/apps/details?id=com.mobirix.airhockey&hl")),
                 null, node);*/
 
+        // Send normal message, and mobile will open intent
         Task<Integer> sendMessageTask =
                 Wearable.getMessageClient(this).sendMessage(node, OPEN_MAP_SELECTOR, new byte[0]);
 

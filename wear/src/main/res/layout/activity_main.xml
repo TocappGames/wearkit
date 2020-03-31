@@ -4,17 +4,21 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/dark_grey"
-    android:padding="@dimen/box_inset_layout_padding"
+    android:background="@color/black"
     tools:context=".MainActivity"
     tools:deviceIds="wear">
 
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:boxedEdges="all"
+    android:padding="5dp">
 
 
-        <com.tocapp.sdk.display.GameView
-            android:id="@+id/game_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+    <com.tocapp.sdk.display.GameView
+        android:id="@+id/game_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <ImageButton
         android:id="@+id/butt"
@@ -22,5 +26,6 @@
         android:layout_height="20dp"
         android:background="@drawable/ic_keyboard_arrow_left_24px" />
 
+</FrameLayout>
 
 </androidx.wear.widget.BoxInsetLayout>
