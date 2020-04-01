@@ -2,6 +2,7 @@ package com.tocapp.sdk.engine;
 
 
 import android.content.Context;
+import android.view.MotionEvent;
 
 import com.tocapp.sdk.rendering.Renderable;
 
@@ -43,4 +44,5 @@ abstract public class AbstractGame implements Game {
         return 1.0;
     }
 
+    public abstract boolean onGenericMotionEvent(MotionEvent ev);
 }

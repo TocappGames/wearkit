@@ -2,25 +2,26 @@ package com.tocapp.dyn4jtest;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.app.Activity;
 import android.content.Intent;
-import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 public class NewActivity extends AppCompatActivity {
+    ImageButton soundBtn;
+    boolean sound = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new);
-
         Button easy = findViewById(R.id.easy);
         Button medium = findViewById(R.id.medium);
         Button hard = findViewById(R.id.hard);
         Button map = findViewById(R.id.map);
+        soundBtn = findViewById(R.id.sound);
+        soundBtn.setImageResource(R.drawable.sound_on);
         easy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,6 +59,19 @@ public class NewActivity extends AppCompatActivity {
             }
         });
 
+        soundBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (sound) {
+                    soundBtn.setImageResource(R.drawable.sound_off);
+                } else {
+                    soundBtn.setImageResource(R.drawable.sound_on);
+                }
+                sound = !sound;
+                MainActivity.sound = sound;
+                System.out.println(sound);
+            }
+        });
     }
 
 

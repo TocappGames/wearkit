@@ -2,6 +2,7 @@ package com.tocapp.sdk.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.wearable.input.RotaryEncoder;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -85,6 +86,23 @@ public class GameView extends View {
         this.game.postRender();
 
     }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent ev) {
+        if (ev.getAction() == MotionEvent.ACTION_SCROLL
+                && RotaryEncoder.isFromRotaryEncoder(ev)) {
+            this.game.onGenericMotionEvent(ev);
+           /* // Note that we negate the delta value here in order to get the right scroll direction.
+            float delta = -RotaryEncoder.getRotaryAxisValue(ev)
+                    * RotaryEncoder.getScaledScrollFactor(getContext());
+            System.out.println(delta);
+            float result = Math.round(delta);
+*/
+            return true;
+        }
+        return super.onGenericMotionEvent(ev);
+    }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

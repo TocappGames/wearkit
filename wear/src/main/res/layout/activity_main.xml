@@ -11,8 +11,7 @@
 <FrameLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:boxedEdges="all"
-    android:padding="5dp">
+    app:boxedEdges="all">
 
 
     <com.tocapp.sdk.display.GameView

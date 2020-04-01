@@ -1,63 +1,70 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:background="@color/colorBlack"
     tools:context=".SelectMap">
 
-    <ImageButton
-        android:id="@+id/buttonLeft"
-        android:layout_width="83dp"
-        android:layout_height="122dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="300dp"
-        android:background="@drawable/left"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
 
-    <ImageButton
-        android:id="@+id/buttonRight"
-        android:layout_width="83dp"
-        android:layout_height="122dp"
-        android:layout_marginStart="300dp"
-        android:layout_marginEnd="20dp"
-        android:background="@drawable/right"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.9"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.499" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:gravity="center_horizontal"
+        android:orientation="horizontal">
 
-    <ImageButton
-        android:id="@+id/image"
-        android:layout_width="188dp"
-        android:layout_height="328dp"
-        android:scaleType="centerCrop"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/buttonRight"
-        app:layout_constraintStart_toEndOf="@+id/buttonLeft"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.498"
-        app:srcCompat="@drawable/mapa1"
-        android:contentDescription="" />
+        <ImageButton
+            android:id="@+id/buttonLeft"
+            android:layout_width="83dp"
+            android:layout_height="122dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/left"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintEnd_toStartOf="@+id/image"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/image" />
 
-    <Button
-        android:id="@+id/selectBtn"
-        android:layout_width="185dp"
-        android:layout_height="108dp"
-        android:text="Select map"
-        android:textColor="@color/colorWhite"
-        android:background="@drawable/button_stroke"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.48"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/image" />
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <ImageButton
+            android:id="@+id/image"
+            android:layout_width="188dp"
+            android:layout_height="328dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="centerCrop"
+            app:layout_constraintBottom_toTopOf="@+id/selectBtn"
+            app:layout_constraintEnd_toStartOf="@+id/buttonRight"
+            app:layout_constraintStart_toEndOf="@+id/buttonLeft"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/mapa1" />
+
+        <ImageButton
+            android:id="@+id/buttonRight"
+            android:layout_width="83dp"
+            android:layout_height="122dp"
+            android:layout_gravity="center_vertical"
+            android:background="@drawable/right"
+            app:layout_constraintBottom_toBottomOf="@+id/image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/image"
+            app:layout_constraintTop_toTopOf="@+id/image"
+            app:layout_constraintVertical_bias="0.533" />
+
+        <Button
+            android:id="@+id/selectBtn"
+            android:layout_width="188dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/button_stroke"
+            android:text="Select map"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</LinearLayout>

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.tocapp.dyn4jtest">
+    package="com.tocapp.dyn4jtest"
+    tools:ignore="LockedOrientationActivity">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
@@ -18,14 +19,17 @@
                     tools:ignore="WearableBindListener" />
             </intent-filter>
         </service>
-        <activity android:name=".SelectMap">
+        <activity android:name=".SelectMap"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <!-- listeners receive events that match the action and data filters -->
                 <action android:name="com.tocapp.dyn4jtest.SelectMap" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".NewActivity">
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NewActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

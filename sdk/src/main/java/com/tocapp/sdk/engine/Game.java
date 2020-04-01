@@ -24,7 +24,7 @@ public interface Game {
     void postRender();
     void finish();
     void touchEvent(MotionEvent event, double scale);
-    void rotatoryEvent(View v, MotionEvent ev);
+    boolean onGenericMotionEvent(MotionEvent ev);
     World getWorld();
     List<Renderable> getBackgroundLandscape();
     List<Renderable> getLandscape();

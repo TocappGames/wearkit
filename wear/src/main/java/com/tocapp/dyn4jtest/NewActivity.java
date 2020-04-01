@@ -12,11 +12,6 @@ import android.widget.Button;
 
 public class NewActivity extends WearableActivity {
 
-    public static int ballColor;
-    public static int sticksColor;
-    public static int boxColor;
-    public static int goalsColor;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,18 +64,5 @@ public class NewActivity extends WearableActivity {
 
     }
 
-    @Override
-    public boolean onGenericMotionEvent(MotionEvent ev) {
-        if (ev.getAction() == MotionEvent.ACTION_SCROLL
-                && RotaryEncoder.isFromRotaryEncoder(ev)) {
-            // Note that we negate the delta value here in order to get the right scroll direction.
-            float delta = -RotaryEncoder.getRotaryAxisValue(ev)
-                    * RotaryEncoder.getScaledScrollFactor(getApplicationContext());
-            System.out.println(delta);
-            //scrollBy(0, Math.round(delta));
-            return true;
-        }
-        return super.onGenericMotionEvent(ev);
-    }
 
 }
