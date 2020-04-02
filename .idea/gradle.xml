@@ -10,9 +10,10 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
+            <option value="$PROJECT_DIR$/airhockey" />
             <option value="$PROJECT_DIR$/mobile" />
             <option value="$PROJECT_DIR$/sdk" />
-            <option value="$PROJECT_DIR$/touchround" />
+            <option value="$PROJECT_DIR$/utils" />
             <option value="$PROJECT_DIR$/wear" />
           </set>
         </option>

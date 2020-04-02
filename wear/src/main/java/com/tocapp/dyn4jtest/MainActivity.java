@@ -48,6 +48,7 @@ public class MainActivity extends WearGameActivity{
     static public int goalsColor = Color.RED;
     static public int backgroundImage = 0;
     public static boolean displayIsRound = false;
+    public static boolean sound = true;
 
 
     @Override
@@ -66,7 +67,7 @@ public class MainActivity extends WearGameActivity{
 
     @Override
     protected Game getGame() {
-        return new AirHockey(level, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
+        return new AirHockey(level, sound, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
     }
 
     @Override

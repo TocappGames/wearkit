@@ -1,5 +1,7 @@
 package com.tocapp.dyn4jtest;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
@@ -18,6 +20,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
 import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.Wearable;
+import com.tocapp.utils.SharedPrefsUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -35,8 +38,7 @@ public class SelectMap extends WearableActivity {
 
     static final String GAME_PATH = "com.tocapp.dyn4jtest.SelectMap";
 
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor sharedPrefEditor;
+    private SharedPrefsUtil sharedPrefs;
 
     private Button buttonSelect;
     @Override
@@ -44,8 +46,7 @@ public class SelectMap extends WearableActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_map);
 
-        sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplication());
-        sharedPrefEditor = sharedPref.edit();
+        sharedPrefs = new SharedPrefsUtil(getApplication());
 
         ImageButton buttonLeft = findViewById(R.id.buttonLeft);
         ImageButton buttonRight = findViewById(R.id.buttonRight);
@@ -67,7 +68,6 @@ public class SelectMap extends WearableActivity {
                 if (selection < numMaps -1) {
                     selection++;
                     mapChanged();
-                    image.setImageResource(images.get(selection));
                 }
 
             }
@@ -79,8 +79,6 @@ public class SelectMap extends WearableActivity {
                 if (selection > 0) {
                     selection--;
                     mapChanged();
-                    image.setImageResource(images.get(selection));
-
                 }
             }
         });
@@ -104,92 +102,125 @@ public class SelectMap extends WearableActivity {
     }
 
     private void onMapSelected(View view) {
+        Intent mainActivityIntent = new Intent(SelectMap.this, NewActivity.class);
+
         switch (selection) {
             case 0:
-                MainActivity.ballColor = Color.WHITE;
-                MainActivity.sticksColor = Color.BLUE;
-                MainActivity.boxColor = Color.WHITE;
-                MainActivity.goalsColor = Color.RED;
+                MainActivity.ballColor = R.color.white;
+                MainActivity.sticksColor = R.color.blue;
+                MainActivity.boxColor = R.color.white;
+                MainActivity.goalsColor = R.color.red;
+                startActivity(mainActivityIntent);
                 break;
             case 1:
-                boolean mapa1Viewed = sharedPref.getBoolean("1", false);
-                if (mapa1Viewed) {
-                    MainActivity.ballColor = Color.YELLOW;
-                    MainActivity.sticksColor = Color.GREEN;
-                    MainActivity.boxColor = Color.MAGENTA;
-                    MainActivity.goalsColor = Color.CYAN;
+                if (checkMap("1")) {
+                    MainActivity.ballColor = R.color.cyan;
+                    MainActivity.sticksColor = R.color.yellow;
+                    MainActivity.boxColor = R.color.purple;
+                    MainActivity.goalsColor = R.color.green;
+
                     MainActivity.backgroundImage = R.drawable.fondo_2;
+                    startActivity(mainActivityIntent);
                 } else {
-                    // If map is not viewed, start mobile activity to see it.
-                    onStartMobileActivity(view);
+                    showAlert();
+                    sharedPrefs.setSharedPref( "1" );
+
                 }
                 break;
             case 2:
                 // get if video is viewed
-                boolean mapa2Viewed = sharedPref.getBoolean("2", false);
-                if (mapa2Viewed) {
-                    MainActivity.ballColor = Color.CYAN;
-                    MainActivity.sticksColor = Color.YELLOW;
-                    MainActivity.boxColor = Color.MAGENTA;
-                    MainActivity.goalsColor = Color.GREEN;
+                if (checkMap("2")) {
+                    MainActivity.ballColor = R.color.green;
+                    MainActivity.sticksColor = R.color.purple;
+                    MainActivity.boxColor = R.color.white;
+                    MainActivity.goalsColor = R.color.red;
+
                     MainActivity.backgroundImage = R.drawable.fondo_3;
+                    startActivity(mainActivityIntent);
                 }else {
-                    onStartMobileActivity(view);
-                }
+                    showAlert();
+
+                    sharedPrefs.setSharedPref( "2" );
+        }
 
                 break;
             case 3:
                 // get if video is viewed
-                boolean mapa3Viewed = sharedPref.getBoolean("3", false);
-                if (mapa3Viewed) {
-                    MainActivity.ballColor = Color.GREEN;
-                    MainActivity.sticksColor = Color.MAGENTA;
-                    MainActivity.boxColor = Color.WHITE;
-                    MainActivity.goalsColor = Color.RED;
+                if (checkMap("3")) {
+                    MainActivity.ballColor = R.color.black;
+                    MainActivity.sticksColor = R.color.green;
+                    MainActivity.boxColor = R.color.yellow;
+                    MainActivity.goalsColor = R.color.purple;
+
                     MainActivity.backgroundImage = R.drawable.fondo_4;
+                    startActivity(mainActivityIntent);
+
                 }else {
-                    onStartMobileActivity(view);
+                    showAlert();
+
+                    sharedPrefs.setSharedPref( "3" );
                 }
 
                 break;
             case 4:
-                boolean mapa4Viewed = sharedPref.getBoolean("4", false);
-                if (mapa4Viewed) {
+                if (checkMap("4")) {
                     MainActivity.ballColor = Color.BLACK;
                     MainActivity.sticksColor = Color.GREEN;
                     MainActivity.boxColor = Color.YELLOW;
                     MainActivity.goalsColor = Color.MAGENTA;
+
                     MainActivity.backgroundImage = R.drawable.fondo_5;
+                    startActivity(mainActivityIntent);
                 }else {
-                    onStartMobileActivity(view);
+                    showAlert();
+                    sharedPrefs.setSharedPref( "4" );
                 }
 
                 break;
         }
 
-        Intent i = new Intent(SelectMap.this, NewActivity.class);
-        startActivity(i);
     }
 
+    private boolean checkMap(String mapId) {
+        return (sharedPrefs.getSharedPref(mapId));
+    }
+
+    // Check text on button
     private void mapChanged() {
-        boolean mapIsUnlocked = sharedPref.getBoolean(Integer.toString(selection), false);
+        image.setImageResource(images.get(selection));
+        boolean mapIsUnlocked = sharedPrefs.getSharedPref( Integer.toString(  selection) );
         if (selection == 0) mapIsUnlocked = true;
         if (mapIsUnlocked) {
             buttonSelect.setText("Select map");
         } else {
-            buttonSelect.setText("Unlock in phone");
+            buttonSelect.setText("You need to see a video");
         }
     }
+    private void showAlert() {
+        AlertDialog.Builder builder = new AlertDialog.Builder( this );
 
+        builder.setMessage("Do you wanna go mobile?" )
+                .setTitle( "Are you sure?" );
+
+        builder.setPositiveButton("Go mobile", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                onStartMobileActivity();
+            }
+        });
+        builder.setNegativeButton("Go back", new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                onBackPressed();
+            }
+        });
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
     private class StartMobileActivity extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... args) {
             Collection<String> nodes = getNodes();
-            System.out.println("Nodes: " + nodes);
-
             for (String node : nodes) {
-                System.out.println("Nodes: " + node);
                 sendStartActivityMessage(node);
             }
             return null;
@@ -225,7 +256,7 @@ public class SelectMap extends WearableActivity {
     }
 
     /** Sends an RPC to start a fullscreen Activity on the wearable. */
-    public void onStartMobileActivity(View view) {
+    public void onStartMobileActivity() {
         new StartMobileActivity().execute();
     }
 

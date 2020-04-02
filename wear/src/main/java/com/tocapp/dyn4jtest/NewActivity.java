@@ -8,10 +8,12 @@ import android.support.wearable.input.RotaryEncoder;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageButton;
 
 
 public class NewActivity extends WearableActivity {
-
+    ImageButton soundBtn;
+    boolean sound = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +26,8 @@ public class NewActivity extends WearableActivity {
         Button medium = findViewById(R.id.medium);
         Button hard = findViewById(R.id.hard);
         Button map = findViewById(R.id.map);
+        soundBtn = findViewById(R.id.soundBtn);
+        soundBtn.setImageResource(R.drawable.sound_on);
         easy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -62,6 +66,19 @@ public class NewActivity extends WearableActivity {
             }
         });
 
+        soundBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (sound) {
+                    soundBtn.setImageResource(R.drawable.sound_off);
+                } else {
+                    soundBtn.setImageResource(R.drawable.sound_on);
+                }
+                sound = !sound;
+                MainActivity.sound = sound;
+                System.out.println(sound);
+            }
+        });
     }
 
 

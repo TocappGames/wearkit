@@ -29,8 +29,10 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
     implementation 'androidx.wear:wear:1.0.0'
     compileOnly 'com.google.android.wearable:wearable:2.5.0'
-    implementation project(path: ':touchround')
+    implementation project(path: ':airhockey')
     implementation project(path: ':sdk')
     implementation 'org.dyn4j:dyn4j:3.4.0'
+    implementation project(":utils")
+
 
 }

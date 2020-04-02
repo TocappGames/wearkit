@@ -31,6 +31,7 @@ import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
+import com.tocapp.utils.SharedPrefsUtil;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -45,8 +46,8 @@ public class DataLayerListenerService extends WearableListenerService {
     public static final String VIDEO_CONFIRMATION_PATH = "/confirmation";
     private static final String UNLOCKED_MAP_ID = "id";
     public static final String VIDEO_CONFIRMATION_TIME = "time";
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor editor;
+    private SharedPrefsUtil sharedPrefs;
+
 
     @Override
     public void onDataChanged(DataEventBuffer dataEvents) {
@@ -55,13 +56,11 @@ public class DataLayerListenerService extends WearableListenerService {
                 String path = event.getDataItem().getUri().getPath();
                 // If data is about video confirmation
                 if (DataLayerListenerService.VIDEO_CONFIRMATION_PATH.equals(path)) {
-                    sharedPref = PreferenceManager.getDefaultSharedPreferences(getApplication());
-                    editor = sharedPref.edit();
                     // get map id and put it true on shared prefs
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                     int mapId = dataMapItem.getDataMap().getInt(UNLOCKED_MAP_ID);
-                    editor.putBoolean(Integer.toString(mapId), true);
-                    editor.commit();
+                    sharedPrefs = new SharedPrefsUtil(getApplication());
+                    sharedPrefs.setSharedPref(Integer.toString(mapId));
 
                     // Get time confirmation
                     long confirmationTime =

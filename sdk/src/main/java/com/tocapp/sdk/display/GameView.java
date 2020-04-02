@@ -1,18 +1,24 @@
 package com.tocapp.sdk.display;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.support.wearable.input.RotaryEncoder;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 
 import com.tocapp.sdk.engine.Game;
 import com.tocapp.sdk.rendering.Renderable;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.dynamics.World;
+
+import java.util.Locale;
 
 public class GameView extends View {
 
@@ -27,19 +33,6 @@ public class GameView extends View {
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.status = STATUS_READY;
-        double cmX = Math.pow(display.widthPixels/display.xdpi,2);
-        double cmY = Math.pow(display.heightPixels/display.ydpi,2);
-        double screenInches = Math.sqrt(cmX+ cmY);
-        double area = cmX * cmY;
-        System.out.println(display.widthPixels);
-        System.out.println(display.heightPixels);
-        System.out.println(display.xdpi);
-        System.out.println(display.ydpi);
-        System.out.println(cmX);
-        System.out.println(cmY);
-        System.out.println(screenInches);
-        System.out.println(area);
-
 
     }
 

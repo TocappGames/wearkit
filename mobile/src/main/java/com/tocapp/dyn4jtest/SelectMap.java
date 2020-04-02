@@ -29,6 +29,7 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.tocapp.utils.SharedPrefsUtil;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -51,17 +52,19 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     private static final String VIDEO_CONFIRMATION_TIME = "time";
     private static final String UNLOCKED_MAP_ID = "id";
     private static final String START_ACTIVITY_PATH = "/start-activity";
+    private static final String MAP1 = "1";
+    private static final String MAP2 = "2";
+    private static final String MAP3 = "3";
+    private static final String MAP4 = "4";
 
-    private SharedPreferences sharedPref;
-    private SharedPreferences.Editor sharedPrefEditor;
+    private SharedPrefsUtil sharedPrefs;
     private Button buttonSelect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_select_map);
-        sharedPref = getPreferences(Context.MODE_PRIVATE);
-        sharedPrefEditor = sharedPref.edit();
+        sharedPrefs = new SharedPrefsUtil(getApplication());
         ImageButton buttonLeft = findViewById(R.id.buttonLeft);
         ImageButton buttonRight = findViewById(R.id.buttonRight);
         buttonSelect = findViewById(R.id.selectBtn);
@@ -83,7 +86,6 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (selection < numMaps - 1) {
                     selection++;
                     mapChanged();
-                    image.setImageResource(images.get(selection));
                 }
             }
         });
@@ -94,7 +96,6 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (selection > 0) {
                     selection--;
                     mapChanged();
-                    image.setImageResource(images.get(selection));
                 }
             }
         });
@@ -118,60 +119,56 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     private void onMapSelected() {
         switch (selection) {
             case 0:
-                MainActivity.ballColor = Color.WHITE;
-                MainActivity.sticksColor = Color.BLUE;
-                MainActivity.boxColor = Color.WHITE;
-                MainActivity.goalsColor = Color.RED;
+                MainActivity.ballColor = R.color.white;
+                MainActivity.sticksColor = R.color.blue;
+                MainActivity.boxColor = R.color.white;
+                MainActivity.goalsColor = R.color.red;
                 break;
 
             case 1:
-                boolean mapa1Viewed = sharedPref.getBoolean("1", false);
-                if (!mapa1Viewed)
-                    seeVideo(1);
+                if (!checkMap(MAP1))
+                    seeVideo(MAP1);
                 else {
-                    MainActivity.ballColor = Color.YELLOW;
-                    MainActivity.sticksColor = Color.GREEN;
-                    MainActivity.boxColor = Color.MAGENTA;
-                    MainActivity.goalsColor = Color.CYAN;
+                    MainActivity.ballColor = R.color.yellow;
+                    MainActivity.sticksColor = R.color.green;
+                    MainActivity.boxColor = R.color.purple;
+                    MainActivity.goalsColor = R.color.cyan;
                     MainActivity.backgroundImage = R.drawable.fondo_2;
                 }
                 break;
 
             case 2:
-                boolean mapa2Viewed = sharedPref.getBoolean("2", false);
-                if (!mapa2Viewed)
-                    seeVideo(2);
+                if (!checkMap(MAP2))
+                    seeVideo(MAP2);
                 else {
-                    MainActivity.ballColor = Color.CYAN;
-                    MainActivity.sticksColor = Color.YELLOW;
-                    MainActivity.boxColor = Color.MAGENTA;
-                    MainActivity.goalsColor = Color.GREEN;
+                    MainActivity.ballColor = R.color.cyan;
+                    MainActivity.sticksColor = R.color.yellow;
+                    MainActivity.boxColor = R.color.purple;
+                    MainActivity.goalsColor = R.color.green;
                     MainActivity.backgroundImage = R.drawable.fondo_3;
                 }
                 break;
 
             case 3:
-                boolean mapa3Viewed = sharedPref.getBoolean("2", false);
-                if (!mapa3Viewed)
-                    seeVideo(3);
+                if (!checkMap(MAP3))
+                    seeVideo(MAP3);
                 else {
-                    MainActivity.ballColor = Color.GREEN;
-                    MainActivity.sticksColor = Color.MAGENTA;
-                    MainActivity.boxColor = Color.WHITE;
-                    MainActivity.goalsColor = Color.RED;
+                    MainActivity.ballColor = R.color.green;
+                    MainActivity.sticksColor = R.color.purple;
+                    MainActivity.boxColor = R.color.white;
+                    MainActivity.goalsColor = R.color.red;
                     MainActivity.backgroundImage = R.drawable.fondo_4;
                 }
                 break;
 
             case 4:
-                boolean mapa4Viewed = sharedPref.getBoolean("2", false);
-                if (!mapa4Viewed)
-                    seeVideo(2);
+                if (!checkMap(MAP4))
+                    seeVideo(MAP4);
                 else {
-                    MainActivity.ballColor = Color.BLACK;
-                    MainActivity.sticksColor = Color.GREEN;
-                    MainActivity.boxColor = Color.YELLOW;
-                    MainActivity.goalsColor = Color.MAGENTA;
+                    MainActivity.ballColor = R.color.black;
+                    MainActivity.sticksColor = R.color.green;
+                    MainActivity.boxColor = R.color.yellow;
+                    MainActivity.goalsColor = R.color.purple;
                     MainActivity.backgroundImage = R.drawable.fondo_5;
                 }
                 break;
@@ -181,21 +178,26 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         startActivity(i);
     }
 
-    private void seeVideo(int numMap) {
+    private boolean checkMap(String mapId) {
+        return (sharedPrefs.getSharedPref(mapId));
+    }
+
+
+    private void seeVideo(String numMap) {
         boolean videoViewed = false;
         System.out.println("Watching video");
         videoViewed = true;
         if (videoViewed) {
             // Put true on sharedPrefs with numMap reference
-            sharedPrefEditor.putBoolean(Integer.toString(numMap), true);
-            sharedPrefEditor.commit();
-            sendVideoViewedConfirmation(numMap);
+           sharedPrefs.setSharedPref(numMap);
+            sendVideoViewedConfirmation(Integer.parseInt(numMap));
         }
     }
 
     // Check text on button
     private void mapChanged() {
-        boolean mapIsUnlocked = sharedPref.getBoolean(Integer.toString(selection), false);
+        image.setImageResource(images.get(selection));
+        boolean mapIsUnlocked = sharedPrefs.getSharedPref( Integer.toString(  selection) );
         if (selection == 0) mapIsUnlocked = true;
         if (mapIsUnlocked) {
             buttonSelect.setText("Select map");

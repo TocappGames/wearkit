@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/colorBlack"
+    android:background="@color/black"
     tools:context=".SelectMap">
 
 
@@ -18,10 +18,11 @@
 
         <ImageButton
             android:id="@+id/buttonLeft"
-            android:layout_width="83dp"
-            android:layout_height="122dp"
+            android:layout_width="95dp"
+            android:layout_height="130dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/left"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="@+id/image"
             app:layout_constraintEnd_toStartOf="@+id/image"
             app:layout_constraintStart_toStartOf="parent"
@@ -41,28 +42,27 @@
 
         <ImageButton
             android:id="@+id/buttonRight"
-            android:layout_width="83dp"
-            android:layout_height="122dp"
+            android:layout_width="95dp"
+            android:layout_height="130dp"
             android:layout_gravity="center_vertical"
             android:background="@drawable/right"
+            android:scaleType="centerCrop"
             app:layout_constraintBottom_toBottomOf="@+id/image"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/image"
-            app:layout_constraintTop_toTopOf="@+id/image"
-            app:layout_constraintVertical_bias="0.533" />
+            app:layout_constraintTop_toTopOf="@+id/image" />
 
         <Button
             android:id="@+id/selectBtn"
             android:layout_width="188dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="32dp"
+            android:layout_height="48dp"
             android:background="@drawable/button_stroke"
             android:text="Select map"
             android:textColor="@color/colorWhite"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/image"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/image"
             app:layout_constraintTop_toBottomOf="@+id/image" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
