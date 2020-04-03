@@ -92,7 +92,7 @@ public class AirHockey extends AbstractGame {
     private boolean iaWin;
     private double goalTime;
 
-    public AirHockey(int level, boolean sound, boolean displayIsRound, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
+    public AirHockey(double width, double heiht, int level, boolean sound, boolean displayIsRound, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
         this.level = level;
         this.sound = sound;
         this.displayIsRound = displayIsRound;
