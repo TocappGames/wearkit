@@ -71,10 +71,11 @@ public class GameView extends View {
             ((Renderable) body).render(canvas, game.getScale());
         }
 
+
         for (Renderable r: this.game.getLandscape()) {
             r.render(canvas, this.game.getScale());
         }
-
+        this.game.getLandscape().clear();
 
         this.game.postRender();
 

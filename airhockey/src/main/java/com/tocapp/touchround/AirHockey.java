@@ -40,7 +40,7 @@ public class AirHockey extends AbstractGame {
     double sidesMargin;
     double boxHeight;
     boolean sound;
-
+    private DrawUtils drawUtils;
     private SoundUtils soundUtil;
 
     private static final Vector2 MY_GRAVITY = new Vector2(0.0, 9.8);
@@ -143,95 +143,9 @@ public class AirHockey extends AbstractGame {
         this.world.setUpdateRequired( false );
         settings.setContinuousDetectionMode(ContinuousDetectionMode.ALL);
         //settings.setMaximumTranslation(1);
-        backgroundImageBmp = null;
-        if (backgroundImage != 0) {
-            backgroundImageBmp = BitmapFactory.decodeResource(
-                    context.getResources(),
-                    backgroundImage
-            );
-            backgroundImageBmp2 = Bitmap.createScaledBitmap(backgroundImageBmp, mobileWidth - (int) (sidesMargin * getScale()) * 2 - (int) (boxHeight * getScale()), mobileHeight - (int) (sidesMargin * getScale()) * 2 - (int) (boxHeight * getScale()), false);
 
-        }
-
-        this.backgroundLandscape.add(new Renderable() {
-            @Override
-            public void render(Canvas canvas, double scale) {
-                if (backgroundImageBmp != null) {
-                    canvas.drawBitmap(
-                            backgroundImageBmp2, // Bitmap
-                            (int) (sidesMargin * scale) + (int) (boxHeight * getScale() / 2), // Left
-                            (int) (sidesMargin * scale) + (int) (boxHeight * getScale() / 2), // Top
-                            null // Paint
-                    );
-                }
-            }
-
-            @Override
-            public void render(Canvas canvas, Paint paint, double scale) {
-
-            }
-        });
-
-        this.landscape.add(new Renderable() {
-            @Override
-            public void render(Canvas canvas, double scale) {
-                // Render difficulty on screen
-                String text = "";
-                switch (level) {
-                    case 1:
-                        text = "Easy";
-                        break;
-                    case 2:
-                        text = "Medium";
-                        break;
-                    case 3:
-                        text = "Hard";
-                        break;
-                }
-
-                Paint paint2 = new Paint();
-                paint2.setColor(Color.WHITE);
-                paint2.setTextSize(5 / (int) getScale());
-                canvas.drawText(text, mobileWidth / 8, mobileHeight / 8, paint2);
-
-                // Render punctuation
-                Paint paint = new Paint();
-                paint.setColor(Color.WHITE);
-                paint.setTextSize(2000 / (float) getScale());
-                canvas.drawText(userGoals.toString(), mobileWidth / 8, mobileHeight / 2 + 4000 / (float) getScale(), paint);
-                canvas.drawText(iaGoals.toString(), mobileWidth / 8, (float) mobileHeight / 2 - 4000 / (float) getScale(), paint);
-
-                // Render goal text
-                if (userScores) {
-                    if (System.currentTimeMillis() - goalTime < 1000) {
-                        paint.setTextSize(1800 / (float) getScale());
-                        canvas.drawText("USER GOAL", mobileWidth / 3 + 1000 / (int) getScale(), mobileHeight / 2 + 3000 / (int) getScale(), paint);
-                    }
-                }
-
-                if (iaScores) {
-                    if (System.currentTimeMillis() - goalTime < 1000) {
-                        paint.setTextSize(1800 / (float) getScale());
-                        canvas.drawText("MACHINE GOAL", mobileWidth / 3 + 1000 / (int) getScale(), mobileHeight / 2 - 3000 / (int) getScale(), paint);
-                    }
-                }
-
-                if (userWin) {
-                    paint.setTextSize(1800 / (float) getScale());
-                    canvas.drawText("User win!", mobileWidth / 3 + 1000 / (int) getScale(), mobileHeight / 2 - 3000 / (int) getScale(), paint);
-                }
-
-                if (iaWin) {
-                    paint.setTextSize(1800 / (float) getScale());
-                    canvas.drawText("Ia Win!", mobileWidth / 3 + 1000 / (int) getScale(), mobileHeight / 2 - 3000 / (int) getScale(), paint);
-                }
-
-            }
-
-            @Override
-            public void render(Canvas canvas, Paint paint, double scale) {
-            }
-        });
+        drawUtils = new DrawUtils( mobileWidth, mobileHeight, boxHeight, sidesMargin, context, getScale() );
+        drawUtils.drawBackground( backgroundLandscape, backgroundImage );
 
         this.world.setGravity(World.ZERO_GRAVITY);
 
@@ -493,6 +407,10 @@ public class AirHockey extends AbstractGame {
 
     @Override
     public void update() {
+
+        drawUtils.drawDifficulty( landscape, level);
+        drawUtils.drawGoals( landscape,userScores,iaScores,iaWin,userWin,goalTime );
+        drawUtils.drawPuncuation( landscape,userGoals,iaGoals );
 
         if (ball.getLinearVelocity().x >= 40)
             ball.setLinearVelocity(new Vector2(40, ball.getLinearVelocity().y));

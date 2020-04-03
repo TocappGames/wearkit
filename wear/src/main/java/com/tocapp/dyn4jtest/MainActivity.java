@@ -42,14 +42,15 @@ public class MainActivity extends WearGameActivity{
     private TextView mTextView;
 
     static public int level = 1;
-    static public int ballColor = Color.WHITE;
-    static public int sticksColor = Color.BLUE;
-    static public int boxColor = Color.WHITE;
-    static public int goalsColor = Color.RED;
-    static public int backgroundImage = 0;
+    static public int ballColor;
+    static public int sticksColor;
+    static public int boxColor;
+    static public int goalsColor;
+    static public int backgroundImage;
     public static boolean displayIsRound = false;
     public static boolean sound = true;
-
+    static public double width = 0;
+    static public double height = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,9 +74,6 @@ public class MainActivity extends WearGameActivity{
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Instantiates clients without member variables, as clients are inexpensive to create and
-        // won't lose their listeners. (They are cached and shared between GoogleApi instances.)
 
     }
 
