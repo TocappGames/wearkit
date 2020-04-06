@@ -32,7 +32,7 @@ public class AirHockey extends AbstractGame {
     private static int mobileHeight;
     private static boolean displayIsRound;
 
-    boolean sound;
+    private boolean sound;
     private DrawUtils drawUtils;
     private SoundUtils soundUtil;
 
@@ -41,7 +41,6 @@ public class AirHockey extends AbstractGame {
     private GameObject iaStick;
     private double iaStickBallCol;
     private GameObject ball;
-    private final double MAX_BALL_VELOCITY = 40;
     private double lastBallX;
     private double lastBallY;
     private GameObject centerRect;
@@ -69,8 +68,6 @@ public class AirHockey extends AbstractGame {
 
     private MotionEvent event;
 
-    double nextAttack = 10000;
-
     private Context context;
 
     private boolean userScores;
@@ -84,8 +81,6 @@ public class AirHockey extends AbstractGame {
     private double BOX_HEIGHT;
     private double WIDTH_SCALED;
     private double HEIGHT_SCALED;
-    private double BOARD_WIDTH;
-    private double BOARD_HEIGHT;
     private double CENTER_WIDTH;
     private double CENTER_HEIGHT;
 
@@ -102,7 +97,7 @@ public class AirHockey extends AbstractGame {
 
     @Override
     public double getScale() {
-        return 40;
+        return 0.4;
     }
 
     @Override
@@ -124,9 +119,9 @@ public class AirHockey extends AbstractGame {
     }
 
     private void win(String user) {
-        if (user == "user") {
+        if (user.equals("user")) {
             userWin = true;
-        } else if (user == "ia") {
+        } else if (user.equals( "ia" )) {
             iaWin = true;
         }
     }
@@ -195,22 +190,15 @@ public class AirHockey extends AbstractGame {
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2) {
                 // False collision ball with centerline
-                if (body1 == ball && body2 == centerRect
-                        || body2 == ball && body1 == centerRect) {
-                    return false;
-                }
-
-                return true;
+                return (body1 != ball || body2 != centerRect)
+                        && (body2 != ball || body1 != centerRect);
             }
 
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Manifold manifold) {
                 // False collision ball with centerline
-                if (body1 == ball && body2 == centerRect
-                        || body2 == ball && body1 == centerRect) {
-                    return false;
-                }
-                return true;
+                return (body1 != ball || body2 != centerRect)
+                        && (body2 != ball || body1 != centerRect);
             }
 
             @Override
@@ -232,10 +220,10 @@ public class AirHockey extends AbstractGame {
         iaStick = addIaStick();
         userStick = addUserStick();
         this.goalTime = System.currentTimeMillis();
-        if (goal == "user") {
+        if (goal.equals( "user" )) {
             userScores = true;
             userGoals++;
-        } else if (goal == "ia") {
+        } else if (goal.equals( "ia" )) {
             iaScores = true;
             iaGoals++;
         }
@@ -256,19 +244,19 @@ public class AirHockey extends AbstractGame {
         final double GOAL_WIDTH_PERCENT = 0.3;
         final double GOAL_WIDTH = (WIDTH_SCALED) * GOAL_WIDTH_PERCENT;
         final double GOAL_HEIGHT = BOX_HEIGHT;
-        BOARD_WIDTH = WIDTH_SCALED;
-        BOARD_HEIGHT = HEIGHT_SCALED;
+        double BOARD_WIDTH = WIDTH_SCALED;
+        double BOARD_HEIGHT = HEIGHT_SCALED;
 
         if (!displayIsRound) {
             // Ia map
             Rectangle leftBorderGoalIa = new Rectangle( BORDER_GOAL_WIDTH, BORDER_GOAL_HEIGTH );
-            leftBorderGoalIa.translate( BORDER_GOAL_WIDTH / 2, GOAL_HEIGHT * 0.5 );
+            leftBorderGoalIa.translate( BORDER_GOAL_WIDTH * 0.5, GOAL_HEIGHT * 0.5 );
 
             goalIa = new Rectangle( GOAL_WIDTH, GOAL_HEIGHT );
             goalIa.translate( CENTER_WIDTH, GOAL_HEIGHT * 0.5 );
 
             Rectangle rightBorderGoalIa = new Rectangle( BORDER_GOAL_WIDTH, BORDER_GOAL_HEIGTH );
-            rightBorderGoalIa.translate( BOARD_WIDTH - BORDER_GOAL_WIDTH / 2, GOAL_HEIGHT * 0.5 );
+            rightBorderGoalIa.translate( BOARD_WIDTH - BORDER_GOAL_WIDTH * 0.5, GOAL_HEIGHT * 0.5 );
 
             // User map
             Rectangle leftBorderGoalUser = new Rectangle( BORDER_GOAL_WIDTH, BORDER_GOAL_HEIGTH );
@@ -278,7 +266,7 @@ public class AirHockey extends AbstractGame {
             goalUser.translate( CENTER_WIDTH, BOARD_HEIGHT - GOAL_HEIGHT * 0.5 );
 
             Rectangle rightBorderGoalUser = new Rectangle( BORDER_GOAL_WIDTH, BORDER_GOAL_HEIGTH );
-            rightBorderGoalUser.translate( BOARD_WIDTH - BORDER_GOAL_WIDTH / 2, BOARD_HEIGHT - GOAL_HEIGHT * 0.5 );
+            rightBorderGoalUser.translate( BOARD_WIDTH - BORDER_GOAL_WIDTH * 0.5, BOARD_HEIGHT - GOAL_HEIGHT * 0.5 );
 
             // Sides walls
             Rectangle left = new Rectangle( BOX_HEIGHT, BOARD_HEIGHT );
@@ -356,14 +344,19 @@ public class AirHockey extends AbstractGame {
         GameObject ball = new GameObject( ballPaint );
         ball.addFixture( new Circle( BALL_RADIUS ), 0.5, 0.0, 1 );
 
-        if (position == "user") {
-            ball.translate( CENTER_WIDTH, USER_HOME_Y );
-        } else if (position == "ia") {
-            ball.translate( CENTER_WIDTH + xRange, IA_HOME_Y );
-        } else if (position == "center") {
-            ball.translate( CENTER_WIDTH, CENTER_HEIGHT );
-        } else if (position == "last") {
-            ball.translate( lastBallX, lastBallY );
+        switch (position) {
+            case "user":
+                ball.translate( CENTER_WIDTH, USER_HOME_Y );
+                break;
+            case "ia":
+                ball.translate( CENTER_WIDTH + xRange, IA_HOME_Y );
+                break;
+            case "center":
+                ball.translate( CENTER_WIDTH, CENTER_HEIGHT );
+                break;
+            case "last":
+                ball.translate( lastBallX, lastBallY );
+                break;
         }
 
         ball.setMass( MassType.NORMAL );
@@ -410,6 +403,7 @@ public class AirHockey extends AbstractGame {
         drawUtils.drawGoals( landscape, userScores, iaScores, iaWin, userWin, goalTime );
         drawUtils.drawPuncuation( landscape, userGoals, iaGoals );
 
+        double MAX_BALL_VELOCITY = 40;
         if (ball.getLinearVelocity().x >= MAX_BALL_VELOCITY)
             ball.setLinearVelocity( new Vector2( MAX_BALL_VELOCITY, ball.getLinearVelocity().y ) );
         else if (ball.getLinearVelocity().y >= MAX_BALL_VELOCITY)
@@ -472,19 +466,12 @@ public class AirHockey extends AbstractGame {
         double ballX = ball.getWorldCenter().x;
         double ballY = ball.getWorldCenter().y;
         double ballRadius = ball.getFixture( 0 ).getShape().getRadius();
+
         if (ballX < corner || ballX > cornerX || ballY < corner || ballY > cornerY) {
-            if (ballX < corner) {
-                lastBallX += ballRadius;
-            }
-            if (ballX > cornerX) {
-                lastBallX -= ballRadius;
-            }
-            if (ballY < corner) {
-                lastBallY += ballRadius;
-            }
-            if (ballY > cornerY) {
-                lastBallY -= ballRadius;
-            }
+            if (ballX < corner) lastBallX += ballRadius;
+            if (ballX > cornerX) lastBallX -= ballRadius;
+            if (ballY < corner) lastBallY += ballRadius;
+            if (ballY > cornerY) lastBallY -= ballRadius;
             world.removeBody( ball );
             ball = addBall( "last" );
         } else {
@@ -517,7 +504,7 @@ public class AirHockey extends AbstractGame {
     public void finish() {
     }
 
-    public void calculateIa() {
+    private void calculateIa() {
         double homeX;
         double homeY;
         if (!displayIsRound) {
@@ -555,7 +542,7 @@ public class AirHockey extends AbstractGame {
         switch (level) {
             case 1:
                 ballVel = 45;
-                nextAttack = 10000;
+                double nextAttack = 10000;
                 force = 350;
                 break;
             case 2:
