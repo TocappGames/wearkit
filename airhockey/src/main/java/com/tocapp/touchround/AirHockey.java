@@ -28,9 +28,9 @@ import static java.lang.Math.abs;
 
 public class AirHockey extends AbstractGame {
     private int level;
-    private static int mobileWidth;
-    private static int mobileHeight;
-    private static boolean displayIsRound;
+    private  int mobileWidth;
+    private  int mobileHeight;
+    private  boolean displayIsRound;
 
     private boolean sound;
     private DrawUtils drawUtils;
@@ -97,7 +97,7 @@ public class AirHockey extends AbstractGame {
 
     @Override
     public double getScale() {
-        return 0.4;
+        return 40;
     }
 
     @Override
@@ -237,15 +237,15 @@ public class AirHockey extends AbstractGame {
 
         final double BOX_HEIGHT_PERCENT = 0.03;
         BOX_HEIGHT = WIDTH_SCALED * BOX_HEIGHT_PERCENT;
-        final double CENTER_CIRC_RADIUS = BOX_HEIGHT * 0.25;
         final double BORDER_GOAL_WIDTH_PERCENT = 0.35;
         final double BORDER_GOAL_WIDTH = (WIDTH_SCALED) * BORDER_GOAL_WIDTH_PERCENT;
         final double BORDER_GOAL_HEIGTH = BOX_HEIGHT;
         final double GOAL_WIDTH_PERCENT = 0.3;
         final double GOAL_WIDTH = (WIDTH_SCALED) * GOAL_WIDTH_PERCENT;
         final double GOAL_HEIGHT = BOX_HEIGHT;
-        double BOARD_WIDTH = WIDTH_SCALED;
-        double BOARD_HEIGHT = HEIGHT_SCALED;
+        final double BOARD_WIDTH = WIDTH_SCALED;
+        final double BOARD_HEIGHT = HEIGHT_SCALED;
+        final double CENTER_CIRC_RADIUS = BOARD_WIDTH * 0.25;
 
         if (!displayIsRound) {
             // Ia map

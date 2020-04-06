@@ -14,22 +14,24 @@ import java.util.List;
 public class DrawUtils {
     int mobileWidth;
     int mobileHeight;
-    private int backgroundImage;
     private Bitmap backgroundImageBmp;
     private Bitmap backgroundImageBmpScaled;
     private int boxHeight;
     private int sidesMargin;
     private int scale;
     private Context context;
+    private int centerWidth = mobileWidth / 2;
+    private int centerHeight = mobileHeight / 2;
 
     public DrawUtils(int mobileWidth, int mobileHeight, double boxHeight, double sidesMargin, Context context, double scale) {
         this.mobileWidth = mobileWidth;
         this.mobileHeight = mobileHeight;
-        this.backgroundImage = backgroundImage;
+
         this.boxHeight = (int) boxHeight;
         this.sidesMargin = (int) sidesMargin;
         this.context = context;
         this.scale = (int) scale;
+
     }
 
     public void drawBackground(List<Renderable> background, int backgroundImage) {
@@ -41,8 +43,8 @@ public class DrawUtils {
 
             backgroundImageBmpScaled = Bitmap.createScaledBitmap(
                     backgroundImageBmp,
-                    mobileWidth - ( (sidesMargin * scale) * 2 -  (boxHeight * scale)),
-                    mobileHeight - ( (sidesMargin * scale) * 2 -  (boxHeight * scale)),
+                    mobileWidth - ((sidesMargin * scale) * 2 - (boxHeight * scale)),
+                    mobileHeight - ((sidesMargin * scale) * 2 - (boxHeight * scale)),
                     false );
 
         }
@@ -67,7 +69,7 @@ public class DrawUtils {
     }
 
     public void drawDifficulty(List<Renderable> landscape, final int level) {
-        landscape.add(new Renderable() {
+        landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
                 // Render difficulty on screen
@@ -86,7 +88,7 @@ public class DrawUtils {
 
                 Paint paint2 = new Paint();
                 paint2.setColor( Color.WHITE );
-                paint2.setTextSize( 5 / (int) scale );
+                paint2.setTextSize( mobileWidth / 20 );
                 canvas.drawText( text, mobileWidth / 8, mobileHeight / 8, paint2 );
 
             }
@@ -95,58 +97,49 @@ public class DrawUtils {
             public void render(Canvas canvas, Paint paint, double scale) {
 
             }
-        });
+        } );
     }
 
-            public void drawPuncuation(List<Renderable> landscape, final Integer userGoals, final Integer iaGoals) {
-                landscape.add( new Renderable() {
-                    @Override
-                    public void render(Canvas canvas, double scale) {
-                        // Render punctuation
-                        Paint paint = new Paint();
-                        paint.setColor( Color.WHITE );
-                        paint.setTextSize( 2000 / (float) scale );
-                        canvas.drawText( userGoals.toString(), mobileWidth / 8, mobileHeight / 2 + 4000 / (float) scale, paint );
-                        canvas.drawText( iaGoals.toString(), mobileWidth / 8, (float) mobileHeight / 2 - 4000 / (float) scale, paint );
-                    }
-
-                    @Override
-                    public void render(Canvas canvas, Paint paint, double scale) {
-
-                    }
-                } );
-            }
-            public void drawGoals(List<Renderable> landscape, final boolean userScores, final boolean iaScores, final boolean iaWin, final boolean userWin, final double goalTime) {
-        landscape.add(new Renderable() {
+    public void drawPuncuation(List<Renderable> landscape, final Integer userGoals, final Integer iaGoals) {
+        final float centerDistance = 4000;
+        landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
+                // Render punctuation
                 Paint paint = new Paint();
-                paint.setColor(Color.WHITE);
-                paint.setTextSize(2000 / (float) scale);
+                paint.setColor( Color.WHITE );
+                paint.setTextSize( 2000 / (float) scale );
+                canvas.drawText( userGoals.toString(), mobileWidth / 8, centerHeight + centerDistance / (float) scale, paint );
+                canvas.drawText( iaGoals.toString(), mobileWidth / 8, (float) centerHeight - centerDistance / (float) scale, paint );
+            }
+
+            @Override
+            public void render(Canvas canvas, Paint paint, double scale) {
+
+            }
+        } );
+    }
+
+    public void drawGoals(List<Renderable> landscape, final boolean userScores, final boolean iaScores, final boolean iaWin, final boolean userWin, final double goalTime) {
+        final float centerDistance = 3000;
+
+        landscape.add( new Renderable() {
+            @Override
+            public void render(Canvas canvas, double scale) {
+                String text = "";
+                Paint paint = new Paint();
+                paint.setColor( Color.WHITE );
+                paint.setTextSize( 2000 / (float) scale );
 
                 // Render goal text
-                if (userScores) {
-                    if (System.currentTimeMillis() - goalTime < 1000) {
-                        paint.setTextSize(1800 / (float) scale);
-                        canvas.drawText("USER GOAL", mobileWidth / 3 + 1000 / (int) scale, mobileHeight / 2 + 3000 / (int) scale, paint);
-                    }
-                }
+                if (userScores) text = "User goal";
+                if (iaScores) text = "Ia goal";
+                if (userWin) text = "User win";
+                if (iaWin) text = "Ia win";
 
-                if (iaScores) {
-                    if (System.currentTimeMillis() - goalTime < 1000) {
-                        paint.setTextSize(1800 / (float) scale);
-                        canvas.drawText("MACHINE GOAL", mobileWidth / 3 + 1000 / (int) scale, mobileHeight / 2 - 3000 / (int) scale, paint);
-                    }
-                }
-
-                if (userWin) {
-                    paint.setTextSize(1800 / (float) scale);
-                    canvas.drawText("User win!", mobileWidth / 3 + 1000 / (int) scale, mobileHeight / 2 - 3000 / (int) scale, paint);
-                }
-
-                if (iaWin) {
-                    paint.setTextSize(1800 / (float) scale);
-                    canvas.drawText("Ia Win!", mobileWidth / 3 + 1000 / (int) scale, mobileHeight / 2 - 3000 / (int) scale, paint);
+                if (System.currentTimeMillis() - goalTime < 1000) {
+                    paint.setTextSize( 1800 / (float) scale );
+                    canvas.drawText( text, 80 / (float) scale, centerHeight - centerDistance / (int) scale, paint );
                 }
 
             }
@@ -156,6 +149,6 @@ public class DrawUtils {
 
             }
 
-        });
+        } );
     }
 }
