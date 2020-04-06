@@ -142,6 +142,7 @@ public class AirHockey extends AbstractGame {
         this.world.setGravity( World.ZERO_GRAVITY );
 
         this.world.addListener( new CollisionListener() {
+            final int nextSoundTime = 400;
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
                 if (body1 == ball && body2 == centerRect
@@ -179,7 +180,7 @@ public class AirHockey extends AbstractGame {
                         || body2 == ball && body1 != centerRect
                         || body1 == ball && body2 != centerCirc
                         || body2 == ball && body1 != centerCirc) {
-                    if (lastSoundTime + 400 > System.currentTimeMillis())
+                    if (lastSoundTime + nextSoundTime > System.currentTimeMillis())
                         lastSoundTime = System.currentTimeMillis();
                     soundUtil.startTapSound();
 

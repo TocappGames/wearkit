@@ -69,6 +69,9 @@ public class DrawUtils {
     }
 
     public void drawDifficulty(List<Renderable> landscape, final int level) {
+        final int textSize = mobileWidth / 20;
+        final int positionX = mobileWidth / 8;
+        final int positionY = mobileHeight / 8;
         landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
@@ -88,8 +91,8 @@ public class DrawUtils {
 
                 Paint paint2 = new Paint();
                 paint2.setColor( Color.WHITE );
-                paint2.setTextSize( mobileWidth / 20 );
-                canvas.drawText( text, mobileWidth / 8, mobileHeight / 8, paint2 );
+                paint2.setTextSize( textSize );
+                canvas.drawText( text, positionX, positionY, paint2 );
 
             }
 
@@ -102,6 +105,8 @@ public class DrawUtils {
 
     public void drawPuncuation(List<Renderable> landscape, final Integer userGoals, final Integer iaGoals) {
         final float centerDistance = 4000;
+        final int positionX = mobileWidth / 8;
+        final int positionY = (int) (centerHeight + centerDistance / scale);
         landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
@@ -109,8 +114,8 @@ public class DrawUtils {
                 Paint paint = new Paint();
                 paint.setColor( Color.WHITE );
                 paint.setTextSize( 2000 / (float) scale );
-                canvas.drawText( userGoals.toString(), mobileWidth / 8, centerHeight + centerDistance / (float) scale, paint );
-                canvas.drawText( iaGoals.toString(), mobileWidth / 8, (float) centerHeight - centerDistance / (float) scale, paint );
+                canvas.drawText( userGoals.toString(), positionX, positionY, paint );
+                canvas.drawText( iaGoals.toString(), positionX, positionY, paint );
             }
 
             @Override
@@ -122,14 +127,16 @@ public class DrawUtils {
 
     public void drawGoals(List<Renderable> landscape, final boolean userScores, final boolean iaScores, final boolean iaWin, final boolean userWin, final double goalTime) {
         final float centerDistance = 3000;
-
+        final float textSize = 1800 / (float) scale;
+        final float xPosition = 80 / scale;
+        final float yPosition = centerHeight -centerDistance / scale;
         landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
                 String text = "";
                 Paint paint = new Paint();
                 paint.setColor( Color.WHITE );
-                paint.setTextSize( 2000 / (float) scale );
+                paint.setTextSize( textSize );
 
                 // Render goal text
                 if (userScores) text = "User goal";
@@ -138,8 +145,7 @@ public class DrawUtils {
                 if (iaWin) text = "Ia win";
 
                 if (System.currentTimeMillis() - goalTime < 1000) {
-                    paint.setTextSize( 1800 / (float) scale );
-                    canvas.drawText( text, 80 / (float) scale, centerHeight - centerDistance / (int) scale, paint );
+                    canvas.drawText( text, xPosition, yPosition, paint );
                 }
 
             }
