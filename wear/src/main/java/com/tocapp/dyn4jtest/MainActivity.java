@@ -68,7 +68,7 @@ public class MainActivity extends WearGameActivity{
 
     @Override
     protected Game getGame() {
-        return new AirHockey(level, sound, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
+        return new AirHockey(width, height, level, sound, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
     }
 
     @Override
