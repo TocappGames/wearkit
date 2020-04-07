@@ -341,9 +341,12 @@ public class AirHockey extends AbstractGame {
         final double IA_HOME_Y = HEIGHT_SCALED * 0.4;
         final double USER_HOME_Y = HEIGHT_SCALED * 0.6;
         final double BALL_RADIUS = WIDTH_SCALED * 0.05;
+        final int LINEAR_DAMPING = 20;
+        final double DENSITY = 0.5;
+        final int RESTITUTION = 1;
 
         GameObject ball = new GameObject( ballPaint );
-        ball.addFixture( new Circle( BALL_RADIUS ), 0.5, 0.0, 1 );
+        ball.addFixture( new Circle( BALL_RADIUS ), DENSITY, 0.0, RESTITUTION );
 
         switch (position) {
             case "user":
@@ -361,7 +364,7 @@ public class AirHockey extends AbstractGame {
         }
 
         ball.setMass( MassType.NORMAL );
-        ball.setLinearDamping( 0.3 );
+        ball.setLinearDamping( LINEAR_DAMPING );
         ball.setBullet( true );
         this.world.addBody( ball );
         return ball;
@@ -371,10 +374,13 @@ public class AirHockey extends AbstractGame {
         final double HOME_X = CENTER_WIDTH;
         final double HOME_Y = HEIGHT_SCALED * 0.2;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
+        final int DENSITY = 2;
+        final double RESTITUTION = 0.002;
+
         Paint paint = new Paint( sticksPaint );
 
         GameObject iaStick = new GameObject( paint );
-        iaStick.addFixture( new Circle( STICK_RADIUS ), 2, 0, 0.002 );
+        iaStick.addFixture( new Circle( STICK_RADIUS ), DENSITY, 0, RESTITUTION );
         iaStick.translate( HOME_X, HOME_Y );
         iaStick.setMass( MassType.NORMAL );
         iaStick.setLinearDamping( 3 );
@@ -387,12 +393,15 @@ public class AirHockey extends AbstractGame {
         final double HOME_X = CENTER_WIDTH;
         final double HOME_Y = HEIGHT_SCALED * 0.8;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
+        final int LINEAR_DAMPING = 20;
+        final int DENSITY = 2;
+        final double RESTITUTION = 0.002;
 
         GameObject userStick = new GameObject( sticksPaint );
-        userStick.addFixture( new Circle( STICK_RADIUS ), 2, 0.0, 0.002 );
+        userStick.addFixture( new Circle( STICK_RADIUS ), DENSITY, 0.0, RESTITUTION );
         userStick.setMass( MassType.NORMAL );
         userStick.translate( HOME_X, HOME_Y );
-        userStick.setLinearDamping( 20 );
+        userStick.setLinearDamping( LINEAR_DAMPING );
         this.world.addBody( userStick );
         return userStick;
     }
@@ -461,18 +470,18 @@ public class AirHockey extends AbstractGame {
     }
 
     private void checkBall() {
-        double corner = 0;
-        double cornerX = WIDTH_SCALED - corner;
-        double cornerY = HEIGHT_SCALED - corner;
-        double ballX = ball.getWorldCenter().x;
-        double ballY = ball.getWorldCenter().y;
-        double ballRadius = ball.getFixture( 0 ).getShape().getRadius();
+        final double CORNER = 0;
+        final double CORNER_X = WIDTH_SCALED - CORNER;
+        final double CORNER_Y = HEIGHT_SCALED - CORNER;
+        final double BALL_X = ball.getWorldCenter().x;
+        final double BALL_Y = ball.getWorldCenter().y;
+        final double BALL_RADIUS = ball.getFixture( 0 ).getShape().getRadius();
 
-        if (ballX < corner || ballX > cornerX || ballY < corner || ballY > cornerY) {
-            if (ballX < corner) lastBallX += ballRadius;
-            if (ballX > cornerX) lastBallX -= ballRadius;
-            if (ballY < corner) lastBallY += ballRadius;
-            if (ballY > cornerY) lastBallY -= ballRadius;
+        if (BALL_X < CORNER || BALL_X > CORNER_X || BALL_Y < CORNER || BALL_Y > CORNER_Y) {
+            if (BALL_X < CORNER) lastBallX += BALL_RADIUS;
+            if (BALL_X > CORNER_X) lastBallX -= BALL_RADIUS;
+            if (BALL_Y < CORNER) lastBallY += BALL_RADIUS;
+            if (BALL_Y > CORNER_Y) lastBallY -= BALL_RADIUS;
             world.removeBody( ball );
             ball = addBall( "last" );
         } else {
@@ -482,20 +491,20 @@ public class AirHockey extends AbstractGame {
     }
 
     private void checkUserStick() {
-        double corner = 0;
+        final double CORNER = 0;
         double userStickX = userStick.getWorldCenter().x;
         double userStickY = userStick.getWorldCenter().y;
-        if (userStickX < corner || userStickX > mobileWidth / getScale() - corner || userStickY < corner || userStickY > mobileHeight / getScale() - corner) {
+        if (userStickX < CORNER || userStickX > mobileWidth / getScale() - CORNER || userStickY < CORNER || userStickY > mobileHeight / getScale() - CORNER) {
             world.removeBody( userStick );
             userStick = addUserStick();
         }
     }
 
     private void checkIaStick() {
-        double corner = 0;
+        final double CORNER = 0;
         double iaStickX = iaStick.getWorldCenter().x;
         double iaStickY = iaStick.getWorldCenter().y;
-        if (iaStickX < corner || iaStickX > WIDTH_SCALED - corner || iaStickY < corner || iaStickY > HEIGHT_SCALED - corner) {
+        if (iaStickX < CORNER || iaStickX > WIDTH_SCALED - CORNER || iaStickY < CORNER || iaStickY > HEIGHT_SCALED - CORNER) {
             world.removeBody( iaStick );
             iaStick = addIaStick();
         }
@@ -528,9 +537,9 @@ public class AirHockey extends AbstractGame {
             if (distancia2 > radius) {
 
                 if (ball.getWorldCenter().y < CENTER_HEIGHT) {
-                    if (ball.getWorldCenter().x < mobileWidth / getScale() * 0.9
+                   /* if (ball.getWorldCenter().x < mobileWidth / getScale() * 0.9
                             && ball.getWorldCenter().x > mobileWidth / getScale() * 0.1
-                            && ball.getWorldCenter().y > mobileWidth / getScale() * 0.1)
+                            && ball.getWorldCenter().y > mobileWidth / getScale() * 0.1)*/
                         attack();
                 }
             }
@@ -570,7 +579,8 @@ public class AirHockey extends AbstractGame {
         final double STICK_MASS = userStick.getMass().getMass();
         final double EXTRA_FORCE = 10000;
         // Si el dedo se encuentra fuera de la bola, se mueve
-        if (DISTANCIA2 > RADIUS * RADIUS / 22)
+        final double MOVE_DISTANCE = RADIUS * RADIUS / 22;
+        if (DISTANCIA2 > MOVE_DISTANCE)
             userStick.applyForce( new Vector2( STICK_MASS * DISTANCIA2 * DX * EXTRA_FORCE, STICK_MASS * DISTANCIA2 * DY * EXTRA_FORCE ) );
         else
             this.event = null;

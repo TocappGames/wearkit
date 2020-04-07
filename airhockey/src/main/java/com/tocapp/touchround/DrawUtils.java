@@ -104,18 +104,20 @@ public class DrawUtils {
     }
 
     public void drawPuncuation(List<Renderable> landscape, final Integer userGoals, final Integer iaGoals) {
-        final float centerDistance = 4000;
-        final int positionX = mobileWidth / 8;
-        final int positionY = (int) (centerHeight + centerDistance / scale);
+        final float CENTER_DISTANCE = 4000;
+        final int POSITION_X = mobileWidth / 8;
+        final int POSITION_Y = (int) (centerHeight + CENTER_DISTANCE / scale);
+        final float TEXT_SIZE = 2000 / (float) scale;
+
         landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
                 // Render punctuation
                 Paint paint = new Paint();
                 paint.setColor( Color.WHITE );
-                paint.setTextSize( 2000 / (float) scale );
-                canvas.drawText( userGoals.toString(), positionX, positionY, paint );
-                canvas.drawText( iaGoals.toString(), positionX, positionY, paint );
+                paint.setTextSize( TEXT_SIZE );
+                canvas.drawText( userGoals.toString(), POSITION_X, POSITION_Y, paint );
+                canvas.drawText( iaGoals.toString(), POSITION_X, POSITION_Y, paint );
             }
 
             @Override
@@ -126,17 +128,18 @@ public class DrawUtils {
     }
 
     public void drawGoals(List<Renderable> landscape, final boolean userScores, final boolean iaScores, final boolean iaWin, final boolean userWin, final double goalTime) {
-        final float centerDistance = 3000;
-        final float textSize = 1800 / (float) scale;
-        final float xPosition = 80 / scale;
-        final float yPosition = centerHeight -centerDistance / scale;
+        final float CENTER_DISTANCE = 3000;
+        final float TEXT_SIZE = 1800 / (float) scale;
+        final float POSITION_X = 80 / scale;
+        final float POSITION_Y = centerHeight -CENTER_DISTANCE / scale;
+
         landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
                 String text = "";
                 Paint paint = new Paint();
                 paint.setColor( Color.WHITE );
-                paint.setTextSize( textSize );
+                paint.setTextSize( TEXT_SIZE );
 
                 // Render goal text
                 if (userScores) text = "User goal";
@@ -145,7 +148,7 @@ public class DrawUtils {
                 if (iaWin) text = "Ia win";
 
                 if (System.currentTimeMillis() - goalTime < 1000) {
-                    canvas.drawText( text, xPosition, yPosition, paint );
+                    canvas.drawText( text, POSITION_X, POSITION_Y, paint );
                 }
 
             }
