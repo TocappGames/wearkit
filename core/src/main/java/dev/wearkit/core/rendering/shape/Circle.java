@@ -40,21 +40,24 @@ public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Rend
 
 
     @Override
-    public void render(Canvas canvas, double scale) throws PaintRequiredException {
+    public void render(Canvas canvas) throws PaintRequiredException {
         if (this.paint == null) {
             throw new PaintRequiredException("This shape needs to be painted before render");
         }
         Vector2 center = this.getCenter();
         double radius = this.getRadius();
         canvas.drawCircle(
-                (float) (center.x * scale),
-                (float) (center.y * scale),
-                (float) (radius * scale), this.paint);
+                (float) center.x,
+                (float) center.y,
+                (float) radius,
+                this.paint
+        );
 
     }
 
     @Override
     public Renderable paint(Paint paint) {
+        if(paint == null) throw new NullPointerException("Paint cannot be null");
         this.paint = paint;
         return this;
     }

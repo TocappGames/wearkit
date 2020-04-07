@@ -3,23 +3,22 @@ package dev.wearkit.example;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-import dev.wearkit.core.rendering.Body;
-import dev.wearkit.core.rendering.Thing;
-import dev.wearkit.core.engine.AbstractGame;
-import dev.wearkit.core.rendering.shape.Circle;
-import dev.wearkit.core.rendering.shape.Rectangle;
-
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
-public class FloatingBalls extends AbstractGame {
+import dev.wearkit.core.engine.AbstractGame;
+import dev.wearkit.core.rendering.Body;
+import dev.wearkit.core.rendering.Thing;
+import dev.wearkit.core.rendering.shape.Circle;
+import dev.wearkit.core.rendering.shape.Rectangle;
+
+public class ComplexBodies extends AbstractGame {
 
     private static final String TAG = "FloatingBalls";
 
     @Override
     public void init() {
-        world.getSettings().setMaximumTranslation(10);
 
         double borderWidth = world.getSize().x / 50;
 
@@ -87,10 +86,10 @@ public class FloatingBalls extends AbstractGame {
         paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
 
         Body ball = new Body(paint);
-        ball.addFixture(new Circle(10), 1.0, 0.0, 5.0);
+        ball.addFixture(new Circle(0.1), 1.0, 0.0, 1.0);
         ball.translate(world.getSize().x / 2, world.getSize().y / 2);
         ball.setMass(MassType.NORMAL);
-        ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100));
+        ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 20, (Math.random() - 0.5) * 20));
 
         this.world.addBody(ball);
     }

@@ -67,7 +67,7 @@ public class GameView extends View {
                 this.drawWorld(world, canvas);
             }
             try {
-                renderable.render(canvas, world.getScale());
+                renderable.render(canvas);
             } catch (PaintRequiredException e) {
                 e.printStackTrace();
             }
@@ -82,7 +82,7 @@ public class GameView extends View {
     private void drawWorld(World world, Canvas canvas){
         for(Body body: world.getBodies()){
             try {
-                ((Renderable) body).render(canvas, world.getScale());
+                ((Renderable) body).render(canvas);
             } catch (PaintRequiredException e) {
                 e.printStackTrace();
             }

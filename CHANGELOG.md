@@ -7,4 +7,4 @@ All notable changes to this project will be documented in this file. See [standa
 
 ### Bug Fixes
 
-* **coordinate_system:** fixes [#1](https://github.com/TocappGames/game2d/issues/1) ([e428dd0](https://github.com/TocappGames/game2d/commit/e428dd0))
+* **coordinate_system:** fixes [#1](https://github.com/TocappGames/wearkit/issues/1) ([e428dd0](https://github.com/TocappGames/wearkit/commit/e428dd0))

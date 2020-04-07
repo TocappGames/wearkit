@@ -17,20 +17,20 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable {
     }
 
     @Override
-    public void render(Canvas canvas, double scale) {
+    public void render(Canvas canvas) {
 
         // keep the current coordinate system
         canvas.save();
 
         // go to Body's coordinate system
         Vector2 translation = this.transform.getTranslation();
-        canvas.translate((float) (translation.x * scale), (float) (translation.y * scale));
+        canvas.translate((float) translation.x, (float) translation.y);
 
         // render all the fixtures in the Body
         for(BodyFixture fixture: this.getFixtures()){
             Paintable paintable = (Paintable) fixture.getShape();
             try {
-                paintable.paint(this.paint).render(canvas, scale);
+                paintable.paint(this.paint).render(canvas);
             } catch (PaintRequiredException e) {
                 e.printStackTrace();
             }

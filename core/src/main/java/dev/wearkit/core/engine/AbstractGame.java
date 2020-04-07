@@ -7,11 +7,7 @@ abstract public class AbstractGame implements Game {
     protected World world;
 
     public AbstractGame() {
-        this(1.0);
-    }
-
-    public AbstractGame(double scale) {
-        this.world = new World(scale);
+        this.world = new World();
     }
 
     @Override

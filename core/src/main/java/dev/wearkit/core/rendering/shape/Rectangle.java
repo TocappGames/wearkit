@@ -41,25 +41,26 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable
     }
 
     @Override
-    public void render(Canvas canvas, double scale) throws PaintRequiredException {
+    public void render(Canvas canvas) throws PaintRequiredException {
         if (this.paint == null) {
             throw new PaintRequiredException("This shape needs to be painted before render");
         }
         Vector2 center = this.getCenter();
 
-        double halfWidth = this.getWidth() / 2 * scale;
-        double halfHeight = this.getHeight() / 2 * scale;
+        double halfWidth = this.getWidth() / 2;
+        double halfHeight = this.getHeight() / 2;
         canvas.drawRect(
-                (float) (center.x * scale - halfWidth),
-                (float) (center.y * scale - halfHeight),
-                (float) (center.x * scale + halfWidth),
-                (float) (center.y * scale + halfHeight),
+                (float) (center.x - halfWidth),
+                (float) (center.y - halfHeight),
+                (float) (center.x + halfWidth),
+                (float) (center.y + halfHeight),
                 this.paint
         );
     }
 
     @Override
     public Renderable paint(Paint paint) {
+        if(paint == null) throw new NullPointerException("Paint cannot be null");
         this.paint = paint;
         return this;
     }
