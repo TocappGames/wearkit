@@ -29,4 +29,9 @@ public class World extends org.dyn4j.dynamics.World implements Measurable, Scene
     public SortedSet<Renderable> getDecoration() {
         return decoration;
     }
+
+    @Override
+    public void addOrnament(Renderable thing) {
+        this.decoration.add(thing);
+    }
 }

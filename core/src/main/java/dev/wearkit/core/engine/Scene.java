@@ -6,4 +6,5 @@ import java.util.SortedSet;
 
 public interface Scene {
     SortedSet<Renderable> getDecoration();
+    void addOrnament(Renderable thing);
 }

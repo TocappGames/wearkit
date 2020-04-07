@@ -2,15 +2,15 @@ package dev.wearkit.core.rendering;
 
 import android.graphics.Paint;
 
-public class Thing extends Body implements Indexable {
+public class Ornament extends Body implements Indexable {
 
     private int zIndex = -1;
 
-    public Thing(Paint paint) {
+    public Ornament(Paint paint) {
         super(paint);
     }
 
-    public Thing(Paint paint, int zIndex) {
+    public Ornament(Paint paint, int zIndex) {
         super(paint);
         this.zIndex = zIndex;
     }

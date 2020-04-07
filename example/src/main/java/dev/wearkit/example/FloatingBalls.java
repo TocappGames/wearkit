@@ -4,7 +4,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import dev.wearkit.core.rendering.Body;
-import dev.wearkit.core.rendering.Thing;
+import dev.wearkit.core.rendering.Ornament;
 import dev.wearkit.core.engine.AbstractGame;
 import dev.wearkit.core.rendering.shape.Circle;
 import dev.wearkit.core.rendering.shape.Rectangle;
@@ -25,21 +25,21 @@ public class FloatingBalls extends AbstractGame {
 
         Paint bgCircleColor = new Paint();
         bgCircleColor.setColor(Color.GRAY);
-        Thing bg = new Thing(bgCircleColor, -2);
+        Ornament bg = new Ornament(bgCircleColor, -2);
         double radius = Math.min(world.getSize().x, world.getSize().y) / 2 - borderWidth;
         Circle bgCentre = new Circle(radius);
         bgCentre.translate(world.getSize().x / 2, world.getSize().y / 2);
         bg.addFixture(bgCentre);
-        this.world.getDecoration().add(bg);
+        this.world.addOrnament(bg);
 
         Paint bgCircleColor2 = new Paint();
         bgCircleColor2.setColor(Color.BLUE);
-        Thing bg2 = new Thing(bgCircleColor2, -3);
+        Ornament bg2 = new Ornament(bgCircleColor2, -3);
         Circle bgCentre2 = new Circle(Math.min(world.getSize().x, world.getSize().y) / 4);
         bgCentre2.translate(world.getSize().x / 2, world.getSize().y / 2 - radius);
         bg2.addFixture(bgCentre2);
 
-        this.world.getDecoration().add(bg2);
+        this.world.addOrnament(bg2);
 
 
         this.world.setGravity(World.ZERO_GRAVITY);
