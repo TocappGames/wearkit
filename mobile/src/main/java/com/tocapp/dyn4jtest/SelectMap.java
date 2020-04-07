@@ -152,8 +152,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 break;
         }
 
-        Intent i = new Intent(SelectMap.this, NewActivity.class);
-        startActivity(i);
+        onBackPressed();
     }
 
     private boolean checkMap(String mapId) {

@@ -1,6 +1,5 @@
 package com.tocapp.dyn4jtest;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.ViewTreeObserver;
@@ -42,7 +41,7 @@ public class MainActivity extends MobileGameActivity {
     }
 
     protected Game getGame() {
-        if (!config.isHasConfiguration()) {
+        if (!config.haveMap()) {
             config.setMap0();
         }
         config.setDisplayIsRound( displayIsRound );

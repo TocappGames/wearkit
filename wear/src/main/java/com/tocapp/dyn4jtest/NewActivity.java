@@ -75,7 +75,7 @@ public class NewActivity extends WearableActivity {
                     soundBtn.setImageResource(R.drawable.sound_on);
                 }
                 sound = !sound;
-                MainActivity.sound = sound;
+                MainActivity.config.setSound(sound);
                 System.out.println(sound);
             }
         });

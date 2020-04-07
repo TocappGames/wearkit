@@ -92,7 +92,7 @@ public class AirHockey extends AbstractGame {
 
     public AirHockey(Config config) {
         this.level = config.getLevel();
-        this.sound = config.isSound();
+        this.sound = config.haveSound();
         this.displayIsRound = config.isDisplayIsRound();
         this.backgroundImage = config.getBackgroundImage();
         this.ballPaint.setColor( config.getBallColor() );
@@ -156,11 +156,54 @@ public class AirHockey extends AbstractGame {
                     return false;
                 }
 
-              /*  if (body1 == ball && body2 == iaStick
-                    ||body2 == ball && body1 == iaStick) {
-                    if (iaStickBallCol )
+                if (body1 == userStick && body2 == box
+                || body1 == box && body2 == userStick) {
+                    double boxX = box.getWorldCenter().x;
+                    double boxY = box.getWorldCenter().y;
+                    double boxRadius = box.getFixture( 0 ).getShape().getRadius();
+                    double ballX = userStick.getWorldCenter().x;
+                    double ballY = userStick.getWorldCenter().y;
+                    double ballRadius = userStick.getFixture( 0 ).getShape().getRadius();
+
+                    double distance = Math.sqrt((boxX-ballX)*(boxX-ballX) + (boxY-ballY)*(boxY-ballY));
+                    if (distance > boxRadius - ballRadius)
+                        return true;
+                    else return false;
                 }
-*/
+
+                if (body1 == iaStick && body2 == box
+                        || body1 == box && body2 == iaStick) {
+                    double boxX = box.getWorldCenter().x;
+                    double boxY = box.getWorldCenter().y;
+                    double boxRadius = box.getFixture( 0 ).getShape().getRadius();
+                    double ballX = iaStick.getWorldCenter().x;
+                    double ballY = iaStick.getWorldCenter().y;
+                    double ballRadius = iaStick.getFixture( 0 ).getShape().getRadius();
+
+                    double distance = Math.sqrt((boxX-ballX)*(boxX-ballX) + (boxY-ballY)*(boxY-ballY));
+                    if (distance > boxRadius - ballRadius) return true;
+                    else return false;
+                }
+
+                if (body1 == ball && body2 == box
+                        || body1 == box && body2 == ball) {
+                    double boxX = box.getWorldCenter().x;
+                    double boxY = box.getWorldCenter().y;
+                    double boxRadius = box.getFixture( 0 ).getShape().getRadius();
+                    double ballX = ball.getWorldCenter().x;
+                    double ballY = ball.getWorldCenter().y;
+                    double ballRadius = ball.getFixture( 0 ).getShape().getRadius();
+
+                    double distance = Math.sqrt((boxX-ballX)*(boxX-ballX) + (boxY-ballY)*(boxY-ballY));
+                    if (distance >= boxRadius - ballRadius) return true;
+                    else return false;
+                }
+
+                if (body1 == ball && body2 == iaStick
+                    ||body2 == ball && body1 == iaStick) {
+                    iaStickBallCol = System.currentTimeMillis();
+                }
+
                 if (body1 == userStick && body2 == centerCirc
                         || body2 == userStick && body1 == centerCirc
                         || body1 == iaStick && body2 == centerCirc
@@ -529,11 +572,11 @@ public class AirHockey extends AbstractGame {
         } else {
             // Cuando la bola está en su campo y lejano al stick ataca
             if (distancia2 > radius) {
-
                 if (ball.getWorldCenter().y < CENTER_HEIGHT) {
-                    if (ball.getWorldCenter().x < mobileWidth / getScale() * 0.9
+                    if (iaStickBallCol + 500 < System.currentTimeMillis())
+                       /* if (ball.getWorldCenter().x < mobileWidth / getScale() * 0.9
                             && ball.getWorldCenter().x > mobileWidth / getScale() * 0.1
-                            && ball.getWorldCenter().y > mobileWidth / getScale() * 0.1)
+                            && ball.getWorldCenter().y > mobileWidth / getScale() * 0.1)*/
                         attack();
                 }
             }

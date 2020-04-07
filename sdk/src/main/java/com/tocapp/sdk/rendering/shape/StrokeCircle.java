@@ -32,7 +32,7 @@ public class StrokeCircle extends org.dyn4j.geometry.Circle implements Renderabl
 
     @Override
     public void render(Canvas canvas, Paint paint, double scale) {
-        paint.setStrokeWidth(1);
+        paint.setStrokeWidth(5);
         paint.setColor(Color.RED);
         paint.setStyle(Paint.Style.STROKE);
         Vector2 center = this.getCenter();

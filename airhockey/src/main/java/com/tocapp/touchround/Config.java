@@ -11,10 +11,11 @@ public class Config {
     private int sticksColor;
     private int boxColor;
     private int goalsColor;
-    private boolean hasConfiguration;
+    private boolean haveMap;
 
     public Config() {
-        hasConfiguration = false;
+        haveMap = false;
+        sound = true;
     }
 
     public void setMap0() {
@@ -23,7 +24,7 @@ public class Config {
         boxColor = R.color.white;
         goalsColor = R.color.red;
         backgroundImage = 0;
-        hasConfiguration = true;
+        haveMap = true;
     }
 
     public void setMap1() {
@@ -32,7 +33,7 @@ public class Config {
         boxColor = R.color.purple;
         goalsColor = R.color.cyan;
         backgroundImage = R.drawable.fondo_2;
-        hasConfiguration = true;
+        haveMap = true;
 
     }
 
@@ -42,7 +43,7 @@ public class Config {
         boxColor = R.color.purple;
         goalsColor = R.color.green;
         backgroundImage = R.drawable.fondo_3;
-        hasConfiguration = true;
+        haveMap = true;
 
     }
 
@@ -52,7 +53,7 @@ public class Config {
         boxColor = R.color.white;
         goalsColor = R.color.red;
         backgroundImage = R.drawable.fondo_4;
-        hasConfiguration = true;
+        haveMap = true;
 
     }
 
@@ -62,24 +63,16 @@ public class Config {
         boxColor = R.color.yellow;
         goalsColor = R.color.purple;
         backgroundImage = R.drawable.fondo_5;
-        hasConfiguration = true;
+        haveMap = true;
 
     }
 
-
-    public double getWidthCm() {
-        return widthCm;
-    }
-
-    public double getHeightCm() {
-        return heightCm;
-    }
 
     public int getLevel() {
         return level;
     }
 
-    public boolean isSound() {
+    public boolean haveSound() {
         return sound;
     }
 
@@ -107,8 +100,8 @@ public class Config {
         return goalsColor;
     }
 
-    public boolean isHasConfiguration() {
-        return hasConfiguration;
+    public boolean haveMap() {
+        return haveMap;
     }
 
 
@@ -132,28 +125,5 @@ public class Config {
         this.displayIsRound = displayIsRound;
     }
 
-    public void setBackgroundImage(int backgroundImage) {
-        this.backgroundImage = backgroundImage;
-    }
-
-    public void setBallColor(int ballColor) {
-        this.ballColor = ballColor;
-    }
-
-    public void setSticksColor(int sticksColor) {
-        this.sticksColor = sticksColor;
-    }
-
-    public void setBoxColor(int boxColor) {
-        this.boxColor = boxColor;
-    }
-
-    public void setGoalsColor(int goalsColor) {
-        this.goalsColor = goalsColor;
-    }
-
-    public void setHasConfiguration(boolean hasConfiguration) {
-        this.hasConfiguration = hasConfiguration;
-    }
 
 }

@@ -11,10 +11,14 @@ import android.widget.ImageButton;
 public class NewActivity extends AppCompatActivity {
     ImageButton soundBtn;
     boolean sound = true;
+    private String SOUND_STATE = "SOUND_STATE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (savedInstanceState != null) {
+            sound = savedInstanceState.getBoolean( SOUND_STATE );
+        }
         setContentView(R.layout.activity_new);
         Button easy = findViewById(R.id.easy);
         Button medium = findViewById(R.id.medium);
@@ -71,6 +75,12 @@ public class NewActivity extends AppCompatActivity {
                 MainActivity.config.setSound(sound);
             }
         });
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putBoolean( SOUND_STATE, sound );
     }
 
 

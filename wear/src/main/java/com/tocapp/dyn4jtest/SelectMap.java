@@ -103,13 +103,13 @@ public class SelectMap extends WearableActivity {
         switch (selection) {
             case 0:
                 MainActivity.config.setMap0();
-                startActivity( mainActivityIntent );
+                onBackPressed();
                 break;
 
             case 1:
                 if (checkMap( "1" )) {
                     MainActivity.config.setMap1();
-                    startActivity( mainActivityIntent );
+                    onBackPressed();
                 } else {
                     showAlert();
                     //sharedPrefs.setViewedMap( "1" );
@@ -120,7 +120,7 @@ public class SelectMap extends WearableActivity {
                 // get if video is viewed
                 if (checkMap( "2" )) {
                     MainActivity.config.setMap2();
-                    startActivity( mainActivityIntent );
+                    onBackPressed();
 
                 } else {
                     showAlert();
@@ -132,7 +132,7 @@ public class SelectMap extends WearableActivity {
                 // get if video is viewed
                 if (checkMap( "3" )) {
                     MainActivity.config.setMap3();
-                    startActivity( mainActivityIntent );
+                    onBackPressed();
                 } else {
                     showAlert();
                     //sharedPrefs.setViewedMap( "3" );
@@ -142,7 +142,7 @@ public class SelectMap extends WearableActivity {
             case 4:
                 if (checkMap( "4" )) {
                     MainActivity.config.setMap4();
-                    startActivity( mainActivityIntent );
+                    onBackPressed();
                 } else {
                     showAlert();
                     //sharedPrefs.setViewedMap( "4" );

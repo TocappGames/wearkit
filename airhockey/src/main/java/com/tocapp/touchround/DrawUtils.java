@@ -94,7 +94,6 @@ public class DrawUtils {
                 paint2.setColor( Color.WHITE );
                 paint2.setTextSize( textSize );
                 canvas.drawText( text, positionX, positionY, paint2 );
-
             }
 
             @Override
@@ -105,11 +104,11 @@ public class DrawUtils {
     }
 
     public void drawPuncuation(List<Renderable> landscape, final Integer userGoals, final Integer iaGoals) {
-        final float CENTER_DISTANCE = 100;
+        final float CENTER_DISTANCE = MOBILE_HEIGHT / 8;
         final int POSITION_X = MOBILE_WIDTH / 8;
-        final int POSITION_Y_USER = (int) (CENTER_HEIGHT + CENTER_DISTANCE);
-        final int POSITION_Y_IA = (int) (CENTER_HEIGHT - CENTER_DISTANCE);
         final float TEXT_SIZE =MOBILE_HEIGHT / 20;
+        final int POSITION_Y_USER = (int) (CENTER_HEIGHT + CENTER_DISTANCE + TEXT_SIZE);
+        final int POSITION_Y_IA = (int) (CENTER_HEIGHT - CENTER_DISTANCE );
 
         landscape.add( new Renderable() {
             @Override
@@ -130,10 +129,9 @@ public class DrawUtils {
     }
 
     public void drawGoals(List<Renderable> landscape, final boolean userScores, final boolean iaScores, final boolean iaWin, final boolean userWin, final double goalTime) {
-        final float CENTER_DISTANCE = 3000;
-        final float TEXT_SIZE = 1800 / (float) SCALE;
-        final float POSITION_X = 80 / SCALE;
-        final float POSITION_Y = CENTER_HEIGHT -CENTER_DISTANCE / SCALE;
+        final float TEXT_SIZE = MOBILE_HEIGHT / 18;
+        final float POSITION_X = CENTER_WIDTH - TEXT_SIZE * 2;
+        final float POSITION_Y = CENTER_HEIGHT;
         final int TIME_IN_SCREEN = 1000;
         landscape.add( new Renderable() {
             @Override
