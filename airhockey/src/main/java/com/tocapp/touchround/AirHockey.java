@@ -90,15 +90,15 @@ public class AirHockey extends AbstractGame {
     private double CENTER_WIDTH;
     private double CENTER_HEIGHT;
 
-    public AirHockey(double width, double height, int level, boolean sound, boolean displayIsRound, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
-        this.level = level;
-        this.sound = sound;
-        this.displayIsRound = displayIsRound;
-        this.backgroundImage = backgroundImage;
-        this.ballPaint.setColor( ballColor );
-        this.sticksPaint.setColor( sticksColor );
-        this.boxPaint.setColor( boxColor );
-        this.goalsPaint.setColor( goalsColor );
+    public AirHockey(Config config) {
+        this.level = config.getLevel();
+        this.sound = config.isSound();
+        this.displayIsRound = config.isDisplayIsRound();
+        this.backgroundImage = config.getBackgroundImage();
+        this.ballPaint.setColor( config.getBallColor() );
+        this.sticksPaint.setColor( config.getSticksColor() );
+        this.boxPaint.setColor( config.getBoxColor() );
+        this.goalsPaint.setColor( config.getGoalsColor() );
     }
 
     @Override

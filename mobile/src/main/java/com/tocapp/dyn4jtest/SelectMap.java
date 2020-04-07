@@ -56,7 +56,6 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
 
     private SharedPrefsUtil sharedPrefs;
     private Button buttonSelect;
-    private Config config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,21 +116,14 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     private void onMapSelected() {
         switch (selection) {
             case 0:
-                MainActivity.ballColor = R.color.white;
-                MainActivity.sticksColor = R.color.blue;
-                MainActivity.boxColor = R.color.white;
-                MainActivity.goalsColor = R.color.red;
+               MainActivity.config.setMap0();
                 break;
 
             case 1:
                 if (!checkMap(MAP1))
                     seeVideo(MAP1);
                 else {
-                    MainActivity.ballColor = R.color.yellow;
-                    MainActivity.sticksColor = R.color.green;
-                    MainActivity.boxColor = R.color.purple;
-                    MainActivity.goalsColor = R.color.cyan;
-                    MainActivity.backgroundImage = R.drawable.fondo_2;
+                    MainActivity.config.setMap1();
                 }
                 break;
 
@@ -139,11 +131,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (!checkMap(MAP2))
                     seeVideo(MAP2);
                 else {
-                    MainActivity.ballColor = R.color.cyan;
-                    MainActivity.sticksColor = R.color.yellow;
-                    MainActivity.boxColor = R.color.purple;
-                    MainActivity.goalsColor = R.color.green;
-                    MainActivity.backgroundImage = R.drawable.fondo_3;
+                MainActivity.config.setMap2();
                 }
                 break;
 
@@ -151,11 +139,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (!checkMap(MAP3))
                     seeVideo(MAP3);
                 else {
-                    MainActivity.ballColor = R.color.green;
-                    MainActivity.sticksColor = R.color.purple;
-                    MainActivity.boxColor = R.color.white;
-                    MainActivity.goalsColor = R.color.red;
-                    MainActivity.backgroundImage = R.drawable.fondo_4;
+                    MainActivity.config.setMap3();
                 }
                 break;
 
@@ -163,11 +147,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (!checkMap(MAP4))
                     seeVideo(MAP4);
                 else {
-                    MainActivity.ballColor = R.color.black;
-                    MainActivity.sticksColor = R.color.green;
-                    MainActivity.boxColor = R.color.yellow;
-                    MainActivity.goalsColor = R.color.purple;
-                    MainActivity.backgroundImage = R.drawable.fondo_5;
+                   MainActivity.config.setMap4();
                 }
                 break;
         }

@@ -33,6 +33,7 @@ import com.tocapp.sdk.activity.WearGameActivity;
 import com.tocapp.sdk.display.GameView;
 import com.tocapp.sdk.engine.Game;
 import com.tocapp.touchround.AirHockey;
+import com.tocapp.touchround.Config;
 
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -54,6 +55,7 @@ public class MainActivity extends WearGameActivity{
     public static boolean sound = true;
     static public double width = 0;
     static public double height = 0;
+    public static Config config = new Config();
     private GameView gameView;
     private double widthCm;
     private double heightCm;
@@ -62,6 +64,13 @@ public class MainActivity extends WearGameActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // AmbientModeSupport.attach(this);
+        if (!config.isHasConfiguration()) {
+            config.setMap0();
+        }
+        config.setWidthCm( widthCm );
+        config.setHeightCm( heightCm );
+        config.setDisplayIsRound( displayIsRound );
+
         gameView = findViewById( R.id.game_view );
         gameView.getViewTreeObserver().addOnGlobalLayoutListener( new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
@@ -87,7 +96,7 @@ public class MainActivity extends WearGameActivity{
 
     @Override
     protected Game getGame() {
-        return new AirHockey(widthCm, heightCm, level, sound, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
+        return new AirHockey(config);
     }
 
     @Override

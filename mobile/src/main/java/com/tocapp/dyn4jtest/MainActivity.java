@@ -9,19 +9,14 @@ import com.tocapp.sdk.activity.MobileGameActivity;
 import com.tocapp.sdk.display.GameView;
 import com.tocapp.sdk.engine.Game;
 import com.tocapp.touchround.AirHockey;
+import com.tocapp.touchround.Config;
 
 
 public class MainActivity extends MobileGameActivity {
 
-    static public int level = 1;
-    static public int ballColor;
-    static public int sticksColor;
-    static public int boxColor;
-    static public int goalsColor;
-    static public int backgroundImage;
     public static boolean displayIsRound = false;
-    public static boolean sound = true;
     private GameView gameView;
+    static public Config config = new Config();
     private double widthCm;
     private double heightCm;
 
@@ -41,12 +36,19 @@ public class MainActivity extends MobileGameActivity {
                 double hi = (double) viewHeight / (double) displayMetrics.ydpi;
                 widthCm =  wi * 2.54;
                 heightCm  = hi * 2.54;
+
             }
         } );
     }
 
     protected Game getGame() {
-        return new AirHockey(widthCm, heightCm, level, sound, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor );
+        if (!config.isHasConfiguration()) {
+            config.setMap0();
+        }
+        config.setDisplayIsRound( displayIsRound );
+        config.setWidthCm( widthCm );
+        config.setHeightCm( heightCm );
+        return new AirHockey(config);
     }
 
 }

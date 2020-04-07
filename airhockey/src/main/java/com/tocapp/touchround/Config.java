@@ -1,38 +1,70 @@
 package com.tocapp.touchround;
 
 public class Config {
-    double widthCm;
-    double heightCm;
-    int level;
-    boolean sound;
-    boolean displayIsRound;
-    int backgroundImage;
-    int ballColor;
-    int sticksColor;
-    int boxColor;
-    int goalsColor;
+    private double widthCm;
+    private double heightCm;
+    private int level;
+    private boolean sound;
+    private boolean displayIsRound;
+    private int backgroundImage;
+    private int ballColor;
+    private int sticksColor;
+    private int boxColor;
+    private int goalsColor;
+    private boolean hasConfiguration;
 
-
-    public Config(double widthCm, double heightCm, int level, boolean sound, boolean displayIsRound, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
-        this.widthCm = widthCm;
-        this.heightCm = heightCm;
-        this.level = level;
-        this.sound = sound;
-        this.displayIsRound = displayIsRound;
-        this.backgroundImage = backgroundImage;
-        this.ballColor = ballColor;
-        this.sticksColor = sticksColor;
-        this.boxColor = boxColor;
-        this.goalsColor = goalsColor;
+    public Config() {
+        hasConfiguration = false;
     }
 
-    public Config(int ballColor, int sticksColor, int boxColor, int goalsColor) {
-        this.ballColor = ballColor;
-        this.sticksColor = sticksColor;
-        this.boxColor = boxColor;
-        this.goalsColor = goalsColor;
+    public void setMap0() {
+        ballColor = R.color.white;
+        sticksColor = R.color.blue;
+        boxColor = R.color.white;
+        goalsColor = R.color.red;
+        backgroundImage = 0;
+        hasConfiguration = true;
     }
 
+    public void setMap1() {
+        ballColor = R.color.yellow;
+        sticksColor = R.color.green;
+        boxColor = R.color.purple;
+        goalsColor = R.color.cyan;
+        backgroundImage = R.drawable.fondo_2;
+        hasConfiguration = true;
+
+    }
+
+    public void setMap2() {
+        ballColor = R.color.cyan;
+        sticksColor = R.color.yellow;
+        boxColor = R.color.purple;
+        goalsColor = R.color.green;
+        backgroundImage = R.drawable.fondo_3;
+        hasConfiguration = true;
+
+    }
+
+    public void setMap3() {
+        ballColor = R.color.green;
+        sticksColor = R.color.purple;
+        boxColor = R.color.white;
+        goalsColor = R.color.red;
+        backgroundImage = R.drawable.fondo_4;
+        hasConfiguration = true;
+
+    }
+
+    public void setMap4() {
+        ballColor = R.color.black;
+        sticksColor = R.color.green;
+        boxColor = R.color.yellow;
+        goalsColor = R.color.purple;
+        backgroundImage = R.drawable.fondo_5;
+        hasConfiguration = true;
+
+    }
 
 
     public double getWidthCm() {
@@ -75,6 +107,11 @@ public class Config {
         return goalsColor;
     }
 
+    public boolean isHasConfiguration() {
+        return hasConfiguration;
+    }
+
+
     public void setWidthCm(double widthCm) {
         this.widthCm = widthCm;
     }
@@ -113,6 +150,10 @@ public class Config {
 
     public void setGoalsColor(int goalsColor) {
         this.goalsColor = goalsColor;
+    }
+
+    public void setHasConfiguration(boolean hasConfiguration) {
+        this.hasConfiguration = hasConfiguration;
     }
 
 }

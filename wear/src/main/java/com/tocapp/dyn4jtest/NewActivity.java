@@ -32,7 +32,7 @@ public class NewActivity extends WearableActivity {
             @Override
             public void onClick(View view) {
                 onBackPressed();
-                MainActivity.level = 1;
+                MainActivity.config.setLevel(1);
 
                 Intent i = new Intent(NewActivity.this, MainActivity.class);
                 startActivity(i);
@@ -42,7 +42,7 @@ public class NewActivity extends WearableActivity {
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.level = 2;
+                MainActivity.config.setLevel(2);
 
                 Intent i = new Intent(NewActivity.this, MainActivity.class);
                 startActivity(i);
@@ -51,7 +51,7 @@ public class NewActivity extends WearableActivity {
         hard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.level = 3;
+                MainActivity.config.setLevel(3);
                 Intent i = new Intent(NewActivity.this, MainActivity.class);
                 startActivity(i);
 

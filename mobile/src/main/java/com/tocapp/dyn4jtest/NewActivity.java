@@ -25,7 +25,7 @@ public class NewActivity extends AppCompatActivity {
         easy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.level = 1;
+                MainActivity.config.setLevel(1);
 
                 Intent i = new Intent(NewActivity.this, MainActivity.class);
                 startActivity(i);
@@ -35,7 +35,7 @@ public class NewActivity extends AppCompatActivity {
         medium.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.level = 2;
+                MainActivity.config.setLevel(2);
 
                 Intent i = new Intent(NewActivity.this, MainActivity.class);
                 startActivity(i);
@@ -44,7 +44,7 @@ public class NewActivity extends AppCompatActivity {
         hard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                MainActivity.level = 3;
+                MainActivity.config.setLevel(3);
                 Intent i = new Intent(NewActivity.this, MainActivity.class);
                 startActivity(i);
 
@@ -68,8 +68,7 @@ public class NewActivity extends AppCompatActivity {
                     soundBtn.setImageResource(R.drawable.sound_on);
                 }
                 sound = !sound;
-                MainActivity.sound = sound;
-                System.out.println(sound);
+                MainActivity.config.setSound(sound);
             }
         });
     }
