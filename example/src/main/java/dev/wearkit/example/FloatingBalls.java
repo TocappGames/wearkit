@@ -87,7 +87,7 @@ public class FloatingBalls extends AbstractGame {
         paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
 
         Body ball = new Body(paint);
-        ball.addFixture(new Circle(10), 1.0, 0.0, 5.0);
+        ball.addFixture(new Circle(10), 1.0, 0.0, 1.1);
         ball.translate(world.getSize().x / 2, world.getSize().y / 2);
         ball.setMass(MassType.NORMAL);
         ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100));

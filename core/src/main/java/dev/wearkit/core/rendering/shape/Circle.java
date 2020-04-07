@@ -14,7 +14,6 @@ public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Rend
 
     private static final String TAG = "Circle";
     private Paint paint;
-    private int index = -1;
 
     /**
      * Full constructor.
@@ -27,17 +26,6 @@ public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Rend
     public Circle(double radius) {
         super(radius);
     }
-
-    /**
-     * Full constructor with z-index
-     * @param radius
-     * @param index
-     */
-    public Circle(double radius, int index) {
-        super(radius);
-        this.index = index;
-    }
-
 
     @Override
     public void render(Canvas canvas) throws PaintRequiredException {

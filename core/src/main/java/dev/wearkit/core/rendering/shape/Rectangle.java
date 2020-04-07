@@ -13,7 +13,6 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable
 
     private static final String TAG = "Rectangle";
     private Paint paint;
-    private int index = -1;
 
     /**
      * Full constructor.
@@ -28,16 +27,6 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable
      */
     public Rectangle(double width, double height) {
         super(width, height);
-    }
-
-    /**
-     *
-     * @param width
-     * @param height
-     */
-    public Rectangle(double width, double height, int index) {
-        this(width, height);
-        this.index = index;
     }
 
     @Override
