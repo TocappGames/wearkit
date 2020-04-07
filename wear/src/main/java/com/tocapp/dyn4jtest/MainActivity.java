@@ -6,8 +6,10 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -28,6 +30,7 @@ import com.google.android.gms.wearable.MessageClient;
 import com.google.android.gms.wearable.MessageEvent;
 import com.google.android.gms.wearable.Wearable;
 import com.tocapp.sdk.activity.WearGameActivity;
+import com.tocapp.sdk.display.GameView;
 import com.tocapp.sdk.engine.Game;
 import com.tocapp.touchround.AirHockey;
 
@@ -51,12 +54,28 @@ public class MainActivity extends WearGameActivity{
     public static boolean sound = true;
     static public double width = 0;
     static public double height = 0;
+    private GameView gameView;
+    private double widthCm;
+    private double heightCm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
        // AmbientModeSupport.attach(this);
-
+        gameView = findViewById( R.id.game_view );
+        gameView.getViewTreeObserver().addOnGlobalLayoutListener( new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                findViewById( R.id.game_view ).getViewTreeObserver().removeGlobalOnLayoutListener( this );
+                DisplayMetrics displayMetrics = getResources().getDisplayMetrics();
+                int viewHeight = gameView.getHeight();
+                int viewWidth = gameView.getWidth();
+                double wi = (double) viewWidth / (double) displayMetrics.xdpi;
+                double hi = (double) viewHeight / (double) displayMetrics.ydpi;
+                widthCm =  wi * 2.54;
+                heightCm  = hi * 2.54;
+            }
+        } );
         ImageButton exitButton = findViewById(R.id.butt);
         exitButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,7 +87,7 @@ public class MainActivity extends WearGameActivity{
 
     @Override
     protected Game getGame() {
-        return new AirHockey(width, height, level, sound, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
+        return new AirHockey(widthCm, heightCm, level, sound, displayIsRound, backgroundImage, ballColor, sticksColor, boxColor, goalsColor);
     }
 
     @Override

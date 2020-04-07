@@ -27,10 +27,10 @@ import java.util.Random;
 import static java.lang.Math.abs;
 
 public class AirHockey extends AbstractGame {
-    private int level;
+    private final int level;
     private  int mobileWidth;
-    private  int mobileHeight;
-    private  boolean displayIsRound;
+    private int mobileHeight;
+    private final boolean displayIsRound;
 
     private boolean sound;
     private DrawUtils drawUtils;
@@ -59,7 +59,6 @@ public class AirHockey extends AbstractGame {
 
     private GameObject box;
     private GameObject goals;
-
     private Rectangle goalIa;
     private Rectangle goalUser;
 
@@ -67,6 +66,10 @@ public class AirHockey extends AbstractGame {
     private int iaGoals = 0;
 
     private MotionEvent event;
+    private final double MAX_BALL_VELOCITY = 40;
+    private final double DELAY_TIME = 1500;
+    private final int MAX_GOALS = 7;
+
 
     private Context context;
 
@@ -78,13 +81,16 @@ public class AirHockey extends AbstractGame {
     private boolean iaWin;
     private double goalTime;
 
+    final double BORDER_GOAL_WIDTH_PERCENT = 0.35;
+    final double GOAL_WIDTH_PERCENT = 0.3;
+    final double BOX_HEIGHT_PERCENT = 0.03;
     private double BOX_HEIGHT;
     private double WIDTH_SCALED;
     private double HEIGHT_SCALED;
     private double CENTER_WIDTH;
     private double CENTER_HEIGHT;
 
-    public AirHockey(double width, double heiht, int level, boolean sound, boolean displayIsRound, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
+    public AirHockey(double width, double height, int level, boolean sound, boolean displayIsRound, int backgroundImage, int ballColor, int sticksColor, int boxColor, int goalsColor) {
         this.level = level;
         this.sound = sound;
         this.displayIsRound = displayIsRound;
@@ -236,12 +242,9 @@ public class AirHockey extends AbstractGame {
         CENTER_WIDTH = WIDTH_SCALED / 2;
         CENTER_HEIGHT = HEIGHT_SCALED / 2;
 
-        final double BOX_HEIGHT_PERCENT = 0.03;
         BOX_HEIGHT = WIDTH_SCALED * BOX_HEIGHT_PERCENT;
-        final double BORDER_GOAL_WIDTH_PERCENT = 0.35;
         final double BORDER_GOAL_WIDTH = (WIDTH_SCALED) * BORDER_GOAL_WIDTH_PERCENT;
         final double BORDER_GOAL_HEIGTH = BOX_HEIGHT;
-        final double GOAL_WIDTH_PERCENT = 0.3;
         final double GOAL_WIDTH = (WIDTH_SCALED) * GOAL_WIDTH_PERCENT;
         final double GOAL_HEIGHT = BOX_HEIGHT;
         final double BOARD_WIDTH = WIDTH_SCALED;
@@ -336,12 +339,12 @@ public class AirHockey extends AbstractGame {
 
     private GameObject addBall(String position) {
         Random r = new Random();
-        int BALL_RANGE_PERCENT = (int) (WIDTH_SCALED * 0.1);
+        int BALL_RANGE_PERCENT = (int) (5);
         double xRange = r.nextInt( (BALL_RANGE_PERCENT + BALL_RANGE_PERCENT) - BALL_RANGE_PERCENT );
         final double IA_HOME_Y = HEIGHT_SCALED * 0.4;
         final double USER_HOME_Y = HEIGHT_SCALED * 0.6;
         final double BALL_RADIUS = WIDTH_SCALED * 0.05;
-        final int LINEAR_DAMPING = 20;
+        final double LINEAR_DAMPING = 0.2;
         final double DENSITY = 0.5;
         final int RESTITUTION = 1;
 
@@ -371,19 +374,19 @@ public class AirHockey extends AbstractGame {
     }
 
     private GameObject addIaStick() {
-        final double HOME_X = CENTER_WIDTH;
         final double HOME_Y = HEIGHT_SCALED * 0.2;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
         final int DENSITY = 2;
         final double RESTITUTION = 0.002;
+        final int DAMPING = 3;
 
         Paint paint = new Paint( sticksPaint );
 
         GameObject iaStick = new GameObject( paint );
         iaStick.addFixture( new Circle( STICK_RADIUS ), DENSITY, 0, RESTITUTION );
-        iaStick.translate( HOME_X, HOME_Y );
+        iaStick.translate( CENTER_WIDTH, HOME_Y );
         iaStick.setMass( MassType.NORMAL );
-        iaStick.setLinearDamping( 3 );
+        iaStick.setLinearDamping( DAMPING );
 
         this.world.addBody( iaStick );
         return iaStick;
@@ -413,7 +416,6 @@ public class AirHockey extends AbstractGame {
         drawUtils.drawGoals( landscape, userScores, iaScores, iaWin, userWin, goalTime );
         drawUtils.drawPuncuation( landscape, userGoals, iaGoals );
 
-        double MAX_BALL_VELOCITY = 40;
         if (ball.getLinearVelocity().x >= MAX_BALL_VELOCITY)
             ball.setLinearVelocity( new Vector2( MAX_BALL_VELOCITY, ball.getLinearVelocity().y ) );
         else if (ball.getLinearVelocity().y >= MAX_BALL_VELOCITY)
@@ -425,7 +427,6 @@ public class AirHockey extends AbstractGame {
 
 
         if (!userWin && !iaWin) {
-            final double DELAY_TIME = 1500;
             calculateIa();
             if (userScores) {
                 if (System.currentTimeMillis() - goalTime > DELAY_TIME) {
@@ -450,7 +451,6 @@ public class AirHockey extends AbstractGame {
 
     @Override
     public void postRender() {
-        final int MAX_GOALS = 7;
         if (goalIaCollision) {
             goal( "user" );
             goalIaCollision = false;
@@ -473,15 +473,13 @@ public class AirHockey extends AbstractGame {
         final double CORNER = 0;
         final double CORNER_X = WIDTH_SCALED - CORNER;
         final double CORNER_Y = HEIGHT_SCALED - CORNER;
-        final double BALL_X = ball.getWorldCenter().x;
-        final double BALL_Y = ball.getWorldCenter().y;
         final double BALL_RADIUS = ball.getFixture( 0 ).getShape().getRadius();
 
-        if (BALL_X < CORNER || BALL_X > CORNER_X || BALL_Y < CORNER || BALL_Y > CORNER_Y) {
-            if (BALL_X < CORNER) lastBallX += BALL_RADIUS;
-            if (BALL_X > CORNER_X) lastBallX -= BALL_RADIUS;
-            if (BALL_Y < CORNER) lastBallY += BALL_RADIUS;
-            if (BALL_Y > CORNER_Y) lastBallY -= BALL_RADIUS;
+        if (ball.getWorldCenter().x < CORNER || ball.getWorldCenter().x > CORNER_X || ball.getWorldCenter().y < CORNER || ball.getWorldCenter().y > CORNER_Y) {
+            if (ball.getWorldCenter().x < CORNER) lastBallX += BALL_RADIUS;
+            if (ball.getWorldCenter().x > CORNER_X) lastBallX -= BALL_RADIUS;
+            if (ball.getWorldCenter().y < CORNER) lastBallY += BALL_RADIUS;
+            if (ball.getWorldCenter().y > CORNER_Y) lastBallY -= BALL_RADIUS;
             world.removeBody( ball );
             ball = addBall( "last" );
         } else {
@@ -492,9 +490,7 @@ public class AirHockey extends AbstractGame {
 
     private void checkUserStick() {
         final double CORNER = 0;
-        double userStickX = userStick.getWorldCenter().x;
-        double userStickY = userStick.getWorldCenter().y;
-        if (userStickX < CORNER || userStickX > mobileWidth / getScale() - CORNER || userStickY < CORNER || userStickY > mobileHeight / getScale() - CORNER) {
+        if (userStick.getWorldCenter().x < CORNER || userStick.getWorldCenter().x > mobileWidth / getScale() - CORNER || userStick.getWorldCenter().y < CORNER || userStick.getWorldCenter().y > mobileHeight / getScale() - CORNER) {
             world.removeBody( userStick );
             userStick = addUserStick();
         }
@@ -502,9 +498,7 @@ public class AirHockey extends AbstractGame {
 
     private void checkIaStick() {
         final double CORNER = 0;
-        double iaStickX = iaStick.getWorldCenter().x;
-        double iaStickY = iaStick.getWorldCenter().y;
-        if (iaStickX < CORNER || iaStickX > WIDTH_SCALED - CORNER || iaStickY < CORNER || iaStickY > HEIGHT_SCALED - CORNER) {
+        if (iaStick.getWorldCenter().x < CORNER || iaStick.getWorldCenter().x > WIDTH_SCALED - CORNER || iaStick.getWorldCenter().y < CORNER || iaStick.getWorldCenter().y > HEIGHT_SCALED - CORNER) {
             world.removeBody( iaStick );
             iaStick = addIaStick();
         }
@@ -537,9 +531,9 @@ public class AirHockey extends AbstractGame {
             if (distancia2 > radius) {
 
                 if (ball.getWorldCenter().y < CENTER_HEIGHT) {
-                   /* if (ball.getWorldCenter().x < mobileWidth / getScale() * 0.9
+                    if (ball.getWorldCenter().x < mobileWidth / getScale() * 0.9
                             && ball.getWorldCenter().x > mobileWidth / getScale() * 0.1
-                            && ball.getWorldCenter().y > mobileWidth / getScale() * 0.1)*/
+                            && ball.getWorldCenter().y > mobileWidth / getScale() * 0.1)
                         attack();
                 }
             }

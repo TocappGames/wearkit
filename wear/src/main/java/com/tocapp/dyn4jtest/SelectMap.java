@@ -3,11 +3,9 @@ package com.tocapp.dyn4jtest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.wearable.activity.WearableActivity;
 import android.view.View;
 import android.widget.Button;
@@ -32,7 +30,6 @@ public class SelectMap extends WearableActivity {
     int selection = 0;
     int numMaps = 5;
     private static final String OPEN_MAP_SELECTOR = "/open_map_selector";
-
     private ArrayList<Integer> images;
     private ImageButton image;
 
@@ -123,7 +120,7 @@ public class SelectMap extends WearableActivity {
                     startActivity(mainActivityIntent);
                 } else {
                     showAlert();
-                    sharedPrefs.setSharedPref( "1" );
+                    sharedPrefs.setViewedMap( "1" );
 
                 }
                 break;
@@ -140,7 +137,7 @@ public class SelectMap extends WearableActivity {
                 }else {
                     showAlert();
 
-                    sharedPrefs.setSharedPref( "2" );
+                    sharedPrefs.setViewedMap( "2" );
         }
 
                 break;
@@ -158,7 +155,7 @@ public class SelectMap extends WearableActivity {
                 }else {
                     showAlert();
 
-                    sharedPrefs.setSharedPref( "3" );
+                    sharedPrefs.setViewedMap( "3" );
                 }
 
                 break;
@@ -173,7 +170,7 @@ public class SelectMap extends WearableActivity {
                     startActivity(mainActivityIntent);
                 }else {
                     showAlert();
-                    sharedPrefs.setSharedPref( "4" );
+                    sharedPrefs.setViewedMap( "4" );
                 }
 
                 break;
@@ -182,18 +179,18 @@ public class SelectMap extends WearableActivity {
     }
 
     private boolean checkMap(String mapId) {
-        return (sharedPrefs.getSharedPref(mapId));
+        return (sharedPrefs.getViewedMap(mapId));
     }
 
     // Check text on button
     private void mapChanged() {
         image.setImageResource(images.get(selection));
-        boolean mapIsUnlocked = sharedPrefs.getSharedPref( Integer.toString(  selection) );
+        boolean mapIsUnlocked = sharedPrefs.getViewedMap( Integer.toString(  selection) );
         if (selection == 0) mapIsUnlocked = true;
         if (mapIsUnlocked) {
-            buttonSelect.setText("Select map");
+            buttonSelect.setText( R.string.select_map);
         } else {
-            buttonSelect.setText("You need to see a video");
+            buttonSelect.setText( R.string.you_need_see_video);
         }
     }
     private void showAlert() {

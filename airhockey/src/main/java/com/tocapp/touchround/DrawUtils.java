@@ -12,25 +12,26 @@ import com.tocapp.sdk.rendering.Renderable;
 import java.util.List;
 
 public class DrawUtils {
-    int mobileWidth;
-    int mobileHeight;
+    final private int MOBILE_WIDTH;
+    final private int MOBILE_HEIGHT;
     private Bitmap backgroundImageBmp;
     private Bitmap backgroundImageBmpScaled;
-    private int boxHeight;
-    private int sidesMargin;
-    private int scale;
-    private Context context;
-    private int centerWidth = mobileWidth / 2;
-    private int centerHeight = mobileHeight / 2;
+    private final int BOX_HEIGHT;
+    private final int SIDES_MARGIN;
+    private final int SCALE;
+    private final Context CONTEXT;
+    private final int CENTER_WIDTH;
+    private final int CENTER_HEIGHT;
 
     public DrawUtils(int mobileWidth, int mobileHeight, double boxHeight, double sidesMargin, Context context, double scale) {
-        this.mobileWidth = mobileWidth;
-        this.mobileHeight = mobileHeight;
-
-        this.boxHeight = (int) boxHeight;
-        this.sidesMargin = (int) sidesMargin;
-        this.context = context;
-        this.scale = (int) scale;
+        this.MOBILE_WIDTH = mobileWidth;
+        this.MOBILE_HEIGHT = mobileHeight;
+        this.CENTER_WIDTH = mobileWidth / 2;
+        this.CENTER_HEIGHT = mobileHeight / 2;
+        this.BOX_HEIGHT = (int) boxHeight;
+        this.SIDES_MARGIN = (int) sidesMargin;
+        this.CONTEXT = context;
+        this.SCALE = (int) scale;
 
     }
 
@@ -38,13 +39,13 @@ public class DrawUtils {
         backgroundImageBmp = null;
         if (backgroundImage != 0) {
             backgroundImageBmp = BitmapFactory.decodeResource(
-                    context.getResources(),
+                    CONTEXT.getResources(),
                     backgroundImage );
 
             backgroundImageBmpScaled = Bitmap.createScaledBitmap(
                     backgroundImageBmp,
-                    mobileWidth - ((sidesMargin * scale) * 2 - (boxHeight * scale)),
-                    mobileHeight - ((sidesMargin * scale) * 2 - (boxHeight * scale)),
+                    MOBILE_WIDTH - ((SIDES_MARGIN * SCALE) * 2 - (BOX_HEIGHT * SCALE)),
+                    MOBILE_HEIGHT - ((SIDES_MARGIN * SCALE) * 2 - (BOX_HEIGHT * SCALE)),
                     false );
 
         }
@@ -54,8 +55,8 @@ public class DrawUtils {
                 if (backgroundImageBmp != null) {
                     canvas.drawBitmap(
                             backgroundImageBmpScaled,
-                            (int) (sidesMargin * scale) + (int) (boxHeight * scale / 2),
-                            (int) (sidesMargin * scale) + (int) (boxHeight * scale / 2),
+                            (int) (SIDES_MARGIN * scale) + (int) (BOX_HEIGHT * scale / 2),
+                            (int) (SIDES_MARGIN * scale) + (int) (BOX_HEIGHT * scale / 2),
                             null
                     );
                 }
@@ -69,9 +70,9 @@ public class DrawUtils {
     }
 
     public void drawDifficulty(List<Renderable> landscape, final int level) {
-        final int textSize = mobileWidth / 20;
-        final int positionX = mobileWidth / 8;
-        final int positionY = mobileHeight / 8;
+        final int textSize = MOBILE_WIDTH / 20;
+        final int positionX = MOBILE_WIDTH / 8;
+        final int positionY = MOBILE_HEIGHT / 8;
         landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
@@ -104,10 +105,11 @@ public class DrawUtils {
     }
 
     public void drawPuncuation(List<Renderable> landscape, final Integer userGoals, final Integer iaGoals) {
-        final float CENTER_DISTANCE = 4000;
-        final int POSITION_X = mobileWidth / 8;
-        final int POSITION_Y = (int) (centerHeight + CENTER_DISTANCE / scale);
-        final float TEXT_SIZE = 2000 / (float) scale;
+        final float CENTER_DISTANCE = 100;
+        final int POSITION_X = MOBILE_WIDTH / 8;
+        final int POSITION_Y_USER = (int) (CENTER_HEIGHT + CENTER_DISTANCE);
+        final int POSITION_Y_IA = (int) (CENTER_HEIGHT - CENTER_DISTANCE);
+        final float TEXT_SIZE =MOBILE_HEIGHT / 20;
 
         landscape.add( new Renderable() {
             @Override
@@ -116,8 +118,8 @@ public class DrawUtils {
                 Paint paint = new Paint();
                 paint.setColor( Color.WHITE );
                 paint.setTextSize( TEXT_SIZE );
-                canvas.drawText( userGoals.toString(), POSITION_X, POSITION_Y, paint );
-                canvas.drawText( iaGoals.toString(), POSITION_X, POSITION_Y, paint );
+                canvas.drawText( userGoals.toString(), POSITION_X, POSITION_Y_USER, paint );
+                canvas.drawText( iaGoals.toString(), POSITION_X, POSITION_Y_IA, paint );
             }
 
             @Override
@@ -129,10 +131,10 @@ public class DrawUtils {
 
     public void drawGoals(List<Renderable> landscape, final boolean userScores, final boolean iaScores, final boolean iaWin, final boolean userWin, final double goalTime) {
         final float CENTER_DISTANCE = 3000;
-        final float TEXT_SIZE = 1800 / (float) scale;
-        final float POSITION_X = 80 / scale;
-        final float POSITION_Y = centerHeight -CENTER_DISTANCE / scale;
-
+        final float TEXT_SIZE = 1800 / (float) SCALE;
+        final float POSITION_X = 80 / SCALE;
+        final float POSITION_Y = CENTER_HEIGHT -CENTER_DISTANCE / SCALE;
+        final int TIME_IN_SCREEN = 1000;
         landscape.add( new Renderable() {
             @Override
             public void render(Canvas canvas, double scale) {
@@ -147,7 +149,7 @@ public class DrawUtils {
                 if (userWin) text = "User win";
                 if (iaWin) text = "Ia win";
 
-                if (System.currentTimeMillis() - goalTime < 1000) {
+                if (System.currentTimeMillis() - goalTime < TIME_IN_SCREEN) {
                     canvas.drawText( text, POSITION_X, POSITION_Y, paint );
                 }
 

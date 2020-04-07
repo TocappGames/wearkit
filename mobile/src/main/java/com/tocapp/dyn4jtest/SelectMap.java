@@ -1,11 +1,7 @@
 package com.tocapp.dyn4jtest;
 
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -29,6 +25,7 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
+import com.tocapp.touchround.Config;
 import com.tocapp.utils.SharedPrefsUtil;
 
 import java.util.ArrayList;
@@ -59,6 +56,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
 
     private SharedPrefsUtil sharedPrefs;
     private Button buttonSelect;
+    private Config config;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -179,7 +177,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     }
 
     private boolean checkMap(String mapId) {
-        return (sharedPrefs.getSharedPref(mapId));
+        return (sharedPrefs.getViewedMap(mapId));
     }
 
 
@@ -189,7 +187,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
         videoViewed = true;
         if (videoViewed) {
             // Put true on sharedPrefs with numMap reference
-           sharedPrefs.setSharedPref(numMap);
+           sharedPrefs.setViewedMap(numMap);
             sendVideoViewedConfirmation(Integer.parseInt(numMap));
         }
     }
@@ -197,12 +195,12 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     // Check text on button
     private void mapChanged() {
         image.setImageResource(images.get(selection));
-        boolean mapIsUnlocked = sharedPrefs.getSharedPref( Integer.toString(  selection) );
+        boolean mapIsUnlocked = sharedPrefs.getViewedMap( Integer.toString(  selection) );
         if (selection == 0) mapIsUnlocked = true;
         if (mapIsUnlocked) {
-            buttonSelect.setText("Select map");
+            buttonSelect.setText( R.string.select_map);
         } else {
-            buttonSelect.setText("You need to see a video");
+            buttonSelect.setText( R.string.you_need_see_video);
         }
     }
 

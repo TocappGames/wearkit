@@ -17,19 +17,12 @@
 package com.tocapp.dyn4jtest;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.gms.wearable.DataEvent;
 import com.google.android.gms.wearable.DataEventBuffer;
 import com.google.android.gms.wearable.DataMapItem;
 import com.google.android.gms.wearable.MessageEvent;
-import com.google.android.gms.wearable.Wearable;
 import com.google.android.gms.wearable.WearableListenerService;
 import com.tocapp.utils.SharedPrefsUtil;
 
@@ -60,7 +53,7 @@ public class DataLayerListenerService extends WearableListenerService {
                     DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
                     int mapId = dataMapItem.getDataMap().getInt(UNLOCKED_MAP_ID);
                     sharedPrefs = new SharedPrefsUtil(getApplication());
-                    sharedPrefs.setSharedPref(Integer.toString(mapId));
+                    sharedPrefs.setViewedMap(Integer.toString(mapId));
 
                     // Get time confirmation
                     long confirmationTime =
