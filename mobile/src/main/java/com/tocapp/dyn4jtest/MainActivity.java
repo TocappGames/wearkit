@@ -21,11 +21,7 @@ import java.util.Locale;
 public class MainActivity extends MobileGameActivity {
 
     public static boolean displayIsRound = false;
-    private GameView gameView;
     static public Config config = new Config();
-    private double widthCm;
-    private double heightCm;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +31,8 @@ public class MainActivity extends MobileGameActivity {
 
     static double getDisplayArea(Activity activity) {
         double xCm = 0, yCm = 0;
+        double area = 0;
+        final double INCH_TO_CM = 2.54;
         try {
             Display display = activity.getWindowManager().getDefaultDisplay();
             DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -43,23 +41,21 @@ public class MainActivity extends MobileGameActivity {
             Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
             DisplayMetrics dm = new DisplayMetrics();
             activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-            xCm = realSize.x / dm.xdpi * 2.54;
-            yCm = realSize.y / dm.ydpi * 2.54;
-
+            xCm = realSize.x / dm.xdpi * INCH_TO_CM;
+            yCm = realSize.y / dm.ydpi * INCH_TO_CM;
             Resources resources = activity.getApplicationContext().getResources();
             int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-            double navBarCm = 0;
+            double navBarCm;
             if (resourceId > 0) {
                 double navBarPx = resources.getDimensionPixelSize(resourceId);
-                navBarCm = navBarPx / dm.ydpi * 2.54;
+                navBarCm = navBarPx / dm.ydpi * INCH_TO_CM;
+                yCm = yCm -navBarCm;
             }
-            yCm = yCm -navBarCm;
-            System.out.println("X Cm: " + xCm);
-            System.out.println("Y CM: " + yCm);
+            area = xCm * yCm;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return xCm * yCm;
+        return area;
     }
 
 

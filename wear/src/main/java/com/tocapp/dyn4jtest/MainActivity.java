@@ -17,13 +17,9 @@ import com.tocapp.touchround.AirHockey;
 import com.tocapp.touchround.Config;
 
 public class MainActivity extends WearGameActivity{
-
-
+    
     public static boolean displayIsRound = false;
     public static Config config = new Config();
-    private GameView gameView;
-    private double widthCm;
-    private double heightCm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +36,8 @@ public class MainActivity extends WearGameActivity{
 
     static double getDisplayArea(Activity activity) {
         double xCm = 0, yCm = 0;
+        double area = 0;
+        final double INCH_TO_CM = 2.54;
         try {
             Display display = activity.getWindowManager().getDefaultDisplay();
             DisplayMetrics displayMetrics = new DisplayMetrics();
@@ -48,23 +46,21 @@ public class MainActivity extends WearGameActivity{
             Display.class.getMethod("getRealSize", Point.class).invoke(display, realSize);
             DisplayMetrics dm = new DisplayMetrics();
             activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
-            xCm = realSize.x / dm.xdpi * 2.54;
-            yCm = realSize.y / dm.ydpi * 2.54;
-
+            xCm = realSize.x / dm.xdpi * INCH_TO_CM;
+            yCm = realSize.y / dm.ydpi * INCH_TO_CM;
             Resources resources = activity.getApplicationContext().getResources();
             int resourceId = resources.getIdentifier("navigation_bar_height", "dimen", "android");
-            double navBarCm = 0;
+            double navBarCm;
             if (resourceId > 0) {
                 double navBarPx = resources.getDimensionPixelSize(resourceId);
-                navBarCm = navBarPx / dm.ydpi * 2.54;
+                navBarCm = navBarPx / dm.ydpi * INCH_TO_CM;
+                yCm = yCm -navBarCm;
             }
-            yCm = yCm -navBarCm;
-            System.out.println("X Cm: " + xCm);
-            System.out.println("Y CM: " + yCm);
+            area = xCm * yCm;
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return xCm * yCm;
+        return area;
     }
 
     @Override

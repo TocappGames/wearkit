@@ -30,6 +30,8 @@ public class AirHockey extends AbstractGame {
     private final int level;
     private  int mobileWidth;
     private int mobileHeight;
+    private final double MY_FACTOR;
+    private final double DEFAULT_AREA = 20;
     private double area;
     private final boolean displayIsRound;
 
@@ -94,6 +96,7 @@ public class AirHockey extends AbstractGame {
     public AirHockey(Config config) {
         this.area = config.getArea();
         MAX_BALL_VELOCITY = this.area / 2;
+        MY_FACTOR = area / DEFAULT_AREA;
         System.out.println( area );
         this.level = config.getLevel();
         this.sound = config.haveSound();
@@ -384,14 +387,14 @@ public class AirHockey extends AbstractGame {
 
     private GameObject addBall(String position) {
         Random r = new Random();
-        int BALL_RANGE_PERCENT = (int) (5);
+        int BALL_RANGE_PERCENT = (int) WIDTH_SCALED / 4;
         double xRange = r.nextInt( (BALL_RANGE_PERCENT + BALL_RANGE_PERCENT) - BALL_RANGE_PERCENT );
         final double IA_HOME_Y = HEIGHT_SCALED * 0.4;
         final double USER_HOME_Y = HEIGHT_SCALED * 0.6;
         final double BALL_RADIUS = WIDTH_SCALED * 0.05;
-        final double LINEAR_DAMPING = 0.2;
-        final double DENSITY = 1;
-        final double RESTITUTION = 1;
+        final double LINEAR_DAMPING = 0.2 * MY_FACTOR;
+        final double DENSITY = 0.5 * MY_FACTOR;
+        final double RESTITUTION = 1 * MY_FACTOR;
 
         GameObject ball = new GameObject( ballPaint );
         ball.addFixture( new Circle( BALL_RADIUS ), DENSITY, 0.0, RESTITUTION );
@@ -422,9 +425,9 @@ public class AirHockey extends AbstractGame {
     private GameObject addIaStick() {
         final double HOME_Y = HEIGHT_SCALED * 0.2;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
-        final double DENSITY = 0.5;
-        final double RESTITUTION = 0.002;
-        final int DAMPING = 1;
+        final double DENSITY = 1 * MY_FACTOR;
+        final double RESTITUTION = 0.002 * MY_FACTOR;
+        final double DAMPING = 3 * MY_FACTOR;
 
         Paint paint = new Paint( sticksPaint );
 
@@ -442,9 +445,9 @@ public class AirHockey extends AbstractGame {
         final double HOME_X = CENTER_WIDTH;
         final double HOME_Y = HEIGHT_SCALED * 0.8;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
-        final int LINEAR_DAMPING = 1;
-        final double DENSITY = 0.5;
-        final double RESTITUTION = 0.002;
+        final double LINEAR_DAMPING = 20 * MY_FACTOR;
+        final double DENSITY = 1 * MY_FACTOR;
+        final double RESTITUTION = 0.002 * MY_FACTOR;
 
         GameObject userStick = new GameObject( sticksPaint );
         userStick.addFixture( new Circle( STICK_RADIUS ), DENSITY, 0.0, RESTITUTION );
@@ -572,7 +575,7 @@ public class AirHockey extends AbstractGame {
         double distancia2 = dx * dx + dy * dy;
         // Si pasa del centro la bola se dirige a su casa
         if (ball.getWorldCenter().y > CENTER_HEIGHT) {
-            iaStick.applyForce( new Vector2( iaStick.getMass().getMass() * distancia2 * 0.5 * (homeX - iaStick.getWorldCenter().x) * 0.5, iaStick.getMass().getMass() * distancia2 * 0.5 * (homeY - iaStick.getWorldCenter().y) * 0.5 ) );
+            iaStick.applyForce( new Vector2( (iaStick.getMass().getMass() * distancia2 * 0.5 * (homeX - iaStick.getWorldCenter().x) * 0.5) * MY_FACTOR, (iaStick.getMass().getMass() * distancia2 * 0.5 * (homeY - iaStick.getWorldCenter().y) * 0.5) * MY_FACTOR ) );
             iaStick.setLinearVelocity( 0, 0 );
         } else {
             // Cuando la bola está en su campo y lejano al stick ataca
@@ -608,7 +611,7 @@ public class AirHockey extends AbstractGame {
                 force = 600;
         }
         if (abs( ball.getLinearVelocity().x ) < ballVel && abs( ball.getLinearVelocity().y ) < ballVel)
-            iaStick.applyForce( new Vector2( iaStick.getMass().getMass() * force * (ball.getWorldCenter().x - iaStick.getWorldCenter().x), iaStick.getMass().getMass() * force * (ball.getWorldCenter().y - iaStick.getWorldCenter().y) ) );
+            iaStick.applyForce( new Vector2( (iaStick.getMass().getMass() * force * (ball.getWorldCenter().x - iaStick.getWorldCenter().x)) * MY_FACTOR, (iaStick.getMass().getMass() * force * (ball.getWorldCenter().y - iaStick.getWorldCenter().y)) * MY_FACTOR ) );
         iaStick.setLinearVelocity( 0, 0 );
     }
 
