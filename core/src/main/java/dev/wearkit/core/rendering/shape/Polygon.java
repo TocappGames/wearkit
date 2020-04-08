@@ -4,8 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Path;
 
-
 import org.dyn4j.geometry.Vector2;
+
+import java.util.Iterator;
 
 import dev.wearkit.core.exceptions.PaintRequiredException;
 import dev.wearkit.core.rendering.Paintable;
@@ -31,10 +32,16 @@ public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Re
         if (this.paint == null) {
             throw new PaintRequiredException("This shape needs to be painted before render");
         }
+        Iterator<Vector2> iterator = this.getVertexIterator();
+        if (!iterator.hasNext()) throw new NullPointerException("vertices cannot be empty");
         Path path = new Path();
-        for(Vector2 point: this.getVertices()){
-            path.lineTo((float) point.x,(float) point.y);
+        Vector2 firstPoint = iterator.next();
+        path.moveTo((float) firstPoint.x, (float) firstPoint.y);
+        while (iterator.hasNext()){
+            Vector2 point = iterator.next();
+            path.lineTo((float) point.x, (float) point.y);
         }
+        path.close();
 
         canvas.drawPath(path, this.paint);
     }
