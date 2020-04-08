@@ -30,6 +30,7 @@ public class AirHockey extends AbstractGame {
     private final int level;
     private  int mobileWidth;
     private int mobileHeight;
+    private double area;
     private final boolean displayIsRound;
 
     private boolean sound;
@@ -66,7 +67,7 @@ public class AirHockey extends AbstractGame {
     private int iaGoals = 0;
 
     private MotionEvent event;
-    private final double MAX_BALL_VELOCITY = 40;
+    private final double MAX_BALL_VELOCITY;
     private final double DELAY_TIME = 1500;
     private final int MAX_GOALS = 7;
 
@@ -91,6 +92,9 @@ public class AirHockey extends AbstractGame {
     private double CENTER_HEIGHT;
 
     public AirHockey(Config config) {
+        this.area = config.getArea();
+        MAX_BALL_VELOCITY = this.area / 2;
+        System.out.println( area );
         this.level = config.getLevel();
         this.sound = config.haveSound();
         this.displayIsRound = config.isDisplayIsRound();
@@ -148,7 +152,6 @@ public class AirHockey extends AbstractGame {
         this.world.setGravity( World.ZERO_GRAVITY );
 
         this.world.addListener( new CollisionListener() {
-            final int nextSoundTime = 400;
             @Override
             public boolean collision(Body body1, BodyFixture fixture1, Body body2, BodyFixture fixture2, Penetration penetration) {
                 if (body1 == ball && body2 == centerRect
@@ -156,7 +159,7 @@ public class AirHockey extends AbstractGame {
                     return false;
                 }
 
-                if (body1 == userStick && body2 == box
+              /*  if (body1 == userStick && body2 == box
                 || body1 == box && body2 == userStick) {
                     double boxX = box.getWorldCenter().x;
                     double boxY = box.getWorldCenter().y;
@@ -170,8 +173,8 @@ public class AirHockey extends AbstractGame {
                         return true;
                     else return false;
                 }
-
-                if (body1 == iaStick && body2 == box
+*/
+                /*if (body1 == iaStick && body2 == box
                         || body1 == box && body2 == iaStick) {
                     double boxX = box.getWorldCenter().x;
                     double boxY = box.getWorldCenter().y;
@@ -183,9 +186,9 @@ public class AirHockey extends AbstractGame {
                     double distance = Math.sqrt((boxX-ballX)*(boxX-ballX) + (boxY-ballY)*(boxY-ballY));
                     if (distance > boxRadius - ballRadius) return true;
                     else return false;
-                }
+                }*/
 
-                if (body1 == ball && body2 == box
+                /*if (body1 == ball && body2 == box
                         || body1 == box && body2 == ball) {
                     double boxX = box.getWorldCenter().x;
                     double boxY = box.getWorldCenter().y;
@@ -198,7 +201,7 @@ public class AirHockey extends AbstractGame {
                     if (distance >= boxRadius - ballRadius) return true;
                     else return false;
                 }
-
+*/
                 if (body1 == ball && body2 == iaStick
                     ||body2 == ball && body1 == iaStick) {
                     iaStickBallCol = System.currentTimeMillis();
@@ -224,13 +227,12 @@ public class AirHockey extends AbstractGame {
                         goalUserCollision = true;
                     }
                 }
-                // False collision ball with centerline
+
+                // Sound on collision
                 if (body1 == ball && body2 != centerRect
                         || body2 == ball && body1 != centerRect
                         || body1 == ball && body2 != centerCirc
                         || body2 == ball && body1 != centerCirc) {
-                    if (lastSoundTime + nextSoundTime > System.currentTimeMillis())
-                        lastSoundTime = System.currentTimeMillis();
                     soundUtil.startTapSound();
 
                 }
@@ -388,8 +390,8 @@ public class AirHockey extends AbstractGame {
         final double USER_HOME_Y = HEIGHT_SCALED * 0.6;
         final double BALL_RADIUS = WIDTH_SCALED * 0.05;
         final double LINEAR_DAMPING = 0.2;
-        final double DENSITY = 0.5;
-        final int RESTITUTION = 1;
+        final double DENSITY = 1;
+        final double RESTITUTION = 1;
 
         GameObject ball = new GameObject( ballPaint );
         ball.addFixture( new Circle( BALL_RADIUS ), DENSITY, 0.0, RESTITUTION );
@@ -410,6 +412,7 @@ public class AirHockey extends AbstractGame {
         }
 
         ball.setMass( MassType.NORMAL );
+        System.out.println("Masa de la bola" +  ball.getMass() );
         ball.setLinearDamping( LINEAR_DAMPING );
         ball.setBullet( true );
         this.world.addBody( ball );
@@ -419,9 +422,9 @@ public class AirHockey extends AbstractGame {
     private GameObject addIaStick() {
         final double HOME_Y = HEIGHT_SCALED * 0.2;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
-        final int DENSITY = 2;
+        final double DENSITY = 0.5;
         final double RESTITUTION = 0.002;
-        final int DAMPING = 3;
+        final int DAMPING = 1;
 
         Paint paint = new Paint( sticksPaint );
 
@@ -439,8 +442,8 @@ public class AirHockey extends AbstractGame {
         final double HOME_X = CENTER_WIDTH;
         final double HOME_Y = HEIGHT_SCALED * 0.8;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
-        final int LINEAR_DAMPING = 20;
-        final int DENSITY = 2;
+        final int LINEAR_DAMPING = 1;
+        final double DENSITY = 0.5;
         final double RESTITUTION = 0.002;
 
         GameObject userStick = new GameObject( sticksPaint );
@@ -458,11 +461,13 @@ public class AirHockey extends AbstractGame {
         drawUtils.drawDifficulty( landscape, level );
         drawUtils.drawGoals( landscape, userScores, iaScores, iaWin, userWin, goalTime );
         drawUtils.drawPuncuation( landscape, userGoals, iaGoals );
+/*
 
         if (ball.getLinearVelocity().x >= MAX_BALL_VELOCITY)
             ball.setLinearVelocity( new Vector2( MAX_BALL_VELOCITY, ball.getLinearVelocity().y ) );
         else if (ball.getLinearVelocity().y >= MAX_BALL_VELOCITY)
             ball.setLinearVelocity( new Vector2( ball.getLinearVelocity().x, MAX_BALL_VELOCITY ) );
+*/
 
         if (this.event != null) {
             calculaMovimiento( event, getScale() );

@@ -1,8 +1,8 @@
 package com.tocapp.touchround;
 
 public class Config {
-    private double widthCm;
-    private double heightCm;
+
+    private double area;
     private int level;
     private boolean sound;
     private boolean displayIsRound;
@@ -67,6 +67,14 @@ public class Config {
 
     }
 
+    public void setArea(double area){
+        this.area = area;
+    }
+
+   public double getArea() {
+        return this.area;
+   }
+
 
     public int getLevel() {
         return level;
@@ -102,15 +110,6 @@ public class Config {
 
     public boolean haveMap() {
         return haveMap;
-    }
-
-
-    public void setWidthCm(double widthCm) {
-        this.widthCm = widthCm;
-    }
-
-    public void setHeightCm(double heightCm) {
-        this.heightCm = heightCm;
     }
 
     public void setLevel(int level) {
