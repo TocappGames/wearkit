@@ -3,16 +3,16 @@ package dev.wearkit.core.rendering.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
-import dev.wearkit.core.exceptions.PaintRequiredException;
+import org.dyn4j.geometry.Vector2;
+
 import dev.wearkit.core.rendering.Paintable;
 import dev.wearkit.core.rendering.Renderable;
-
-import org.dyn4j.geometry.Vector2;
 
 
 public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Renderable {
 
     private static final String TAG = "Circle";
+
     private Paint paint;
 
     /**
@@ -27,11 +27,15 @@ public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Rend
         super(radius);
     }
 
+
     @Override
-    public void render(Canvas canvas) throws PaintRequiredException {
-        if (this.paint == null) {
-            throw new PaintRequiredException("This shape needs to be painted before render");
-        }
+    public void paint(Paint paint) {
+        if(paint == null) throw new NullPointerException("paint cannot be null");
+        this.paint = paint;
+    }
+
+    @Override
+    public void render(Canvas canvas) {
         Vector2 center = this.getCenter();
         double radius = this.getRadius();
         canvas.drawCircle(
@@ -40,13 +44,5 @@ public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Rend
                 (float) radius,
                 this.paint
         );
-
-    }
-
-    @Override
-    public Renderable paint(Paint paint) {
-        if(paint == null) throw new NullPointerException("Paint cannot be null");
-        this.paint = paint;
-        return this;
     }
 }

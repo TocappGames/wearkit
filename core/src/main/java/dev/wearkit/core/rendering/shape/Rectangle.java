@@ -3,15 +3,15 @@ package dev.wearkit.core.rendering.shape;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import org.dyn4j.geometry.Vector2;
+
 import dev.wearkit.core.rendering.Paintable;
 import dev.wearkit.core.rendering.Renderable;
-import dev.wearkit.core.exceptions.PaintRequiredException;
-
-import org.dyn4j.geometry.Vector2;
 
 public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable, Renderable {
 
     private static final String TAG = "Rectangle";
+
     private Paint paint;
 
     /**
@@ -30,10 +30,7 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable
     }
 
     @Override
-    public void render(Canvas canvas) throws PaintRequiredException {
-        if (this.paint == null) {
-            throw new PaintRequiredException("This shape needs to be painted before render");
-        }
+    public void render(Canvas canvas) {
         Vector2 center = this.getCenter();
 
         double halfWidth = this.getWidth() / 2;
@@ -48,10 +45,9 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable
     }
 
     @Override
-    public Renderable paint(Paint paint) {
-        if(paint == null) throw new NullPointerException("Paint cannot be null");
+    public void paint(Paint paint) {
+        if(paint == null) throw new NullPointerException("paint cannot be null");
         this.paint = paint;
-        return this;
     }
 
 }

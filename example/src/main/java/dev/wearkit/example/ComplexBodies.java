@@ -4,40 +4,24 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import org.dyn4j.dynamics.World;
-import org.dyn4j.geometry.Convex;
-import org.dyn4j.geometry.Geometry;
 import org.dyn4j.geometry.MassType;
-import org.dyn4j.geometry.Triangle;
 import org.dyn4j.geometry.Vector2;
-import org.dyn4j.geometry.decompose.Bayazit;
-import org.dyn4j.geometry.decompose.Decomposer;
-import org.dyn4j.geometry.decompose.EarClipping;
-import org.dyn4j.geometry.decompose.SweepLine;
-import org.dyn4j.geometry.decompose.Triangulator;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-
+import dev.wearkit.core.data.Loader;
 import dev.wearkit.core.engine.AbstractGame;
+import dev.wearkit.core.exceptions.LoadException;
 import dev.wearkit.core.rendering.Body;
 import dev.wearkit.core.rendering.Ornament;
 import dev.wearkit.core.rendering.shape.Circle;
-import dev.wearkit.core.rendering.shape.Polygon;
 import dev.wearkit.core.rendering.shape.Rectangle;
 
 public class ComplexBodies extends AbstractGame {
 
     private static final String TAG = "FloatingBalls";
-    private JSONArray circuit;
+    private Loader<Body> loader;
 
-    public ComplexBodies(JSONArray circuit){
-        this.circuit = circuit;
+    public ComplexBodies(Loader<Body> loader){
+        this.loader = loader;
     }
-
 
     @Override
     public void init() {
@@ -90,37 +74,15 @@ public class ComplexBodies extends AbstractGame {
 
         this.world.addBody(frame);
 
-        Paint p = new Paint();
-        p.setColor(Color.BLUE);
-        p.setStyle(Paint.Style.FILL_AND_STROKE);
-        Body u = new Body(p);
-
         try {
-            JSONArray firstBody = circuit.getJSONArray(0);
+            Body circuit = loader.load("circuit");
+            circuit.setMass(MassType.INFINITE);
+            circuit.translate(borderWeight, borderWeight + 200);
 
-            for(int i=0; i < firstBody.length(); i++){
-                JSONArray jsonShape = firstBody.getJSONArray(i);
-                Vector2[] vertexes = new Vector2[jsonShape.length()];
-                for(int j=0; j < jsonShape.length(); j++){
-                    JSONArray jsonVertex = jsonShape.getJSONArray(j);
-                    Vector2 vertex = new Vector2(
-                            jsonVertex.getDouble(0),
-                            jsonVertex.getDouble(1)
-                    );
-                    vertexes[j] = vertex;
-                }
-                Geometry.reverseWinding(vertexes);
-                Polygon polygon = new Polygon(vertexes);
-                u.addFixture(polygon);
-            }
-
-        } catch (JSONException e) {
+            world.addBody(circuit);
+        } catch (LoadException e) {
             e.printStackTrace();
         }
-        u.setMass(MassType.INFINITE);
-        u.translate(borderWeight, borderWeight + 200);
-
-        world.addBody(u);
 
 
         for(int i = 0; i < 20; i++){

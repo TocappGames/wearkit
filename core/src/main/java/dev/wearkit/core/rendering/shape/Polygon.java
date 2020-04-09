@@ -8,7 +8,6 @@ import org.dyn4j.geometry.Vector2;
 
 import java.util.Iterator;
 
-import dev.wearkit.core.exceptions.PaintRequiredException;
 import dev.wearkit.core.rendering.Paintable;
 import dev.wearkit.core.rendering.Renderable;
 
@@ -21,17 +20,7 @@ public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Re
     }
 
     @Override
-    public Renderable paint(Paint paint) {
-        if(paint == null) throw new NullPointerException("Paint cannot be null");
-        this.paint = paint;
-        return this;
-    }
-
-    @Override
-    public void render(Canvas canvas) throws PaintRequiredException {
-        if (this.paint == null) {
-            throw new PaintRequiredException("This shape needs to be painted before render");
-        }
+    public void render(Canvas canvas) {
         Iterator<Vector2> iterator = this.getVertexIterator();
         if (!iterator.hasNext()) throw new NullPointerException("vertices cannot be empty");
         Path path = new Path();
@@ -42,7 +31,12 @@ public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Re
             path.lineTo((float) point.x, (float) point.y);
         }
         path.close();
-
         canvas.drawPath(path, this.paint);
+    }
+
+    @Override
+    public void paint(Paint paint) {
+        if(paint == null) throw new NullPointerException("paint cannot be null");
+        this.paint = paint;
     }
 }
