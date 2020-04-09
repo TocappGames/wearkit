@@ -30,7 +30,7 @@ public class ComplexBodies extends AbstractGame {
         double borderWeight = world.getSize().x / 50;
 
         Paint bgCircleColor = new Paint();
-        bgCircleColor.setColor(Color.GRAY);
+        bgCircleColor.setColor(Color.BLACK);
         Ornament bg = new Ornament(bgCircleColor, -2);
         double radius = Math.min(world.getSize().x, world.getSize().y) / 2 - borderWeight;
         Circle bgCentre = new Circle(radius);
@@ -39,7 +39,7 @@ public class ComplexBodies extends AbstractGame {
         this.world.getDecoration().add(bg);
 
         Paint bgCircleColor2 = new Paint();
-        bgCircleColor2.setColor(Color.RED);
+        bgCircleColor2.setColor(Color.BLUE);
         Ornament bg2 = new Ornament(bgCircleColor2, -3);
         Circle bgCentre2 = new Circle(Math.min(world.getSize().x, world.getSize().y) / 4);
         bgCentre2.translate(world.getSize().x / 2, world.getSize().y / 2 - radius);
@@ -85,7 +85,7 @@ public class ComplexBodies extends AbstractGame {
         }
 
 
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < 10; i++){
             addRandomBall();
         }
 
