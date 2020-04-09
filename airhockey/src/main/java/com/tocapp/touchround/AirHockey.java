@@ -31,7 +31,7 @@ public class AirHockey extends AbstractGame {
     private  int mobileWidth;
     private int mobileHeight;
     private final double MY_FACTOR;
-    private final double DEFAULT_AREA = 20;
+    private final double DEFAULT_AREA = 78.5;
     private double area;
     private final boolean displayIsRound;
 
@@ -97,6 +97,7 @@ public class AirHockey extends AbstractGame {
         this.area = config.getArea();
         MAX_BALL_VELOCITY = this.area / 2;
         MY_FACTOR = area / DEFAULT_AREA;
+
         System.out.println( area );
         this.level = config.getLevel();
         this.sound = config.haveSound();
@@ -394,7 +395,7 @@ public class AirHockey extends AbstractGame {
         final double BALL_RADIUS = WIDTH_SCALED * 0.05;
         final double LINEAR_DAMPING = 0.2 * MY_FACTOR;
         final double DENSITY = 0.5 * MY_FACTOR;
-        final double RESTITUTION = 1 * MY_FACTOR;
+        final double RESTITUTION = 1;
 
         GameObject ball = new GameObject( ballPaint );
         ball.addFixture( new Circle( BALL_RADIUS ), DENSITY, 0.0, RESTITUTION );
@@ -426,7 +427,7 @@ public class AirHockey extends AbstractGame {
         final double HOME_Y = HEIGHT_SCALED * 0.2;
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
         final double DENSITY = 1 * MY_FACTOR;
-        final double RESTITUTION = 0.002 * MY_FACTOR;
+        final double RESTITUTION = 0.002;
         final double DAMPING = 3 * MY_FACTOR;
 
         Paint paint = new Paint( sticksPaint );
@@ -447,7 +448,7 @@ public class AirHockey extends AbstractGame {
         final double STICK_RADIUS = WIDTH_SCALED * 0.07;
         final double LINEAR_DAMPING = 20 * MY_FACTOR;
         final double DENSITY = 1 * MY_FACTOR;
-        final double RESTITUTION = 0.002 * MY_FACTOR;
+        final double RESTITUTION = 0.002;
 
         GameObject userStick = new GameObject( sticksPaint );
         userStick.addFixture( new Circle( STICK_RADIUS ), DENSITY, 0.0, RESTITUTION );

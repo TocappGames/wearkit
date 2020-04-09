@@ -7,12 +7,10 @@
     <com.tocapp.sdk.display.GameView
         android:id="@+id/game_view"
         android:layout_width="match_parent"
-        android:layout_height="500dp"
-        android:layout_marginBottom="731dp" />
+        android:layout_height="match_parent" />
 
     <android.app.MediaRouteButton
+        android:id="@+id/asa"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/asa">
-    </android.app.MediaRouteButton>
+        android:layout_height="match_parent"></android.app.MediaRouteButton>
 </LinearLayout>
