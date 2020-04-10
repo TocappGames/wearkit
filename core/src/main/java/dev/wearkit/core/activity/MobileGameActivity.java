@@ -13,8 +13,6 @@ import dev.wearkit.core.display.GameRenderer;
 
 public abstract class MobileGameActivity extends AppCompatActivity {
 
-    private GameView gameView;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,9 +25,9 @@ public abstract class MobileGameActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        this.gameView = findViewById(R.id.game_view);
-        this.gameView.setGame(this.getGame());
-        new GameRenderer(this.gameView, this, 60).start();
+        GameView gameView = findViewById(R.id.game_view);
+        gameView.setGame(this.getGame());
+        new GameRenderer(gameView, this, 60).start();
     }
 
     abstract protected Game getGame();
