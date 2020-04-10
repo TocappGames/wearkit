@@ -4,6 +4,9 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 
+import dev.wearkit.core.common.Paintable;
+import dev.wearkit.core.common.Renderable;
+import dev.wearkit.core.common.Stampable;
 import dev.wearkit.core.exceptions.PaintRequiredException;
 
 import org.dyn4j.dynamics.BodyFixture;

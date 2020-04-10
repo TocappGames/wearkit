@@ -1,6 +1,6 @@
 package dev.wearkit.core.engine;
 
-import dev.wearkit.core.rendering.Renderable;
+import dev.wearkit.core.common.Renderable;
 
 import java.util.SortedSet;
 

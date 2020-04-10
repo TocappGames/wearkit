@@ -1,15 +1,20 @@
 package dev.wearkit.example;
 
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+
+import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.data.Loader;
 import dev.wearkit.core.engine.AbstractGame;
 import dev.wearkit.core.exceptions.LoadException;
 import dev.wearkit.core.rendering.Body;
+import dev.wearkit.core.rendering.BodyCamera;
+import dev.wearkit.core.rendering.DefaultCamera;
 import dev.wearkit.core.rendering.Ornament;
 import dev.wearkit.core.rendering.shape.Circle;
 import dev.wearkit.core.rendering.shape.Rectangle;
@@ -84,10 +89,15 @@ public class ComplexBodies extends AbstractGame {
             e.printStackTrace();
         }
 
+        Body firstBall = this.addRandomBall();
+        Camera firstBallCam = new BodyCamera(firstBall);
+        this.world.setCamera(firstBallCam);
+        this.world.getCamera().setZoom(2);
 
         for(int i = 0; i < 10; i++){
             addRandomBall();
         }
+
 
     }
 
@@ -96,7 +106,7 @@ public class ComplexBodies extends AbstractGame {
         return (int) Math.round(n);
     }
 
-    private void addRandomBall(){
+    private Body addRandomBall(){
 
         Paint paint = new Paint();
         paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
@@ -108,11 +118,13 @@ public class ComplexBodies extends AbstractGame {
         ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100));
 
         this.world.addBody(ball);
+        return ball;
     }
 
 
     @Override
     public void update() {
+
     }
 
     @Override

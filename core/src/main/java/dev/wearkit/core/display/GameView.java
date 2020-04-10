@@ -1,7 +1,9 @@
 package dev.wearkit.core.display;
 
 import android.content.Context;
+import android.graphics.Camera;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -9,8 +11,8 @@ import android.view.View;
 import dev.wearkit.core.engine.Game;
 import dev.wearkit.core.engine.World;
 import dev.wearkit.core.exceptions.PaintRequiredException;
-import dev.wearkit.core.rendering.Indexable;
-import dev.wearkit.core.rendering.Renderable;
+import dev.wearkit.core.common.Indexable;
+import dev.wearkit.core.common.Renderable;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
@@ -59,6 +61,8 @@ public class GameView extends View {
         }
         double time = System.currentTimeMillis() / 1000.0 - this.startTime;
         World world = this.game.getWorld();
+        canvas.setMatrix(world.getCamera().getMatrix());
+
         SortedSet<Renderable> decoration = world.getDecoration();
         boolean isWorldDrawn = false;
         for(Renderable renderable: decoration){

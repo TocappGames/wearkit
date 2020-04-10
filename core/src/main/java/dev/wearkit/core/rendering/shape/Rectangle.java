@@ -5,8 +5,8 @@ import android.graphics.Paint;
 
 import org.dyn4j.geometry.Vector2;
 
-import dev.wearkit.core.rendering.Paintable;
-import dev.wearkit.core.rendering.Renderable;
+import dev.wearkit.core.common.Paintable;
+import dev.wearkit.core.common.Renderable;
 
 public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable, Renderable {
 

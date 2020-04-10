@@ -1,4 +1,4 @@
-package dev.wearkit.core.rendering;
+package dev.wearkit.core.common;
 
 public interface Indexable extends Comparable {
     int getIndex();

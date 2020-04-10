@@ -2,6 +2,8 @@ package dev.wearkit.core.rendering;
 
 import android.graphics.Paint;
 
+import dev.wearkit.core.common.Indexable;
+
 public class Ornament extends Body implements Indexable {
 
     private int zIndex = -1;

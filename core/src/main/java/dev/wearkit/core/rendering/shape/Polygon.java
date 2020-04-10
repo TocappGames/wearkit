@@ -8,8 +8,8 @@ import org.dyn4j.geometry.Vector2;
 
 import java.util.Iterator;
 
-import dev.wearkit.core.rendering.Paintable;
-import dev.wearkit.core.rendering.Renderable;
+import dev.wearkit.core.common.Paintable;
+import dev.wearkit.core.common.Renderable;
 
 public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Renderable {
 

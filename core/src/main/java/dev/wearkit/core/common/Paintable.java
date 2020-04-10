@@ -1,4 +1,4 @@
-package dev.wearkit.core.rendering;
+package dev.wearkit.core.common;
 
 import android.graphics.Paint;
 
