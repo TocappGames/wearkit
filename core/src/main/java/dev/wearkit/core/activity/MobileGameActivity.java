@@ -23,7 +23,7 @@ public abstract class MobileGameActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
 
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_game);
 
         GameView gameView = findViewById(R.id.game_view);
         gameView.setGame(this.getGame());

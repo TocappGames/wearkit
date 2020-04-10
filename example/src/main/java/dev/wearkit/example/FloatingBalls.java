@@ -70,7 +70,7 @@ public class FloatingBalls extends AbstractGame {
 
         this.world.addBody(frame);
 
-        for(int i = 0; i < 50; i++){
+        for(int i = 0; i < 25; i++){
             addRandomBall();
         }
 
