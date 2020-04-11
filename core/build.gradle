@@ -1,23 +1,47 @@
-apply plugin: 'com.android.library'
-apply plugin: 'maven'
+plugins {
+    id 'com.android.library'
+    id 'maven-publish'
+}
 
 group = 'dev.wearkit'
-version = '1.0.0-beta2'
 
-task writePom {
-    doLast {
-        pom {
-            project {
-                inceptionYear '2020'
-                licenses {
-                    license {
-                        name 'MIT License'
-                        url 'https://github.com/TocappGames/wearkit/LICENSE'
-                        distribution 'repo'
-                    }
-                }
+task javadocs(type: Javadoc) {
+    afterEvaluate {
+        source = android.sourceSets.main.java.srcDirs
+        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+        classpath += files(android.libraryVariants.collect { variant ->
+            variant.javaCompile.classpath.files
+        })
+        exclude '**/R.html', '**/R.*.html', '**/index.html'
+    }
+}
+
+task javadocJar(type: Jar, dependsOn: javadocs) {
+    archiveClassifier.set('javadoc')
+    from javadocs.destinationDir
+}
+
+task sourcesJar(type: Jar) {
+    archiveClassifier.set('sources')
+    from android.sourceSets.main.java.srcDirs
+}
+
+afterEvaluate {
+    publishing {
+        publications {
+            maven(MavenPublication) {
+                groupId = group
+                version = android.defaultConfig.versionName
+                from components.release
+                artifact sourcesJar
+                artifact javadocJar
             }
-        }.writeTo("$buildDir/outputs/aar/pom.xml")
+        }
+        repositories {
+            maven {
+                url "$buildDir/outputs/maven"
+            }
+        }
     }
 }
 
@@ -29,7 +53,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 3
-        versionName "1.0.0-beta2"
+        versionName '1.0.0-beta2'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -51,11 +75,11 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation ('androidx.appcompat:appcompat:1.1.0') {transitive = true}
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
-    implementation 'org.dyn4j:dyn4j:3.4.0'
-    implementation 'com.google.android.support:wearable:2.5.0'
+    implementation ('org.dyn4j:dyn4j:3.4.0') {transitive = true}
+    implementation ('com.google.android.support:wearable:2.5.0') {transitive = true}
     compileOnly 'com.google.android.wearable:wearable:2.5.0'
 }
