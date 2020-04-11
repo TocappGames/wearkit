@@ -1,7 +1,6 @@
 package dev.wearkit.example;
 
 import android.graphics.Color;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import org.dyn4j.dynamics.World;
@@ -14,7 +13,6 @@ import dev.wearkit.core.engine.AbstractGame;
 import dev.wearkit.core.exceptions.LoadException;
 import dev.wearkit.core.rendering.Body;
 import dev.wearkit.core.rendering.BodyCamera;
-import dev.wearkit.core.rendering.DefaultCamera;
 import dev.wearkit.core.rendering.Ornament;
 import dev.wearkit.core.rendering.shape.Circle;
 import dev.wearkit.core.rendering.shape.Rectangle;
