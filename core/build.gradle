@@ -1,4 +1,25 @@
 apply plugin: 'com.android.library'
+apply plugin: 'maven'
+
+group = 'dev.wearkit'
+version = '1.0.0-beta1'
+
+task writePom {
+    doLast {
+        pom {
+            project {
+                inceptionYear '2020'
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'https://github.com/TocappGames/wearkit/LICENSE'
+                        distribution 'repo'
+                    }
+                }
+            }
+        }.writeTo("$buildDir/outputs/aar/pom.xml")
+    }
+}
 
 android {
     compileSdkVersion 29
@@ -8,7 +29,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 29
         versionCode 2
-        versionName "1.0.0-alpha0"
+        versionName "1.0.0-beta1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -36,4 +57,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation 'org.dyn4j:dyn4j:3.4.0'
     implementation 'com.google.android.support:wearable:2.5.0'
+    compileOnly 'com.google.android.wearable:wearable:2.5.0'
 }
