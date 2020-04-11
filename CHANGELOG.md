@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/TocappGames/game2d/compare/v1.0.0-beta1...v1.0.0) (2020-04-11)
+
+
+### Features
+
+* **releasing:** added Pom.xml generator ([f892668](https://github.com/TocappGames/game2d/commit/f892668))
+
+
+
 ## [1.0.0-beta1](https://github.com/TocappGames/game2d/compare/v1.0.0-alpha0...v1.0.0-beta1) (2020-04-11)
 
 
