@@ -4,8 +4,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 import org.dyn4j.dynamics.World;
+import org.dyn4j.geometry.AABB;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+
+import java.util.Map;
 
 import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.data.Loader;
@@ -20,9 +23,9 @@ import dev.wearkit.core.rendering.shape.Rectangle;
 public class ComplexBodies extends AbstractGame {
 
     private static final String TAG = "FloatingBalls";
-    private Loader<Body> loader;
+    private Loader<Map<String, Body>> loader;
 
-    public ComplexBodies(Loader<Body> loader){
+    public ComplexBodies(Loader<Map<String, Body>> loader){
         this.loader = loader;
     }
 
@@ -78,24 +81,29 @@ public class ComplexBodies extends AbstractGame {
         this.world.addBody(frame);
 
         try {
-            Body circuit = loader.load("circuit");
+            Map<String, Body> bodies = loader.load("bodies.json");
+            Body circuit = bodies.get("circuit");
+            circuit.rotate(Math.PI / 4);
+            circuit.translate(world.getSize().x / 2, world.getSize().y / 2);
             circuit.setMass(MassType.INFINITE);
-            circuit.translate(borderWeight, borderWeight + 200);
 
             world.addBody(circuit);
+
+            Body soccerBall = bodies.get("soccer");
+            soccerBall.translate(world.getSize().x / 2, world.getSize().y / 2);
+            soccerBall.setMass(MassType.NORMAL);
+            world.addBody(soccerBall);
+            Camera soccerBallCam = new BodyCamera(soccerBall);
+            this.world.setCamera(soccerBallCam);
+            this.world.getCamera().setZoom(2);
+
         } catch (LoadException e) {
             e.printStackTrace();
         }
 
-        Body firstBall = this.addRandomBall();
-        Camera firstBallCam = new BodyCamera(firstBall);
-        this.world.setCamera(firstBallCam);
-        this.world.getCamera().setZoom(2);
-
         for(int i = 0; i < 10; i++){
-            addRandomBall();
+            addRandomBall(10);
         }
-
 
     }
 
@@ -104,13 +112,13 @@ public class ComplexBodies extends AbstractGame {
         return (int) Math.round(n);
     }
 
-    private Body addRandomBall(){
+    private Body addRandomBall(double radius){
 
         Paint paint = new Paint();
         paint.setColor(Color.rgb(getRandomByte(),getRandomByte(),getRandomByte()));
 
         Body ball = new Body(paint);
-        ball.addFixture(new Circle(10), 1.0, 0.0, 2.0);
+        ball.addFixture(new Circle(radius), 1.0, 0.0, 2.0);
         ball.translate(world.getSize().x / 2, world.getSize().y / 2);
         ball.setMass(MassType.NORMAL);
         ball.setLinearVelocity(new Vector2((Math.random() - 0.5) * 100, (Math.random() - 0.5) * 100));

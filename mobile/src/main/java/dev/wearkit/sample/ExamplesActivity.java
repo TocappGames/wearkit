@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -13,7 +12,7 @@ import java.util.Objects;
 import dev.wearkit.core.activity.MobileGameActivity;
 import dev.wearkit.core.common.Factory;
 import dev.wearkit.core.data.Loader;
-import dev.wearkit.core.data.PhysicsEditorBodyLoader;
+import dev.wearkit.core.data.PhysicsEditorLoader;
 import dev.wearkit.core.engine.Game;
 import dev.wearkit.core.rendering.Body;
 import dev.wearkit.example.ComplexBodies;
@@ -32,7 +31,7 @@ public class ExamplesActivity extends MobileGameActivity {
 
         EXAMPLE_NAMES.add("ComplexBodies");
         EXAMPLES.add((Context ctx) -> {
-            Loader<Body> loader = new PhysicsEditorBodyLoader(ctx);
+            Loader<Map<String, Body>> loader = new PhysicsEditorLoader(ctx);
             return new ComplexBodies(loader);
         });
     }
