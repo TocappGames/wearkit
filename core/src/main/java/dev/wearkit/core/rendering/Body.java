@@ -38,11 +38,11 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
         canvas.rotate((float) (rotationRad * RAD_TO_DEG_RATE));
 
         // render all the fixtures in the Body
-        for(BodyFixture fixture: this.getFixtures()){
-            if(this.bitmap != null){
-                canvas.drawBitmap(this.bitmap, -this.bitmap.getWidth() / 2.0f,  -this.bitmap.getHeight() / 2.0f, this.paint);
-            }
-            else {
+        if(this.bitmap != null){
+            canvas.drawBitmap(this.bitmap, -this.bitmap.getWidth() / 2.0f,  -this.bitmap.getHeight() / 2.0f, this.paint);
+        }
+        else {
+            for(BodyFixture fixture: this.getFixtures()){
                 if(this.paint == null)
                     throw new PaintRequiredException("Either stamp(Bitmap) or paint(Paint) must be used before render");
                 Paintable paintable = (Paintable) fixture.getShape();

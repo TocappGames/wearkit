@@ -1,5 +1,6 @@
 package dev.wearkit.example;
 
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 
@@ -42,7 +43,8 @@ public class ComplexBodies extends AbstractGame {
         Circle bgCentre = new Circle(radius);
         bgCentre.translate(world.getSize().x / 2, world.getSize().y / 2);
         bg.addFixture(bgCentre);
-        this.world.getDecoration().add(bg);
+
+        this.world.addOrnament(bg);
 
         Paint bgCircleColor2 = new Paint();
         bgCircleColor2.setColor(Color.BLUE);
@@ -51,7 +53,7 @@ public class ComplexBodies extends AbstractGame {
         bgCentre2.translate(world.getSize().x / 2, world.getSize().y / 2 - radius);
         bg2.addFixture(bgCentre2);
 
-        this.world.getDecoration().add(bg2);
+        this.world.addOrnament(bg2);
 
 
         this.world.setGravity(World.ZERO_GRAVITY);
@@ -89,13 +91,13 @@ public class ComplexBodies extends AbstractGame {
 
             world.addBody(circuit);
 
-            Body soccerBall = bodies.get("soccer");
+            Body soccerBall = bodies.get("anon-60");
             soccerBall.translate(world.getSize().x / 2, world.getSize().y / 2);
             soccerBall.setMass(MassType.NORMAL);
             world.addBody(soccerBall);
             Camera soccerBallCam = new BodyCamera(soccerBall);
             this.world.setCamera(soccerBallCam);
-            this.world.getCamera().setZoom(2);
+            this.world.getCamera().setZoom(0.5);
 
         } catch (LoadException e) {
             e.printStackTrace();

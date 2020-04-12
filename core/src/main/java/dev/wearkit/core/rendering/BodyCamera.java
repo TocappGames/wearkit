@@ -21,11 +21,12 @@ public class BodyCamera implements Camera {
     }
 
     public BodyCamera(Body body) {
-        this(body, 1.0);
+        this(body, Camera.ZOOM_NONE);
     }
 
     @Override
     public void setZoom(double zoom){
+        if (zoom < 0) zoom = Camera.ZOOM_NONE;
         this.zoom = zoom;
     }
 
