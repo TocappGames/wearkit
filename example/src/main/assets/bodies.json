@@ -1,0 +1,392 @@
+{ 
+    
+    "soccer": { 
+        "bitmap": "soccer.png",
+        "fixtures": [
+        
+        
+            
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 2
+                  },
+                  "shape": [   {"x": 4, "y": -10.5 }  ,  {"x": -3, "y": -10.5 }  ,  {"x": -10.5, "y": -5 }  ,  {"x": -10.5, "y": 4 }  ,  {"x": -5, "y": 9.5 }  ,  {"x": 4, "y": 9.5 }  ,  {"x": 9.5, "y": 4 }  ,  {"x": 9.5, "y": -5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 2
+                  },
+                  "shape": [   {"x": -5, "y": -10.5 }  ,  {"x": -10.5, "y": -5 }  ,  {"x": -3, "y": -10.5 }  ]
+                }
+            
+        
+    ]
+  }
+    , 
+    "circuit": { 
+        "bitmap": "circuit.png",
+        "fixtures": [
+        
+        
+            
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 50.5, "y": -115 }  ,  {"x": 67.5, "y": -37 }  ,  {"x": 85.5, "y": -112 }  ,  {"x": 98, "y": -179.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -142.5, "y": 50 }  ,  {"x": -81.5, "y": -43 }  ,  {"x": -75.5, "y": -103 }  ,  {"x": -109.5, "y": -69 }  ,  {"x": -148.5, "y": 2 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -109.5, "y": -69 }  ,  {"x": -75.5, "y": -103 }  ,  {"x": -116.5, "y": -163 }  ,  {"x": -114.5, "y": -109 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -35, "y": -205.5 }  ,  {"x": 34.5, "y": -213 }  ,  {"x": -28.5, "y": -238 }  ,  {"x": -86.5, "y": -239 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 179, "y": 280.5 }  ,  {"x": 224, "y": 255.5 }  ,  {"x": 253.5, "y": 202 }  ,  {"x": 203.5, "y": 226 }  ,  {"x": 168, "y": 247.5 }  ,  {"x": 129, "y": 278.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -310.5, "y": -386 }  ,  {"x": -329.5, "y": -339 }  ,  {"x": -293, "y": -343.5 }  ,  {"x": -261, "y": -382.5 }  ,  {"x": -243, "y": -423.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -86, "y": 117.5 }  ,  {"x": -130.5, "y": 142 }  ,  {"x": -86, "y": 153.5 }  ,  {"x": -26.5, "y": 161 }  ,  {"x": -8, "y": 131.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -348.5, "y": 351 }  ,  {"x": -329.5, "y": 387 }  ,  {"x": -257, "y": 422.5 }  ,  {"x": -348.5, "y": 301 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 349.5, "y": -269 }  ,  {"x": 320, "y": -353.5 }  ,  {"x": 314.5, "y": -282 }  ,  {"x": 335, "y": -230.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -217, "y": 416.5 }  ,  {"x": -175.5, "y": 386 }  ,  {"x": -196.5, "y": 355 }  ,  {"x": -247, "y": 388.5 }  ,  {"x": -257, "y": 422.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 286, "y": -375.5 }  ,  {"x": 236, "y": -380.5 }  ,  {"x": 239, "y": -344.5 }  ,  {"x": 295.5, "y": -328 }  ,  {"x": 320, "y": -353.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -326.5, "y": -299 }  ,  {"x": -300, "y": -255.5 }  ,  {"x": -287, "y": -293.5 }  ,  {"x": -293, "y": -343.5 }  ,  {"x": -329.5, "y": -339 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -114.5, "y": -109 }  ,  {"x": -116.5, "y": -163 }  ,  {"x": -287, "y": -293.5 }  ,  {"x": -300, "y": -255.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -261, "y": -382.5 }  ,  {"x": -194, "y": -376.5 }  ,  {"x": -242, "y": -423.5 }  ,  {"x": -243, "y": -423.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -167, "y": -399.5 }  ,  {"x": -242, "y": -423.5 }  ,  {"x": -194, "y": -376.5 }  ,  {"x": -28.5, "y": -238 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -153.5, "y": 3 }  ,  {"x": -348.5, "y": 301 }  ,  {"x": -313.5, "y": 308 }  ,  {"x": -151.5, "y": 63 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 297, "y": -195.5 }  ,  {"x": 335, "y": -230.5 }  ,  {"x": 277, "y": -225.5 }  ,  {"x": 98, "y": -179.5 }  ,  {"x": 117.5, "y": -151 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -313.5, "y": 308 }  ,  {"x": -348.5, "y": 301 }  ,  {"x": -312, "y": 347.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 249.5, "y": 152 }  ,  {"x": 91.5, "y": -62 }  ,  {"x": 67.5, "y": -37 }  ,  {"x": 215, "y": 160.5 }  ,  {"x": 253.5, "y": 202 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -153.5, "y": 175 }  ,  {"x": -196.5, "y": 355 }  ,  {"x": -175.5, "y": 386 }  ,  {"x": -121.5, "y": 189 }  ,  {"x": -130.5, "y": 142 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -312, "y": 347.5 }  ,  {"x": -257, "y": 422.5 }  ,  {"x": -287, "y": 378.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -287, "y": 378.5 }  ,  {"x": -257, "y": 422.5 }  ,  {"x": -247, "y": 388.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -121.5, "y": 189 }  ,  {"x": -86, "y": 153.5 }  ,  {"x": -130.5, "y": 142 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -8, "y": 131.5 }  ,  {"x": -26.5, "y": 161 }  ,  {"x": 129, "y": 278.5 }  ,  {"x": 128, "y": 240.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 128, "y": 240.5 }  ,  {"x": 129, "y": 278.5 }  ,  {"x": 168, "y": 247.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 203.5, "y": 226 }  ,  {"x": 253.5, "y": 202 }  ,  {"x": 219, "y": 200.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 219, "y": 200.5 }  ,  {"x": 253.5, "y": 202 }  ,  {"x": 215, "y": 160.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 91.5, "y": -62 }  ,  {"x": 85.5, "y": -112 }  ,  {"x": 67.5, "y": -37 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 85.5, "y": -112 }  ,  {"x": 117.5, "y": -151 }  ,  {"x": 98, "y": -179.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 277, "y": -225.5 }  ,  {"x": 335, "y": -230.5 }  ,  {"x": 308.5, "y": -252 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 308.5, "y": -252 }  ,  {"x": 335, "y": -230.5 }  ,  {"x": 314.5, "y": -282 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 314.5, "y": -282 }  ,  {"x": 320, "y": -353.5 }  ,  {"x": 295.5, "y": -328 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 236, "y": -380.5 }  ,  {"x": 21.5, "y": -246 }  ,  {"x": 34.5, "y": -213 }  ,  {"x": 239, "y": -344.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": 21.5, "y": -246 }  ,  {"x": -28.5, "y": -238 }  ,  {"x": 34.5, "y": -213 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 0
+                  },
+                  "shape": [   {"x": -86.5, "y": -239 }  ,  {"x": -28.5, "y": -238 }  ,  {"x": -194, "y": -376.5 }  ]
+                }
+            
+        
+    ]
+  }
+    , 
+    "anon-60": { 
+        "bitmap": "anon-60.png",
+        "fixtures": [
+        
+        
+            
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 2
+                  },
+                  "shape": [   {"x": 22, "y": -40.5 }  ,  {"x": 1, "y": -43.5 }  ,  {"x": 0, "y": -43.5 }  ,  {"x": -13, "y": 35 }  ,  {"x": -7, "y": 41 }  ,  {"x": 19.5, "y": 24 }  ,  {"x": 29.5, "y": 0 }  ,  {"x": 29, "y": -27 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 2
+                  },
+                  "shape": [   {"x": -24.5, "y": -39 }  ,  {"x": -30.5, "y": -24 }  ,  {"x": -29.5, "y": 5 }  ,  {"x": -18.5, "y": 27 }  ,  {"x": -13, "y": 35 }  ,  {"x": 0, "y": -43.5 }  ]
+                }
+             ,
+                {
+                  "parameters": {
+                      "density": 2,
+                      "friction": 0,
+                      "restitution": 2
+                  },
+                  "shape": [   {"x": 2, "y": 42.5 }  ,  {"x": 9, "y": 38 }  ,  {"x": 19.5, "y": 24 }  ,  {"x": -7, "y": 41 }  ]
+                }
+            
+        
+    ]
+  }
+}
