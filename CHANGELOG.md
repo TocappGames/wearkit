@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/TocappGames/game2d/compare/v1.0.0-beta2...v1.0.0) (2020-04-12)
+
+
+### Bug Fixes
+
+* fixed bug with body rendering if doesn't have fixtures (ornament with bitmap), fixes [#13](https://github.com/TocappGames/game2d/issues/13) ([08ea564](https://github.com/TocappGames/game2d/commit/08ea564))
+* fixed gradle script to generate javadocs ([ef75ce9](https://github.com/TocappGames/game2d/commit/ef75ce9))
+
+
+### Features
+
+* **sprite_loading:** improved body loading, fixes [#15](https://github.com/TocappGames/game2d/issues/15), [#13](https://github.com/TocappGames/game2d/issues/13) ([2cf1506](https://github.com/TocappGames/game2d/commit/2cf1506))
+
+
+
 ## [1.0.0-beta2](https://github.com/TocappGames/game2d/compare/v1.0.0-beta1...v1.0.0-beta2) (2020-04-11)
 
 

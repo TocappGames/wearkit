@@ -91,13 +91,13 @@ public class ComplexBodies extends AbstractGame {
 
             world.addBody(circuit);
 
-            Body soccerBall = bodies.get("anon-60");
+            Body soccerBall = bodies.get("soccer");
             soccerBall.translate(world.getSize().x / 2, world.getSize().y / 2);
             soccerBall.setMass(MassType.NORMAL);
             world.addBody(soccerBall);
             Camera soccerBallCam = new BodyCamera(soccerBall);
             this.world.setCamera(soccerBallCam);
-            this.world.getCamera().setZoom(0.5);
+            this.world.getCamera().setZoom(2);
 
         } catch (LoadException e) {
             e.printStackTrace();
