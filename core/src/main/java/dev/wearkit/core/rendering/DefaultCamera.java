@@ -13,21 +13,19 @@ public class DefaultCamera implements Camera {
 
     public DefaultCamera() {
         this.zoom = 1.0;
-        this.matrix = new Matrix();
     }
 
-    @Override
     public void setZoom(double zoom){
         this.zoom = zoom;
     }
 
     @Override
-    public Matrix getMatrix() {
-        this.matrix.reset();
-        this.matrix.postScale(
-                (float) this.zoom,
-                (float) this.zoom
-        );
-        return this.matrix;
+    public double getZoom() {
+        return this.zoom;
+    }
+
+    @Override
+    public Vector2 getPosition() {
+        return null;
     }
 }

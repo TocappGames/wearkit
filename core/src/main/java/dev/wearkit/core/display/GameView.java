@@ -2,10 +2,12 @@ package dev.wearkit.core.display;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Matrix;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
 
+import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.engine.Game;
 import dev.wearkit.core.engine.World;
 import dev.wearkit.core.exceptions.PaintRequiredException;
@@ -26,9 +28,11 @@ public class GameView extends View {
     private String status;
     private double startTime;
     private Vector2 viewSize = new Vector2(0, 0);
+    private Matrix matrix;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
+        this.matrix = new Matrix();
         this.status = STATUS_READY;
     }
 
@@ -59,7 +63,22 @@ public class GameView extends View {
         }
         double time = System.currentTimeMillis() / 1000.0 - this.startTime;
         World world = this.game.getWorld();
-        canvas.setMatrix(world.getCamera().getMatrix());
+        Camera camera = world.getCamera();
+        float zoom = (float) camera.getZoom();
+        Vector2 center = world.getSize().copy().divide(2);
+        Vector2 camPos = camera.getPosition();
+        if(camPos == null) camPos = center;
+        Vector2 dp = center.difference(camPos);
+
+        this.matrix.reset();
+        this.matrix.postScale(
+                zoom,
+                zoom,
+                (float) camPos.x,
+                (float) camPos.y
+        );
+        this.matrix.postTranslate((float) dp.x, (float) dp.y);
+        canvas.setMatrix(this.matrix);
 
         SortedSet<Renderable> decoration = world.getDecoration();
         boolean isWorldDrawn = false;

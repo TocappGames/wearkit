@@ -6,6 +6,7 @@ import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import dev.wearkit.core.common.Paintable;
+import dev.wearkit.core.common.Printable;
 import dev.wearkit.core.common.Renderable;
 import dev.wearkit.core.common.Stampable;
 import dev.wearkit.core.exceptions.PaintRequiredException;
@@ -13,12 +14,17 @@ import dev.wearkit.core.exceptions.PaintRequiredException;
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Vector2;
 
-public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable {
+public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Printable {
 
     private static final double RAD_TO_DEG_RATE = 180.0 / Math.PI;
 
     private Paint paint;
     private Bitmap bitmap;
+    private String text;
+    private double textX;
+    private double textY;
+    private Paint textPaint;
+    private Double textAngle;
 
     public Body(){ }
 
@@ -44,11 +50,25 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
         else {
             for(BodyFixture fixture: this.getFixtures()){
                 if(this.paint == null)
-                    throw new PaintRequiredException("Either stamp(Bitmap) or paint(Paint) must be used before render");
-                Paintable paintable = (Paintable) fixture.getShape();
-                paintable.paint(this.paint);
-                ((Renderable) paintable).render(canvas);
+                    throw new PaintRequiredException(String.format(
+                            "%s.paint(Paint paint) must be used before render",
+                            getClass().getName()
+                    ));
+                ((Paintable) fixture.getShape()).paint(this.paint);
+                ((Renderable) fixture.getShape()).render(canvas);
             }
+        }
+        if(this.textAngle != null){
+            double newRotationRad = this.textAngle - rotationRad;
+            canvas.rotate((float) (newRotationRad * RAD_TO_DEG_RATE));
+        }
+        if(this.text != null){
+            canvas.drawText(
+                    this.text,
+                    (float) this.textX,
+                    (float) this.textY,
+                    this.textPaint
+            );
         }
 
         // restore previous transformation
@@ -64,5 +84,14 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
     @Override
     public void stamp(Bitmap bitmap) {
         this.bitmap = bitmap;
+    }
+
+    @Override
+    public void print(String text, double xPos, double yPos, Paint paint, Double textAngle) {
+        this.text = text;
+        this.textX = xPos;
+        this.textY = yPos;
+        this.textPaint = paint;
+        this.textAngle = textAngle;
     }
 }
