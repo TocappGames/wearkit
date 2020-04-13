@@ -3,6 +3,7 @@ package dev.wearkit.example;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.text.TextPaint;
 
 import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.AABB;
@@ -48,9 +49,17 @@ public class ComplexBodies extends AbstractGame {
 
         Paint bgCircleColor2 = new Paint();
         bgCircleColor2.setColor(Color.BLUE);
+
         Ornament bg2 = new Ornament(bgCircleColor2, -3);
+
+        TextPaint bg2tp = new TextPaint();
+        bg2tp.setTextAlign(Paint.Align.CENTER);
+        bg2tp.setColor(Color.RED);
+        bg2tp.setTextSize(50);
+        bg2.print("BG_TEXT", 0, 0, bg2tp);
+
         Circle bgCentre2 = new Circle(Math.min(world.getSize().x, world.getSize().y) / 4);
-        bgCentre2.translate(world.getSize().x / 2, world.getSize().y / 2 - radius);
+        bg2.translate(world.getSize().x / 2, world.getSize().y / 2 - radius);
         bg2.addFixture(bgCentre2);
 
         this.world.addOrnament(bg2);
@@ -92,12 +101,16 @@ public class ComplexBodies extends AbstractGame {
             world.addBody(circuit);
 
             Body soccerBall = bodies.get("soccer");
+            TextPaint tp = new TextPaint();
+            tp.setColor(Color.RED);
+            tp.setTextSize(20);
+            soccerBall.print("BALLTEXT", 0, 0, tp, 0.0);
             soccerBall.translate(world.getSize().x / 2, world.getSize().y / 2);
             soccerBall.setMass(MassType.NORMAL);
             world.addBody(soccerBall);
-            Camera soccerBallCam = new BodyCamera(soccerBall);
+            BodyCamera soccerBallCam = new BodyCamera(soccerBall);
             this.world.setCamera(soccerBallCam);
-            this.world.getCamera().setZoom(2);
+            //this.world.getCamera().setZoom(2);
 
         } catch (LoadException e) {
             e.printStackTrace();

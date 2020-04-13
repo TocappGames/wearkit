@@ -1,5 +1,7 @@
 package dev.wearkit.sample;
 
+import java.util.Map;
+
 import dev.wearkit.core.activity.WearGameActivity;
 import dev.wearkit.core.data.Loader;
 import dev.wearkit.core.data.PhysicsEditorLoader;
@@ -11,7 +13,7 @@ public class MainActivity extends WearGameActivity {
 
     @Override
     protected Game getGame() {
-        Loader<Body> loader = new PhysicsEditorLoader(this);
+        Loader<Map<String, Body>> loader = new PhysicsEditorLoader(this);
         return new ComplexBodies(loader);
     }
 }

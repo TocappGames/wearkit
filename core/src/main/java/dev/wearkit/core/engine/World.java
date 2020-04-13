@@ -39,8 +39,8 @@ public class World extends org.dyn4j.dynamics.World implements Measurable, Scene
     }
 
     @Override
-    public void addOrnament(Renderable thing) {
-        this.decoration.add(thing);
+    public void addOrnament(Renderable ornament) {
+        this.decoration.add(ornament);
     }
 
     public void setCamera(Camera camera) {
