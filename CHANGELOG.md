@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta4](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta3...v1.0.0-beta4) (2020-04-13)
+
+
+### Bug Fixes
+
+* **camera:** fixes bug when body not starting in the middle of the world ([f904282](https://github.com/TocappGames/wearkit/commit/f904282))
+
+
+### Features
+
+* **render:** implemented text rendering in bodies and ornament ([1a3d57e](https://github.com/TocappGames/wearkit/commit/1a3d57e))
+
+
+
 ## [1.0.0-beta3](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta2...v1.0.0-beta3) (2020-04-12)
 
 
