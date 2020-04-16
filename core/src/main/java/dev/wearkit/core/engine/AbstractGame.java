@@ -16,7 +16,9 @@ abstract public class AbstractGame implements Game {
     }
 
     @Override
-    public void onTouchEvent(MotionEvent ignored) { }
+    public boolean onTouchEvent(MotionEvent ignored) {
+        return true;
+    }
 
     @Override
     public void onWorldMeasureChange(int widht, int height) { }
