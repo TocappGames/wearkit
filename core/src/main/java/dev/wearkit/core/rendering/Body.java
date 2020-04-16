@@ -2,24 +2,25 @@ package dev.wearkit.core.rendering;
 
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
-import android.graphics.Matrix;
 import android.graphics.Paint;
 
 import dev.wearkit.core.common.Paintable;
 import dev.wearkit.core.common.Printable;
 import dev.wearkit.core.common.Renderable;
+import dev.wearkit.core.common.Scalable;
 import dev.wearkit.core.common.Stampable;
 import dev.wearkit.core.exceptions.PaintRequiredException;
 
 import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
 
-public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Printable {
+public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Printable, Scalable {
 
     private static final double RAD_TO_DEG_RATE = 180.0 / Math.PI;
 
-    private Paint paint;
-    private Bitmap bitmap;
+    protected Paint paint;
+    protected Bitmap bitmap;
     private String text;
     private double textX;
     private double textY;
@@ -87,11 +88,47 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
     }
 
     @Override
+    public void print(String text) {
+        this.print(text, 0, 0, DEFAULT_PAINT);
+    }
+
+    @Override
+    public void print(String text, double xPos, double yPos, Paint paint) {
+        this.print(text, 0, 0, paint, null);
+    }
+
+    @Override
     public void print(String text, double xPos, double yPos, Paint paint, Double textAngle) {
         this.text = text;
         this.textX = xPos;
         this.textY = yPos;
         this.textPaint = paint;
         this.textAngle = textAngle;
+    }
+
+    @Override
+    public Scalable scale(double rate) {
+        Body body = new Body();
+        body.paint = this.paint;
+        if(this.bitmap != null)
+            body.bitmap = Bitmap.createScaledBitmap(
+                    this.bitmap,
+                    (int) Math.round(this.bitmap.getWidth() * rate),
+                    (int) Math.round(this.bitmap.getHeight() * rate),
+                    false
+            );
+        for(BodyFixture fixture: this.getFixtures()){
+            double density = fixture.getDensity();
+            double friction = fixture.getFriction();
+            double restitution = fixture.getRestitution();
+            body.addFixture(
+                    (Convex) ((Scalable) fixture.getShape()).scale(rate),
+                    density,
+                    friction,
+                    restitution
+            );
+        }
+
+        return body;
     }
 }
