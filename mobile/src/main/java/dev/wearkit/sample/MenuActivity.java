@@ -29,6 +29,7 @@ public class MenuActivity extends AppCompatActivity {
         int[] buttonIds = {
                 R.id.button_floatingballs,
                 R.id.button_complexshapes,
+                R.id.button_cardriving,
         };
 
         for(int i=0; i < buttonIds.length; i++){

@@ -39,18 +39,20 @@ public class ComplexBodies extends AbstractGame {
 
         Paint bgCircleColor = new Paint();
         bgCircleColor.setColor(Color.BLACK);
-        Ornament bg = new Ornament(bgCircleColor, -2);
+        Ornament bg = new Ornament();
+        bg.paint(bgCircleColor);
         double radius = Math.min(world.getSize().x, world.getSize().y) / 2 - borderWeight;
         Circle bgCentre = new Circle(radius);
         bgCentre.translate(world.getSize().x / 2, world.getSize().y / 2);
         bg.addFixture(bgCentre);
 
-        this.world.addOrnament(bg);
+        this.world.addOrnament(bg, -2);
 
         Paint bgCircleColor2 = new Paint();
         bgCircleColor2.setColor(Color.BLUE);
 
-        Ornament bg2 = new Ornament(bgCircleColor2, -3);
+        Ornament bg2 = new Ornament();
+        bg2.paint(bgCircleColor2);
 
         TextPaint bg2tp = new TextPaint();
         bg2tp.setTextAlign(Paint.Align.CENTER);
@@ -62,7 +64,7 @@ public class ComplexBodies extends AbstractGame {
         bg2.translate(world.getSize().x / 2, world.getSize().y / 2 - radius);
         bg2.addFixture(bgCentre2);
 
-        this.world.addOrnament(bg2);
+        this.world.addOrnament(bg2, -3);
 
 
         this.world.setGravity(World.ZERO_GRAVITY);
@@ -110,7 +112,7 @@ public class ComplexBodies extends AbstractGame {
             world.addBody(soccerBall);
             BodyCamera soccerBallCam = new BodyCamera(soccerBall);
             this.world.setCamera(soccerBallCam);
-            //this.world.getCamera().setZoom(2);
+            this.world.getCamera().setZoom(2);
 
         } catch (LoadException e) {
             e.printStackTrace();

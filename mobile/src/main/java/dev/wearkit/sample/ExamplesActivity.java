@@ -13,8 +13,10 @@ import dev.wearkit.core.activity.MobileGameActivity;
 import dev.wearkit.core.common.Factory;
 import dev.wearkit.core.data.Loader;
 import dev.wearkit.core.data.PhysicsEditorLoader;
+import dev.wearkit.core.data.UnityAssetLoader;
 import dev.wearkit.core.engine.Game;
 import dev.wearkit.core.rendering.Body;
+import dev.wearkit.example.CarDriving;
 import dev.wearkit.example.ComplexBodies;
 import dev.wearkit.example.FloatingBalls;
 
@@ -33,6 +35,12 @@ public class ExamplesActivity extends MobileGameActivity {
         EXAMPLES.add((Context ctx) -> {
             Loader<Map<String, Body>> loader = new PhysicsEditorLoader(ctx);
             return new ComplexBodies(loader);
+        });
+
+        EXAMPLE_NAMES.add("CarDriving");
+        EXAMPLES.add((Context ctx) -> {
+            Loader<Body> loader = new UnityAssetLoader(ctx);
+            return new CarDriving(loader);
         });
     }
 

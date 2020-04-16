@@ -38,4 +38,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation project(path: ':example')
     implementation project(path: ':core')
+    implementation 'org.dyn4j:dyn4j:3.4.0'
 }

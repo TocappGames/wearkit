@@ -25,21 +25,23 @@ public class FloatingBalls extends AbstractGame {
 
         Paint bgCircleColor = new Paint();
         bgCircleColor.setColor(Color.GRAY);
-        Ornament bg = new Ornament(bgCircleColor, -2);
+        Ornament bg = new Ornament();
+        bg.paint(bgCircleColor);
         double radius = Math.min(world.getSize().x, world.getSize().y) / 2 - borderWidth;
         Circle bgCentre = new Circle(radius);
         bgCentre.translate(world.getSize().x / 2, world.getSize().y / 2);
         bg.addFixture(bgCentre);
-        this.world.addOrnament(bg);
+        this.world.addOrnament(bg, -2);
 
         Paint bgCircleColor2 = new Paint();
         bgCircleColor2.setColor(Color.BLUE);
-        Ornament bg2 = new Ornament(bgCircleColor2, -3);
+        Ornament bg2 = new Ornament();
+        bg2.paint(bgCircleColor2);
         Circle bgCentre2 = new Circle(Math.min(world.getSize().x, world.getSize().y) / 4);
         bgCentre2.translate(world.getSize().x / 2, world.getSize().y / 2 - radius);
         bg2.addFixture(bgCentre2);
 
-        this.world.addOrnament(bg2);
+        this.world.addOrnament(bg2, -3);
 
 
         this.world.setGravity(World.ZERO_GRAVITY);
