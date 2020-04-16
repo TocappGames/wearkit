@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta5](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta4...v1.0.0-beta5) (2020-04-16)
+
+
+### Bug Fixes
+
+* **build:** compatiblity with java7 ([d01a589](https://github.com/TocappGames/wearkit/commit/d01a589))
+* **compatiblity:** fixed compatibility with java 7 (removed java 8 code) ([06e25b8](https://github.com/TocappGames/wearkit/commit/06e25b8))
+* **decoration:** reimplemented decoration management, now is easier to use ([518ebf9](https://github.com/TocappGames/wearkit/commit/518ebf9))
+* **input:** fixed input ontouchevent function ([9ac92e8](https://github.com/TocappGames/wearkit/commit/9ac92e8))
+
+
+### Features
+
+* **camera:** implemented camera angle mode to allow follow a body and its angle ([4cbc2e7](https://github.com/TocappGames/wearkit/commit/4cbc2e7))
+* **camera:** implemented camera to follow object and object angle ([da313c4](https://github.com/TocappGames/wearkit/commit/da313c4))
+* **core:** added ability to scale bodies ([9c5493f](https://github.com/TocappGames/wearkit/commit/9c5493f))
+* **data:** implemented unity loader to load the .meta exported from Unity Editor ([96d030e](https://github.com/TocappGames/wearkit/commit/96d030e))
+
+
+
 ## [1.0.0-beta4](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta3...v1.0.0-beta4) (2020-04-13)
 
 
