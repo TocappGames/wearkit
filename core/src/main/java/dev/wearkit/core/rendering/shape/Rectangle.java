@@ -7,8 +7,9 @@ import org.dyn4j.geometry.Vector2;
 
 import dev.wearkit.core.common.Paintable;
 import dev.wearkit.core.common.Renderable;
+import dev.wearkit.core.common.Scalable;
 
-public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable, Renderable {
+public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable, Renderable, Scalable {
 
     private static final String TAG = "Rectangle";
 
@@ -50,4 +51,10 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable
         this.paint = paint;
     }
 
+    @Override
+    public Scalable scale(double rate) {
+        Rectangle rectangle = new Rectangle(this.getWidth() * rate, this.getHeight() * rate);
+        rectangle.translate(this.getCenter().copy().multiply(rate));
+        return  rectangle;
+    }
 }

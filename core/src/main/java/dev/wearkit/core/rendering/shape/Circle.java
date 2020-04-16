@@ -7,9 +7,10 @@ import org.dyn4j.geometry.Vector2;
 
 import dev.wearkit.core.common.Paintable;
 import dev.wearkit.core.common.Renderable;
+import dev.wearkit.core.common.Scalable;
 
 
-public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Renderable {
+public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Renderable, Scalable {
 
     private static final String TAG = "Circle";
 
@@ -44,5 +45,12 @@ public class Circle extends org.dyn4j.geometry.Circle implements Paintable, Rend
                 (float) radius,
                 this.paint
         );
+    }
+
+    @Override
+    public Scalable scale(double rate) {
+        Circle circle = new Circle(radius * rate);
+        circle.translate(this.getCenter().copy().multiply(rate));
+        return circle;
     }
 }

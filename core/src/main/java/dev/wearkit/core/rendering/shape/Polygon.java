@@ -6,12 +6,15 @@ import android.graphics.Path;
 
 import org.dyn4j.geometry.Vector2;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import dev.wearkit.core.common.Paintable;
 import dev.wearkit.core.common.Renderable;
+import dev.wearkit.core.common.Scalable;
 
-public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Renderable {
+public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Renderable, Scalable {
 
     private Paint paint;
 
@@ -38,5 +41,16 @@ public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Re
     public void paint(Paint paint) {
         if(paint == null) throw new NullPointerException("paint cannot be null");
         this.paint = paint;
+    }
+
+    @Override
+    public Scalable scale(double rate) {
+        Vector2[] vertexes = this.getVertices().clone();
+        for(Vector2 vertex: vertexes){
+            vertex.multiply(rate);
+        }
+        Polygon polygon = new Polygon(vertexes);
+        polygon.translate(this.getCenter().copy().multiply(rate));
+        return polygon;
     }
 }
