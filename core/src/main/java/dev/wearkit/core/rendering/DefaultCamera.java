@@ -12,7 +12,7 @@ public class DefaultCamera implements Camera {
     private Matrix matrix;
 
     public DefaultCamera() {
-        this.zoom = 1.0;
+        this.zoom = Camera.ZOOM_NONE;
     }
 
     public void setZoom(double zoom){
@@ -27,5 +27,10 @@ public class DefaultCamera implements Camera {
     @Override
     public Vector2 getPosition() {
         return null;
+    }
+
+    @Override
+    public double getAngle() {
+        return Camera.ANGLE_NONE;
     }
 }
