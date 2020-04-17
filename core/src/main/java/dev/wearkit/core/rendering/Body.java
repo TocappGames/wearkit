@@ -94,7 +94,7 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
 
     @Override
     public void print(String text, double xPos, double yPos, Paint paint) {
-        this.print(text, 0, 0, paint, null);
+        this.print(text, xPos, yPos, paint, null);
     }
 
     @Override
