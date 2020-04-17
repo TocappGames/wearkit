@@ -7,10 +7,10 @@ import android.graphics.Color;
 import android.graphics.Paint;
 
 
-import org.dyn4j.geometry.Triangle;
+import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
-import org.dyn4j.geometry.decompose.SweepLine;
-import org.dyn4j.geometry.decompose.Triangulator;
+import org.dyn4j.geometry.decompose.Bayazit;
+import org.dyn4j.geometry.decompose.Decomposer;
 import org.yaml.snakeyaml.Yaml;
 
 import java.io.IOException;
@@ -32,15 +32,15 @@ public class UnityAssetLoader implements Loader<Body> {
     private static final String TAG = "UnityAssetLoader";
     private static final String[] META_PATH = {"TextureImporter", "spriteSheet", "physicsShape"};
     private Context ctx;
-    private Triangulator decomposer;
+    private Decomposer decomposer;
 
-    public UnityAssetLoader(Context ctx, Triangulator decomposer) {
+    public UnityAssetLoader(Context ctx, Decomposer decomposer) {
         this.ctx = ctx;
         this.decomposer = decomposer;
     }
 
     public UnityAssetLoader(Context ctx) {
-        this(ctx, new SweepLine());
+        this(ctx, new Bayazit());
     }
 
     @Override
@@ -65,8 +65,8 @@ public class UnityAssetLoader implements Loader<Body> {
                 );
             }
             Body body = new Body();
-            for(Triangle triangle: this.decomposer.triangulate(vertexes)){
-                Polygon polygon = new Polygon(triangle.getVertices());
+            for(Convex convex: this.decomposer.decompose(vertexes)){
+                Polygon polygon = new Polygon(((org.dyn4j.geometry.Polygon) convex).getVertices());
                 body.addFixture(polygon);
             }
             Bitmap bmp = readAsBitmap(filename);

@@ -49,8 +49,6 @@ public class Polygon extends org.dyn4j.geometry.Polygon implements Paintable, Re
         for(Vector2 vertex: vertexes){
             vertex.multiply(rate);
         }
-        Polygon polygon = new Polygon(vertexes);
-        polygon.translate(this.getCenter().copy().multiply(rate));
-        return polygon;
+        return new Polygon(vertexes);
     }
 }
