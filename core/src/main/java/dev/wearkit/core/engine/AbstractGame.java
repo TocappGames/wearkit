@@ -22,4 +22,13 @@ abstract public class AbstractGame implements Game {
 
     @Override
     public void onWorldMeasureChange(int widht, int height) { }
+
+    @Override
+    public void onPreUpdate() { }
+
+    @Override
+    public void onPreRender() { }
+
+    @Override
+    public void onPostRender() { }
 }

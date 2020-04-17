@@ -13,12 +13,10 @@ import dev.wearkit.core.engine.World;
 import dev.wearkit.core.exceptions.PaintRequiredException;
 import dev.wearkit.core.common.Renderable;
 
-import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 public class GameView extends View {
 
@@ -64,7 +62,14 @@ public class GameView extends View {
             this.startTime = System.currentTimeMillis() / 1000.0;
         }
         double time = System.currentTimeMillis() / 1000.0 - this.startTime;
+
         World world = this.game.getWorld();
+        this.game.onPreUpdate();
+        world.update(time);
+        this.game.update();
+
+        this.game.onPreRender();
+
         Camera camera = world.getCamera();
         float zoom = (float) camera.getZoom();
         Vector2 center = world.getSize().copy().divide(2);
@@ -92,15 +97,14 @@ public class GameView extends View {
         for(Integer zIndex: decoration.keySet()){
             if (!isWorldDrawn && zIndex > 0){
                 isWorldDrawn = true;
-                this.drawWorld(world, canvas);
+                this.drawList(world.getBodies(), canvas);
             }
-            this.drawList(Objects.requireNonNull(decoration.get(zIndex)), canvas);
+            this.drawList(decoration.get(zIndex), canvas);
         }
         if(!isWorldDrawn){
             this.drawList(world.getBodies(), canvas);
         }
-        world.update(time);
-        this.game.update();
+        this.game.onPostRender();
     }
 
     private void drawList(List<?> renderables, Canvas canvas){
@@ -109,16 +113,6 @@ public class GameView extends View {
                 ((Renderable) r).render(canvas);
             } catch (PaintRequiredException e) {
                 throw new NullPointerException("Paint is required: " + e.getMessage());
-            }
-        }
-    }
-
-    private void drawWorld(World world, Canvas canvas){
-        for(Body body: world.getBodies()){
-            try {
-                ((Renderable) body).render(canvas);
-            } catch (PaintRequiredException e) {
-                e.printStackTrace();
             }
         }
     }
