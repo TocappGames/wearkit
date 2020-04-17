@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta6](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta5...v1.0.0-beta6) (2020-04-17)
+
+
+### Features
+
+* **engine:** added lifecycle callbacks to allow processing before and after world update and render ([7cef359](https://github.com/TocappGames/wearkit/commit/7cef359))
+
+
+
 ## [1.0.0-beta5](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta4...v1.0.0-beta5) (2020-04-16)
 
 
