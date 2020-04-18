@@ -63,14 +63,22 @@ public class CarDriving extends AbstractGame {
             inWall.translate(wc);
             world.addBody(  inWall);
 
+
+            Body outWall = (Body) this.loader.load("circuit1_out.png");//.scale(4);
+            outWall.stamp(null);
+            outWall = (Body) outWall.scale(4);
+            outWall.setMass(MassType.INFINITE);
+            outWall.translate(wc);
+            world.addBody(  outWall);
+
             this.car = this.loader.load("top-car-50.png");
             for(BodyFixture fixture: this.car.getFixtures()){
                 fixture.setDensity(0.002);
-                fixture.setRestitution(2);
+                fixture.setRestitution(0.2);
             }
             //this.car.getFixtures().forEach(f -> f.setDensity(0.02));
             this.car.setMass(MassType.NORMAL);
-            this.car.translate(wc);
+            this.car.translate(wc.copy().add(400, 500));
 
             this.car.setLinearDamping(3);
             this.car.setAngularDamping(3);
@@ -108,7 +116,7 @@ public class CarDriving extends AbstractGame {
 
             @Override
             public boolean preSolve(ContactPoint point) {
-                return false;
+                return true;
             }
 
             @Override
