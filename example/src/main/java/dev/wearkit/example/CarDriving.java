@@ -82,7 +82,11 @@ public class CarDriving extends AbstractGame {
             Paint carPaint = new Paint(Color.RED);
             carPaint.setStyle(Paint.Style.FILL_AND_STROKE);
             this.car.paint(carPaint);
-            this.car.addFixture(new Circle(25), 0.002, 0.0, 0.2);
+            Circle circleFront = new Circle(25);
+            Circle circleBack = new Circle(25);
+            circleBack.translate(0, 50);
+            this.car.addFixture(circleFront, 0.002, 0.0, 0.2);
+            this.car.addFixture(circleBack, 0.002, 0.0, 0.2);
             //this.car.getFixtures().forEach(f -> f.setDensity(0.02));
             this.car.setMass(MassType.NORMAL);
             this.car.translate(wc.copy().add(400, 500));
