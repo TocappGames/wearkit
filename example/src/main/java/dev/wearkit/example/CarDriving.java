@@ -5,8 +5,17 @@ import android.graphics.Paint;
 import android.util.Log;
 import android.view.MotionEvent;
 
+import org.dyn4j.collision.manifold.Manifold;
+import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.BodyFixture;
+import org.dyn4j.dynamics.CollisionListener;
 import org.dyn4j.dynamics.World;
+import org.dyn4j.dynamics.contact.ContactAdapter;
+import org.dyn4j.dynamics.contact.ContactConstraint;
+import org.dyn4j.dynamics.contact.ContactListener;
+import org.dyn4j.dynamics.contact.ContactPoint;
+import org.dyn4j.dynamics.contact.PersistedContactPoint;
+import org.dyn4j.dynamics.contact.SolvedContactPoint;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
@@ -17,6 +26,7 @@ import dev.wearkit.core.data.Loader;
 import dev.wearkit.core.engine.AbstractGame;
 import dev.wearkit.core.exceptions.LoadException;
 import dev.wearkit.core.rendering.Body;
+import dev.wearkit.core.rendering.BodyCamera;
 import dev.wearkit.core.rendering.Ornament;
 import dev.wearkit.core.rendering.shape.Circle;
 
@@ -45,15 +55,18 @@ public class CarDriving extends AbstractGame {
 
         try {
 
-            Body circuit = this.loader.load("circuit.png");
-            circuit.setMass(MassType.INFINITE);
-            circuit.translate(wc);
-            circuit.stamp(null);
-            world.addOrnament(circuit);
+            //Body circuit = (Body) this.loader.load("circuit.png").scale(4);
+            Body inWall = (Body) this.loader.load("circuit1_in.png");//.scale(4);
+            inWall.stamp(null);
+            inWall = (Body) inWall.scale(4);
+            inWall.setMass(MassType.INFINITE);
+            inWall.translate(wc);
+            world.addBody(  inWall);
 
             this.car = this.loader.load("top-car-50.png");
             for(BodyFixture fixture: this.car.getFixtures()){
                 fixture.setDensity(0.002);
+                fixture.setRestitution(2);
             }
             //this.car.getFixtures().forEach(f -> f.setDensity(0.02));
             this.car.setMass(MassType.NORMAL);
@@ -63,9 +76,46 @@ public class CarDriving extends AbstractGame {
             this.car.setAngularDamping(3);
             world.addBody(this.car);
 
+            BodyCamera bc = new BodyCamera(this.car);
+            //bc.setAngleMode(BodyCamera.MODE_BODY_ANGLE);
+            //bc.setZoom(1.1);
+            this.world.setCamera(bc);
+
         } catch (LoadException e) {
-            e.printStackTrace();
+            throw new NullPointerException("ERROR: " + e.getMessage());
         }
+
+        world.addListener(new ContactListener() {
+            @Override
+            public void sensed(ContactPoint point) {
+
+            }
+
+            @Override
+            public boolean begin(ContactPoint point) {
+                return true;
+            }
+
+            @Override
+            public void end(ContactPoint point) {
+
+            }
+
+            @Override
+            public boolean persist(PersistedContactPoint point) {
+                return true;
+            }
+
+            @Override
+            public boolean preSolve(ContactPoint point) {
+                return false;
+            }
+
+            @Override
+            public void postSolve(SolvedContactPoint point) {
+                Log.d(TAG, "POSTSOLVE");
+            }
+        });
 
 
     }
@@ -112,7 +162,7 @@ public class CarDriving extends AbstractGame {
 
         Vector2 accelForce = new Vector2(this.car.getTransform().getRotationAngle());
         accelForce.rotate(-Math.PI / 2);
-        accelForce.setMagnitude(5000);
+        accelForce.setMagnitude(20000);
         this.car.applyForce(accelForce);//, rearAxis);
 
         if (this.turnForce != null){
@@ -131,21 +181,15 @@ public class CarDriving extends AbstractGame {
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getActionMasked()){
             case MotionEvent.ACTION_DOWN:
-                Log.d(TAG, "ACTION_DOWN");
                 if(event.getX() > this.world.getSize().x / 2){
                     this.turnForce = new Vector2( 200, 0);
-
                 }
                 else {
                     this.turnForce = new Vector2(-200, 0);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                Log.d(TAG, "ACTION_UP");
                 this.turnForce = null;
-                break;
-            case MotionEvent.ACTION_MOVE:
-                Log.d(TAG, "ACTION_MOVE");
                 break;
         }
         return true;

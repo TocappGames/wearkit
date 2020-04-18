@@ -3,6 +3,7 @@ package dev.wearkit.core.rendering;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Rect;
 
 import dev.wearkit.core.common.Paintable;
 import dev.wearkit.core.common.Printable;
@@ -44,11 +45,11 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
         double rotationRad = this.transform.getRotationAngle();
         canvas.rotate((float) (rotationRad * RAD_TO_DEG_RATE));
 
-        // render all the fixtures in the Body
         if(this.bitmap != null){
             canvas.drawBitmap(this.bitmap, -this.bitmap.getWidth() / 2.0f,  -this.bitmap.getHeight() / 2.0f, this.paint);
         }
         else {
+            // render all the fixtures in the Body
             for(BodyFixture fixture: this.getFixtures()){
                 if(this.paint == null)
                     throw new PaintRequiredException(String.format(
