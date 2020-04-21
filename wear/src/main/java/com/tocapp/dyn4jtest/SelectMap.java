@@ -41,8 +41,8 @@ public class SelectMap extends WearableActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate( savedInstanceState );
-        setContentView( R.layout.activity_select_map );
-        mainActivityIntent = new Intent( SelectMap.this, NewActivity.class );
+        setContentView( R.layout.select_map_activity );
+        mainActivityIntent = new Intent( SelectMap.this, MainActivity.class );
         sharedPrefs = new SharedPrefsUtil( getApplication() );
 
         ImageButton buttonLeft = findViewById( R.id.buttonLeft );
@@ -102,13 +102,13 @@ public class SelectMap extends WearableActivity {
 
         switch (selection) {
             case 0:
-                MainActivity.config.setMap0();
+                GameActivity.config.setMap0();
                 onBackPressed();
                 break;
 
             case 1:
                 if (checkMap( "1" )) {
-                    MainActivity.config.setMap1();
+                    GameActivity.config.setMap1();
                     onBackPressed();
                 } else {
                     showAlert();
@@ -119,7 +119,7 @@ public class SelectMap extends WearableActivity {
             case 2:
                 // get if video is viewed
                 if (checkMap( "2" )) {
-                    MainActivity.config.setMap2();
+                    GameActivity.config.setMap2();
                     onBackPressed();
 
                 } else {
@@ -131,7 +131,7 @@ public class SelectMap extends WearableActivity {
             case 3:
                 // get if video is viewed
                 if (checkMap( "3" )) {
-                    MainActivity.config.setMap3();
+                    GameActivity.config.setMap3();
                     onBackPressed();
                 } else {
                     showAlert();
@@ -141,7 +141,7 @@ public class SelectMap extends WearableActivity {
 
             case 4:
                 if (checkMap( "4" )) {
-                    MainActivity.config.setMap4();
+                    GameActivity.config.setMap4();
                     onBackPressed();
                 } else {
                     showAlert();

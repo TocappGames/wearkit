@@ -26,9 +26,9 @@
                 <action android:name="com.tocapp.dyn4jtest.SelectMap" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
+        <activity android:name=".GameActivity"
             android:screenOrientation="portrait"/>
-        <activity android:name=".NewActivity"
+        <activity android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

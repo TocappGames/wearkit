@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "com.tocapp.dyn4jtest"
-        minSdkVersion 19
+        minSdkVersion 24
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -34,10 +34,9 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     wearApp project(':wear')
     implementation project(path: ':airhockey')
-    implementation project(path: ':sdk')
     implementation 'androidx.appcompat:appcompat:1.0.0'
     implementation 'com.google.android.gms:play-services-wearable:+'
     implementation project(":utils")
-
+    implementation 'dev.wearkit:core:1.0.0-beta5'
 
 }

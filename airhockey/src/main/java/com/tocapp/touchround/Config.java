@@ -1,5 +1,7 @@
 package com.tocapp.touchround;
 
+import android.content.Context;
+
 public class Config {
 
     private double area;
@@ -12,6 +14,7 @@ public class Config {
     private int boxColor;
     private int goalsColor;
     private boolean haveMap;
+    private Context context;
 
     public Config() {
         haveMap = false;
@@ -69,6 +72,14 @@ public class Config {
 
     public void setArea(double area){
         this.area = area;
+    }
+
+    public void setContext(Context context) {
+        this.context = context;
+    }
+
+    public Context getContext() {
+        return context;
     }
 
    public double getArea() {

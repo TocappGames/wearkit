@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/black">
 <androidx.constraintlayout.widget.ConstraintLayout
-    tools:context=".NewActivity"
+    tools:context=".MainActivity"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     >

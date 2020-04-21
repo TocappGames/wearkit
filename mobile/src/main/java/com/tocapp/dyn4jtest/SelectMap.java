@@ -1,6 +1,5 @@
 package com.tocapp.dyn4jtest;
 
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -25,7 +24,6 @@ import com.google.android.gms.wearable.Node;
 import com.google.android.gms.wearable.PutDataMapRequest;
 import com.google.android.gms.wearable.PutDataRequest;
 import com.google.android.gms.wearable.Wearable;
-import com.tocapp.touchround.Config;
 import com.tocapp.utils.SharedPrefsUtil;
 
 import java.util.ArrayList;
@@ -60,7 +58,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_map);
+        setContentView(R.layout.select_map_activity );
         sharedPrefs = new SharedPrefsUtil(getApplication());
         ImageButton buttonLeft = findViewById(R.id.buttonLeft);
         ImageButton buttonRight = findViewById(R.id.buttonRight);
@@ -116,14 +114,14 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
     private void onMapSelected() {
         switch (selection) {
             case 0:
-               MainActivity.config.setMap0();
+               GameActivity.config.setMap0();
                 break;
 
             case 1:
                 if (!checkMap(MAP1))
                     seeVideo(MAP1);
                 else {
-                    MainActivity.config.setMap1();
+                    GameActivity.config.setMap1();
                 }
                 break;
 
@@ -131,7 +129,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (!checkMap(MAP2))
                     seeVideo(MAP2);
                 else {
-                MainActivity.config.setMap2();
+                GameActivity.config.setMap2();
                 }
                 break;
 
@@ -139,7 +137,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (!checkMap(MAP3))
                     seeVideo(MAP3);
                 else {
-                    MainActivity.config.setMap3();
+                    GameActivity.config.setMap3();
                 }
                 break;
 
@@ -147,7 +145,7 @@ public class SelectMap extends AppCompatActivity implements DataClient.OnDataCha
                 if (!checkMap(MAP4))
                     seeVideo(MAP4);
                 else {
-                   MainActivity.config.setMap4();
+                   GameActivity.config.setMap4();
                 }
                 break;
         }
