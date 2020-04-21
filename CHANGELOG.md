@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-beta7](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta6...v1.0.0-beta7) (2020-04-21)
+
+
+### Bug Fixes
+
+* **performance:** fixed bitmap performance issues ([d0b18d9](https://github.com/TocappGames/wearkit/commit/d0b18d9)), closes [#30](https://github.com/TocappGames/wearkit/issues/30)
+* **scaling:** fixed scaling bug ([b172e97](https://github.com/TocappGames/wearkit/commit/b172e97))
+
+
+
 ## [1.0.0-beta6](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta5...v1.0.0-beta6) (2020-04-17)
 
 
