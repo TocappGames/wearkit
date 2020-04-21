@@ -55,39 +55,50 @@ public class CarDriving extends AbstractGame {
 
         try {
 
-            //Body circuit = (Body) this.loader.load("circuit.png").scale(4);
-            Body inWall = (Body) this.loader.load("circuit1_in.png");//.scale(4);
-            inWall.stamp(null);
-            inWall = (Body) inWall.scale(4);
-            inWall.setMass(MassType.INFINITE);
-            inWall.translate(wc);
-            world.addBody(  inWall);
-
-
-            Body outWall = (Body) this.loader.load("circuit1_out.png");//.scale(4);
-            outWall.stamp(null);
-            outWall = (Body) outWall.scale(4);
-            outWall.setMass(MassType.INFINITE);
-            outWall.translate(wc);
-            world.addBody(  outWall);
+            Body circuit = this.loader.load("circuit.png").scale(4);
+            circuit.setMass(MassType.INFINITE);
+            circuit.translate(wc);
+            world.addBody(circuit);
 
             /*
+            Body inWall = this.loader.load("circuit1_in.png").scale(4);
+            inWall.stamp(null);
+            inWall.setMass(MassType.INFINITE);
+            inWall.translate(wc);
+            world.addBody(inWall);
+
+
+            Body outWall = this.loader.load("circuit1_out.png").scale(4);
+            outWall.stamp(null);
+            outWall.setMass(MassType.INFINITE);
+            outWall.translate(wc);
+            world.addBody(outWall);
+
+             */
+
+
+
             this.car = this.loader.load("top-car-50.png");
+            this.car.stamp(null);
             for(BodyFixture fixture: this.car.getFixtures()){
                 fixture.setDensity(0.002);
                 fixture.setRestitution(0.2);
             }
-            */
+
+            /*
             this.car = new Body();
             Paint carPaint = new Paint(Color.RED);
             carPaint.setStyle(Paint.Style.FILL_AND_STROKE);
             this.car.paint(carPaint);
+
             Circle circleFront = new Circle(25);
             Circle circleBack = new Circle(25);
             circleBack.translate(0, 50);
             this.car.addFixture(circleFront, 0.002, 0.0, 0.2);
             this.car.addFixture(circleBack, 0.002, 0.0, 0.2);
-            //this.car.getFixtures().forEach(f -> f.setDensity(0.02));
+             */
+
+            //this.car.getFixtures().forEach(f -> f.setDensity(0.02)); // java8
             this.car.setMass(MassType.NORMAL);
             this.car.translate(wc.copy().add(400, 500));
 
@@ -97,7 +108,7 @@ public class CarDriving extends AbstractGame {
 
             BodyCamera bc = new BodyCamera(this.car);
             //bc.setAngleMode(BodyCamera.MODE_BODY_ANGLE);
-            //bc.setZoom(1.1);
+            //bc.setZoom(4);
             this.world.setCamera(bc);
 
         } catch (LoadException e) {
