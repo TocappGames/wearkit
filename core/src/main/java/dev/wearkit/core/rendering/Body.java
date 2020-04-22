@@ -9,8 +9,6 @@ import dev.wearkit.core.common.Printable;
 import dev.wearkit.core.common.Renderable;
 import dev.wearkit.core.common.Scalable;
 import dev.wearkit.core.common.Stampable;
-import dev.wearkit.core.data.BitmapPool;
-import dev.wearkit.core.data.Pool;
 import dev.wearkit.core.exceptions.PaintRequiredException;
 
 import org.dyn4j.dynamics.BodyFixture;
@@ -20,7 +18,7 @@ import org.dyn4j.geometry.Vector2;
 public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Printable, Scalable {
 
     private static final double RAD_TO_DEG_RATE = 180.0 / Math.PI;
-    private static final int CHUNK_SIZE_X = 72;
+    private static final int CHUNK_SIZE_X = 128;
     private static final int CHUNK_SIZE_Y = 128;
 
     protected Paint paint;
