@@ -30,7 +30,6 @@ public class ExamplesActivity extends MobileGameActivity {
         EXAMPLE_NAMES.add("FloatingBalls");
         EXAMPLES.add((Context ctx) -> new FloatingBalls());
 
-
         EXAMPLE_NAMES.add("ComplexBodies");
         EXAMPLES.add((Context ctx) -> {
             Loader<Map<String, Body>> loader = new PhysicsEditorLoader(ctx);

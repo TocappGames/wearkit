@@ -2,16 +2,11 @@ package dev.wearkit.example;
 
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 
-import org.dyn4j.collision.manifold.Manifold;
-import org.dyn4j.collision.narrowphase.Penetration;
 import org.dyn4j.dynamics.BodyFixture;
-import org.dyn4j.dynamics.CollisionListener;
+import org.dyn4j.dynamics.Torque;
 import org.dyn4j.dynamics.World;
-import org.dyn4j.dynamics.contact.ContactAdapter;
-import org.dyn4j.dynamics.contact.ContactConstraint;
 import org.dyn4j.dynamics.contact.ContactListener;
 import org.dyn4j.dynamics.contact.ContactPoint;
 import org.dyn4j.dynamics.contact.PersistedContactPoint;
@@ -35,7 +30,7 @@ public class CarDriving extends AbstractGame {
     private static final String TAG = "FloatingBalls";
     private final Loader<Body> loader;
     private Body car;
-    private Vector2 turnForce;
+    private Torque turnTorque;
     private Queue<Ornament> wheelPointsLeft = new ArrayDeque<>();
     private Queue<Ornament> wheelPointsRight = new ArrayDeque<>();
     private static Paint wheelMarksPaint = new Paint(Color.RED);
@@ -142,9 +137,7 @@ public class CarDriving extends AbstractGame {
             }
 
             @Override
-            public void postSolve(SolvedContactPoint point) {
-                Log.d(TAG, "POSTSOLVE");
-            }
+            public void postSolve(SolvedContactPoint point) { }
         });
 
 
@@ -195,9 +188,10 @@ public class CarDriving extends AbstractGame {
         accelForce.setMagnitude(20000);
         this.car.applyForce(accelForce);//, rearAxis);
 
-        if (this.turnForce != null){
-            Vector2 frontAxis = new Vector2( 25, 0);
-            this.car.applyForce(this.turnForce, frontAxis);
+        if (this.turnTorque != null){
+            //Vector2 frontAxis = new Vector2( 25, 0);
+            //this.car.applyForce(this.turnForce, frontAxis);
+            this.car.applyTorque(this.turnTorque);
         }
 
     }
@@ -212,14 +206,14 @@ public class CarDriving extends AbstractGame {
         switch (event.getActionMasked()){
             case MotionEvent.ACTION_DOWN:
                 if(event.getX() > this.world.getSize().x / 2){
-                    this.turnForce = new Vector2( 200, 0);
+                    this.turnTorque = new Torque(200000);
                 }
                 else {
-                    this.turnForce = new Vector2(-200, 0);
+                    this.turnTorque = new Torque(-200000);
                 }
                 break;
             case MotionEvent.ACTION_UP:
-                this.turnForce = null;
+                this.turnTorque = null;
                 break;
         }
         return true;
