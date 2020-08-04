@@ -18,8 +18,8 @@ import org.dyn4j.geometry.Vector2;
 public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Printable, Scalable {
 
     private static final double RAD_TO_DEG_RATE = 180.0 / Math.PI;
-    private static final int CHUNK_SIZE_X = 128;
-    private static final int CHUNK_SIZE_Y = 128;
+    private static final int CHUNK_SIZE_X = 256;
+    private static final int CHUNK_SIZE_Y = 256;
 
     protected Paint paint;
     private String text;

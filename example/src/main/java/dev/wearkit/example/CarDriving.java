@@ -189,8 +189,6 @@ public class CarDriving extends AbstractGame {
         this.car.applyForce(accelForce);//, rearAxis);
 
         if (this.turnTorque != null){
-            //Vector2 frontAxis = new Vector2( 25, 0);
-            //this.car.applyForce(this.turnForce, frontAxis);
             this.car.applyTorque(this.turnTorque);
         }
 

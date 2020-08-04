@@ -47,13 +47,13 @@ afterEvaluate {
 
 android {
     compileSdkVersion 29
-    buildToolsVersion "29.0.2"
+    buildToolsVersion "29.0.3"
 
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 29
-        versionCode 6
-        versionName '1.0.0-beta7'
+        versionCode 7
+        versionName '1.0.0-beta8'
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
@@ -80,7 +80,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
     implementation ('org.dyn4j:dyn4j:3.4.0') {transitive = true}
-    implementation ('com.google.android.support:wearable:2.5.0') {transitive = true}
-    compileOnly 'com.google.android.wearable:wearable:2.5.0'
+    implementation ('com.google.android.support:wearable:2.7.0') {transitive = true}
+    compileOnly 'com.google.android.wearable:wearable:2.7.0'
     implementation 'org.yaml:snakeyaml:1.26'
 }
