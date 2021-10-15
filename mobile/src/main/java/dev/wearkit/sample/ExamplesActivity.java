@@ -11,11 +11,13 @@ import java.util.Objects;
 
 import dev.wearkit.core.activity.MobileGameActivity;
 import dev.wearkit.core.common.Factory;
+import dev.wearkit.core.data.AssetOrnamentLoader;
 import dev.wearkit.core.data.Loader;
-import dev.wearkit.core.data.PhysicsEditorLoader;
-import dev.wearkit.core.data.UnityAssetLoader;
+import dev.wearkit.core.data.PhysicsEditorSceneLoader;
+import dev.wearkit.core.data.UnityAssetBodyLoader;
 import dev.wearkit.core.engine.Game;
 import dev.wearkit.core.rendering.Body;
+import dev.wearkit.core.rendering.Ornament;
 import dev.wearkit.example.CarDriving;
 import dev.wearkit.example.ComplexBodies;
 import dev.wearkit.example.FloatingBalls;
@@ -32,14 +34,15 @@ public class ExamplesActivity extends MobileGameActivity {
 
         EXAMPLE_NAMES.add("ComplexBodies");
         EXAMPLES.add((Context ctx) -> {
-            Loader<Map<String, Body>> loader = new PhysicsEditorLoader(ctx);
+            Loader<Map<String, Body>> loader = new PhysicsEditorSceneLoader(ctx);
             return new ComplexBodies(loader);
         });
 
         EXAMPLE_NAMES.add("CarDriving");
         EXAMPLES.add((Context ctx) -> {
-            Loader<Body> loader = new UnityAssetLoader(ctx);
-            return new CarDriving(loader);
+            Loader<Body> bodies = new UnityAssetBodyLoader(ctx);
+            Loader<Ornament> ornaments = new AssetOrnamentLoader(ctx);
+            return new CarDriving(bodies, ornaments);
         });
     }
 

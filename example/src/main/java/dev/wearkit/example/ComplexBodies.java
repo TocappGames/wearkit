@@ -5,7 +5,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 
-import org.dyn4j.dynamics.World;
+import org.dyn4j.world.World;
 import org.dyn4j.geometry.AABB;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;

@@ -16,7 +16,7 @@ abstract public class AbstractGame implements Game {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent ignored) {
+    public boolean onMotionEvent(MotionEvent ignored) {
         return true;
     }
 

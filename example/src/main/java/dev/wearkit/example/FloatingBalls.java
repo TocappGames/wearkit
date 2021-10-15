@@ -9,9 +9,9 @@ import dev.wearkit.core.engine.AbstractGame;
 import dev.wearkit.core.rendering.shape.Circle;
 import dev.wearkit.core.rendering.shape.Rectangle;
 
-import org.dyn4j.dynamics.World;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
+import org.dyn4j.world.World;
 
 public class FloatingBalls extends AbstractGame {
 

@@ -27,24 +27,25 @@ import dev.wearkit.core.rendering.shape.Polygon;
  * Loads the data taken from Unity SpriteEditor as *.meta, located in assets directory
  * see https://wearkit.dev/tutorial#SpriteLoading
  */
-public class UnityAssetLoader implements Loader<Body> {
+public class UnityAssetBodyLoader extends AssetLoader<Body> {
 
     private static final String TAG = "UnityAssetLoader";
     private static final String[] META_PATH = {"TextureImporter", "spriteSheet", "physicsShape"};
-    private Context ctx;
     private Decomposer decomposer;
 
-    public UnityAssetLoader(Context ctx, Decomposer decomposer) {
-        this.ctx = ctx;
+    public UnityAssetBodyLoader(Context ctx, Decomposer decomposer) {
+        super(ctx);
         this.decomposer = decomposer;
     }
 
-    public UnityAssetLoader(Context ctx) {
+    public UnityAssetBodyLoader(Context ctx) {
         this(ctx, new Bayazit());
     }
 
     @Override
     public Body load(String filename) throws LoadException {
+
+        Body body = new Body();
         try {
             InputStream is = this.ctx.getAssets().open(filename + ".meta");
             Yaml yaml = new Yaml();
@@ -64,11 +65,12 @@ public class UnityAssetLoader implements Loader<Body> {
                         -(y instanceof Integer? (Integer) y: (Double) y)
                 );
             }
-            Body body = new Body();
             for(Convex convex: this.decomposer.decompose(vertexes)){
                 Polygon polygon = new Polygon(((org.dyn4j.geometry.Polygon) convex).getVertices());
                 body.addFixture(polygon);
             }
+        } catch (IOException ignored){}
+        try {
             Bitmap bmp = readAsBitmap(filename);
             body.stamp(bmp);
             Paint paint = new Paint(Color.GREEN);
@@ -79,7 +81,5 @@ public class UnityAssetLoader implements Loader<Body> {
             throw new LoadException("Failed to load data from resource: " + e.getMessage());
         }
     }
-    private Bitmap readAsBitmap(String filename) throws IOException {
-        return BitmapFactory.decodeStream(this.ctx.getAssets().open(filename));
-    }
+
 }

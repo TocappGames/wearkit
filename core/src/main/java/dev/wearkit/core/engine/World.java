@@ -6,6 +6,7 @@ import dev.wearkit.core.common.Renderable;
 import dev.wearkit.core.common.Viewport;
 import dev.wearkit.core.rendering.DefaultCamera;
 
+import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class World extends org.dyn4j.dynamics.World implements Measurable, Scene, Viewport {
+public class World extends org.dyn4j.world.World<Body> implements Measurable, Scene, Viewport {
 
     private Vector2 size;
     private Map<Integer, List<Renderable>> decoration;

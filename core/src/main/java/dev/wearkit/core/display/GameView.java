@@ -119,6 +119,11 @@ public class GameView extends View {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return this.game.onTouchEvent(event);
+        return this.game.onMotionEvent(event);
+    }
+
+    @Override
+    public boolean onGenericMotionEvent(MotionEvent event) {
+        return this.game.onMotionEvent(event);
     }
 }

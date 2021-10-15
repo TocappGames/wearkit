@@ -4,13 +4,11 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.MotionEvent;
 
+import com.google.android.wearable.input.RotaryEncoderHelper;
+
 import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.dynamics.Torque;
-import org.dyn4j.dynamics.World;
-import org.dyn4j.dynamics.contact.ContactListener;
-import org.dyn4j.dynamics.contact.ContactPoint;
-import org.dyn4j.dynamics.contact.PersistedContactPoint;
-import org.dyn4j.dynamics.contact.SolvedContactPoint;
+import org.dyn4j.world.World;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
@@ -27,8 +25,9 @@ import dev.wearkit.core.rendering.shape.Circle;
 
 public class CarDriving extends AbstractGame {
 
-    private static final String TAG = "FloatingBalls";
-    private final Loader<Body> loader;
+    private static final String TAG = "CarDriving";
+    private final Loader<Body> bodies;
+    private final Loader<Ornament> ornaments;
     private Body car;
     private Torque turnTorque;
     private Queue<Ornament> wheelPointsLeft = new ArrayDeque<>();
@@ -38,8 +37,12 @@ public class CarDriving extends AbstractGame {
         wheelMarksPaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
 
-    public CarDriving(Loader<Body> loader){
-        this.loader = loader;
+    private long startTimeRotary = 0;
+    private static final long ROTARY_DURATION_MILLIS = 250;
+
+    public CarDriving(Loader<Body> bodies, Loader<Ornament> ornaments){
+        this.bodies = bodies;
+        this.ornaments = ornaments;
     }
 
     @Override
@@ -49,31 +52,28 @@ public class CarDriving extends AbstractGame {
         Vector2 wc = world.getSize().copy().divide(2);
 
         try {
-
+/*
             Body circuit = this.loader.load("circuit.png").scale(4);
             circuit.setMass(MassType.INFINITE);
             circuit.translate(wc);
             world.addBody(circuit);
+            */
 
-            /*
-            Body inWall = this.loader.load("circuit1_in.png").scale(4);
+            int circuScale = 4;
+
+            Body inWall = this.bodies.load("circuit-touch-round.jpg").scale(circuScale);
             inWall.stamp(null);
             inWall.setMass(MassType.INFINITE);
             inWall.translate(wc);
             world.addBody(inWall);
 
 
-            Body outWall = this.loader.load("circuit1_out.png").scale(4);
-            outWall.stamp(null);
+            Body outWall = this.bodies.load("circuit-touch-round-out.jpg").scale(circuScale);
             outWall.setMass(MassType.INFINITE);
             outWall.translate(wc);
             world.addBody(outWall);
 
-             */
-
-
-
-            this.car = this.loader.load("top-car-50.png");
+            this.car = this.bodies.load("top-car-50.png").scale(0.75);
             this.car.stamp(null);
             for(BodyFixture fixture: this.car.getFixtures()){
                 fixture.setDensity(0.002);
@@ -95,7 +95,7 @@ public class CarDriving extends AbstractGame {
 
             //this.car.getFixtures().forEach(f -> f.setDensity(0.02)); // java8
             this.car.setMass(MassType.NORMAL);
-            this.car.translate(wc.copy().add(400, 500));
+            this.car.translate(wc.copy().add(1300, 1000));
 
             this.car.setLinearDamping(3);
             this.car.setAngularDamping(3);
@@ -109,36 +109,6 @@ public class CarDriving extends AbstractGame {
         } catch (LoadException e) {
             throw new NullPointerException("ERROR: " + e.getMessage());
         }
-
-        world.addListener(new ContactListener() {
-            @Override
-            public void sensed(ContactPoint point) {
-
-            }
-
-            @Override
-            public boolean begin(ContactPoint point) {
-                return true;
-            }
-
-            @Override
-            public void end(ContactPoint point) {
-
-            }
-
-            @Override
-            public boolean persist(PersistedContactPoint point) {
-                return true;
-            }
-
-            @Override
-            public boolean preSolve(ContactPoint point) {
-                return true;
-            }
-
-            @Override
-            public void postSolve(SolvedContactPoint point) { }
-        });
 
 
     }
@@ -185,9 +155,13 @@ public class CarDriving extends AbstractGame {
 
         Vector2 accelForce = new Vector2(this.car.getTransform().getRotationAngle());
         accelForce.rotate(-Math.PI / 2);
-        accelForce.setMagnitude(20000);
+        accelForce.setMagnitude(20000 / 3.0);
         this.car.applyForce(accelForce);//, rearAxis);
 
+        if (this.startTimeRotary > 0 && System.currentTimeMillis() > this.startTimeRotary + ROTARY_DURATION_MILLIS) {
+            this.turnTorque = null;
+            this.startTimeRotary = 0;
+        }
         if (this.turnTorque != null){
             this.car.applyTorque(this.turnTorque);
         }
@@ -200,14 +174,25 @@ public class CarDriving extends AbstractGame {
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onMotionEvent(MotionEvent event) {
+
+
         switch (event.getActionMasked()){
+
+            case MotionEvent.ACTION_SCROLL:
+                float rotation = RotaryEncoderHelper.getRotaryAxisValue(event);
+                this.turnTorque = new Torque(-200000 / 4.0 * rotation);
+                this.startTimeRotary = System.currentTimeMillis();
+                break;
+
             case MotionEvent.ACTION_DOWN:
+                this.startTimeRotary = 0;
+
                 if(event.getX() > this.world.getSize().x / 2){
-                    this.turnTorque = new Torque(200000);
+                    this.turnTorque = new Torque(200000 / 4.0);
                 }
                 else {
-                    this.turnTorque = new Torque(-200000);
+                    this.turnTorque = new Torque(-200000 / 4.0);
                 }
                 break;
             case MotionEvent.ACTION_UP:
@@ -216,4 +201,7 @@ public class CarDriving extends AbstractGame {
         }
         return true;
     }
+
+
+
 }

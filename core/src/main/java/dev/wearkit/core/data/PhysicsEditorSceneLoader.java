@@ -31,12 +31,10 @@ import dev.wearkit.core.rendering.shape.Polygon;
  * Loads the data exported from PhysicsEditor(TM) located in assets directory
  * see https://wearkit.dev/tutorial#SpriteLoading
  */
-public class PhysicsEditorLoader implements Loader<Map<String, Body>> {
+public class PhysicsEditorSceneLoader extends AssetLoader<Map<String, Body>> {
 
-    private Context ctx;
-
-    public PhysicsEditorLoader(Context ctx) {
-        this.ctx = ctx;
+    public PhysicsEditorSceneLoader(Context ctx) {
+        super(ctx);
     }
 
     @Override
@@ -120,10 +118,6 @@ public class PhysicsEditorLoader implements Loader<Map<String, Body>> {
             text.append('\n');
         }
         return text.toString();
-    }
-
-    private Bitmap readAsBitmap(String filename) throws IOException {
-        return BitmapFactory.decodeStream(this.ctx.getAssets().open(filename));
     }
 
     private boolean assetExists(String filename) throws IOException {

@@ -13,6 +13,8 @@ import dev.wearkit.core.display.GameRenderer;
 
 public abstract class WearGameActivity extends WearableActivity {
 
+    private GameView gameView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -26,9 +28,18 @@ public abstract class WearGameActivity extends WearableActivity {
         setContentView(R.layout.activity_game);
         setAmbientEnabled();
 
-        GameView gameView = findViewById(R.id.game_view);
-        gameView.setGame(this.getGame());
-        new GameRenderer(gameView, this, 60).start();
+        this.gameView = findViewById(R.id.game_view);
+        this.gameView.setGame(this.getGame());
+        this.gameView.setFocusableInTouchMode(true);
+        new GameRenderer(this.gameView, this, 60).start();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (gameView != null){
+            gameView.requestFocus();
+        }
     }
 
     abstract protected Game getGame();
