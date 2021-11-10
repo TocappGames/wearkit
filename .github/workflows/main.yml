@@ -12,7 +12,10 @@ jobs:
       - name: Obtaining the code
         uses: actions/checkout@v1
 
-      - name: Build and generate Maven files
+      - name: Build
+        run: ./gradlew build
+
+      - name: Generate Maven files
         run: |
           ./gradlew publish -Dargs=$(git describe --tags)
           ls -l core/build/outputs/maven/dev/wearkit/core
