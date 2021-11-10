@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0-rc1](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta8...v1.0.0-rc1) (2021-11-10)
+
+
+### Features
+
+* **core:** improved wearkit performance and usability ([16ec51b](https://github.com/TocappGames/wearkit/commit/16ec51b))
+* **example:** improved car driving example with wearkit's newer features ([0e416d4](https://github.com/TocappGames/wearkit/commit/0e416d4))
+
+
+
 ## [1.0.0-beta8](https://github.com/TocappGames/wearkit/compare/v1.0.0-beta7...v1.0.0-beta8) (2020-08-04)
 
 
