@@ -12,10 +12,11 @@ jobs:
       - name: Obtaining the code
         uses: actions/checkout@v1
 
-      - name: Build
+      - name: Build & Test
         run: ./gradlew build
 
-      - name: Generate Maven files
+      - name: Publish Maven Artifacts
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./gradlew publish -Dargs=$(git describe --tags)
-          ls -l core/build/outputs/maven/dev/wearkit/core

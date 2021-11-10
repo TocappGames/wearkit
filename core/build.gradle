@@ -39,7 +39,16 @@ afterEvaluate {
         }
         repositories {
             maven {
+                name "LocalDelivery"
                 url "$buildDir/outputs/maven"
+            }
+            maven {
+                name = "GitHubPackages"
+                url = "https://maven.pkg.github.com/tocappgames/wearkit"
+                credentials {
+                    username = System.getenv("GITHUB_ACTOR")
+                    password = System.getenv("GITHUB_TOKEN")
+                }
             }
         }
     }
