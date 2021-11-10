@@ -2,7 +2,6 @@ package dev.wearkit.core.data;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Paint;
 
@@ -27,18 +26,18 @@ import dev.wearkit.core.rendering.shape.Polygon;
  * Loads the data taken from Unity SpriteEditor as *.meta, located in assets directory
  * see https://wearkit.dev/tutorial#SpriteLoading
  */
-public class UnityAssetBodyLoader extends AssetLoader<Body> {
+public class UnityLoader extends AssetLoader<Body> {
 
     private static final String TAG = "UnityAssetLoader";
-    private static final String[] META_PATH = {"TextureImporter", "spriteSheet", "physicsShape"};
+    private static final String[] UNITY_SHAPE_META_PATH = {"TextureImporter", "spriteSheet", "physicsShape"};
     private Decomposer decomposer;
 
-    public UnityAssetBodyLoader(Context ctx, Decomposer decomposer) {
+    public UnityLoader(Context ctx, Decomposer decomposer) {
         super(ctx);
         this.decomposer = decomposer;
     }
 
-    public UnityAssetBodyLoader(Context ctx) {
+    public UnityLoader(Context ctx) {
         this(ctx, new Bayazit());
     }
 
@@ -50,24 +49,27 @@ public class UnityAssetBodyLoader extends AssetLoader<Body> {
             InputStream is = this.ctx.getAssets().open(filename + ".meta");
             Yaml yaml = new Yaml();
             Object node = yaml.load(is);
-            for(String step: META_PATH){
+            for(String step: UNITY_SHAPE_META_PATH){
                 node = ((Map) node).get(step);
             }
-            List path = (List) ((List) node).get(0);
-            Vector2[] vertexes = new Vector2[path.size()];
-            for(int i=0; i<path.size(); i++){
-                Map<String, ?> point = (Map<String, ?>) path.get(i);
-                vertexes[i] = new Vector2();
-                Object x = point.get("x");
-                Object y = point.get("y");
-                vertexes[i] = new Vector2(
-                        x instanceof Integer? (Integer) x: (Double) x,
-                        -(y instanceof Integer? (Integer) y: (Double) y)
-                );
-            }
-            for(Convex convex: this.decomposer.decompose(vertexes)){
-                Polygon polygon = new Polygon(((org.dyn4j.geometry.Polygon) convex).getVertices());
-                body.addFixture(polygon);
+            for(int i=0; i<((List) node).size(); i++){
+
+                List path = (List) ((List) node).get(i);
+                Vector2[] vertexes = new Vector2[path.size()];
+                for(int j=0; j<path.size(); j++){
+                    Map<String, ?> point = (Map<String, ?>) path.get(j);
+                    vertexes[j] = new Vector2();
+                    Object x = point.get("x");
+                    Object y = point.get("y");
+                    vertexes[j] = new Vector2(
+                            x instanceof Integer? (Integer) x: (Double) x,
+                            -(y instanceof Integer? (Integer) y: (Double) y)
+                    );
+                }
+                for(Convex convex: this.decomposer.decompose(vertexes)){
+                    Polygon polygon = new Polygon(((org.dyn4j.geometry.Polygon) convex).getVertices());
+                    body.addFixture(polygon);
+                }
             }
         } catch (IOException ignored){}
         try {

@@ -1,5 +1,8 @@
 package dev.wearkit.core.common;
 
-public interface Viewport {
+import dev.wearkit.core.engine.Scene;
+
+public interface Viewport extends Printable, Scene, Renderable {
     Camera getCamera();
+    void setCamera(Camera camera);
 }

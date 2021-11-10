@@ -12,4 +12,7 @@ public interface Scene {
     void addOrnament(Renderable renderable, int zIndex);
     void removeOrnament(Renderable renderable);
     void removeOrnament(Renderable renderable, int zIndex);
+
+    void clear();
+    void clear(int zIndex);
 }

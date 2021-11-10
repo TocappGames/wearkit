@@ -11,10 +11,8 @@ public class BodyCamera implements Camera {
     public static final int MODE_FIXED_ANGLE = 0;
     public static final int MODE_BODY_ANGLE = 1;
 
-    private double zoom;
-    private Body body;
-    private Matrix matrix;
-    private Vector2 defaultPos;
+    private final double zoom;
+    private final Body body;
     private int angleMode;
     private double angle;
 
@@ -23,8 +21,6 @@ public class BodyCamera implements Camera {
         this.zoom = zoom;
         this.angle = angle;
         this.angleMode = angleMode;
-        this.matrix = new Matrix();
-        this.defaultPos = this.body.getWorldCenter();
     }
 
     public BodyCamera(Body body) {
@@ -39,9 +35,9 @@ public class BodyCamera implements Camera {
         this.angle = angle;
     }
 
-    public void setZoom(double zoom){
+    public BodyCamera zoom(double zoom){
         if (zoom < 0) zoom = Camera.ZOOM_NONE;
-        this.zoom = zoom;
+        return new BodyCamera(this.body, zoom, this.angle, this.angleMode);
     }
 
     @Override

@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.wearable.activity.WearableActivity;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import dev.wearkit.core.R;
 import dev.wearkit.core.display.GameView;
@@ -27,6 +28,7 @@ public abstract class WearGameActivity extends WearableActivity {
 
         setContentView(R.layout.activity_game);
         setAmbientEnabled();
+
 
         this.gameView = findViewById(R.id.game_view);
         this.gameView.setGame(this.getGame());

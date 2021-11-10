@@ -13,7 +13,7 @@ public class Rectangle extends org.dyn4j.geometry.Rectangle implements Paintable
 
     private static final String TAG = "Rectangle";
 
-    private Paint paint;
+    protected Paint paint;
 
     /**
      * Full constructor.

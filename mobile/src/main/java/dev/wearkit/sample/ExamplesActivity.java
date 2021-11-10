@@ -14,7 +14,7 @@ import dev.wearkit.core.common.Factory;
 import dev.wearkit.core.data.AssetOrnamentLoader;
 import dev.wearkit.core.data.Loader;
 import dev.wearkit.core.data.PhysicsEditorSceneLoader;
-import dev.wearkit.core.data.UnityAssetBodyLoader;
+import dev.wearkit.core.data.UnityLoader;
 import dev.wearkit.core.engine.Game;
 import dev.wearkit.core.rendering.Body;
 import dev.wearkit.core.rendering.Ornament;
@@ -40,7 +40,7 @@ public class ExamplesActivity extends MobileGameActivity {
 
         EXAMPLE_NAMES.add("CarDriving");
         EXAMPLES.add((Context ctx) -> {
-            Loader<Body> bodies = new UnityAssetBodyLoader(ctx);
+            Loader<Body> bodies = new UnityLoader(ctx);
             Loader<Ornament> ornaments = new AssetOrnamentLoader(ctx);
             return new CarDriving(bodies, ornaments);
         });

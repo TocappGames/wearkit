@@ -1,22 +1,22 @@
 package dev.wearkit.core.rendering;
 
-import android.graphics.Matrix;
-
 import org.dyn4j.geometry.Vector2;
-
 import dev.wearkit.core.common.Camera;
 
 public class DefaultCamera implements Camera {
 
-    private double zoom;
-    private Matrix matrix;
+    private final double zoom;
 
     public DefaultCamera() {
-        this.zoom = Camera.ZOOM_NONE;
+        this(Camera.ZOOM_NONE);
     }
 
-    public void setZoom(double zoom){
+    public DefaultCamera(double zoom) {
         this.zoom = zoom;
+    }
+
+    public DefaultCamera zoom(double zoom){
+        return new DefaultCamera(zoom);
     }
 
     @Override

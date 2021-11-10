@@ -1,10 +1,13 @@
 package dev.wearkit.core.engine;
 
+import android.graphics.Paint;
+
 import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.common.Measurable;
 import dev.wearkit.core.common.Renderable;
 import dev.wearkit.core.common.Viewport;
 import dev.wearkit.core.rendering.DefaultCamera;
+import dev.wearkit.core.rendering.DefaultViewport;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
@@ -15,15 +18,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class World extends org.dyn4j.world.World<Body> implements Measurable, Scene, Viewport {
+public class World extends org.dyn4j.world.World<Body> implements Measurable, Scene {
 
     private Vector2 size;
     private Map<Integer, List<Renderable>> decoration;
-    private Camera camera;
+    public static final int DEFAULT_DECORATION_ZINDEX = -1;
+    public static final int DEFAULT_BODY_ZINDEX = 0;
+    private final Viewport viewport;
 
     World() {
         this.decoration = new TreeMap<>();
-        this.camera = new DefaultCamera();
+        this.viewport = new DefaultViewport();
     }
 
     public void setSize(Vector2 size) {
@@ -42,31 +47,60 @@ public class World extends org.dyn4j.world.World<Body> implements Measurable, Sc
 
     @Override
     public void addOrnament(Renderable renderable) {
-        this.addOrnament(renderable, -1);
+        this.addOrnament(renderable, DEFAULT_DECORATION_ZINDEX);
     }
 
     @Override
     public void addOrnament(Renderable renderable, int zIndex) {
         if(!this.decoration.containsKey(zIndex)){
-            this.decoration.put(zIndex, new ArrayList<Renderable>());
+            this.decoration.put(zIndex, new ArrayList<>());
         }
         this.decoration.get(zIndex).add(renderable);
     }
 
+    @Override
     public void removeOrnament(Renderable ornament, int zIndex) {
         this.decoration.get(zIndex).remove(ornament);
     }
 
-    public void removeOrnament(Renderable ornament) {
-        this.removeOrnament(ornament, -1);
-    }
-
-    public void setCamera(Camera camera) {
-        this.camera = camera;
+    @Override
+    public void clear() {
+        this.decoration.clear();
     }
 
     @Override
-    public Camera getCamera() {
-        return this.camera;
+    public void clear(int zIndex) {
+        this.decoration.get(zIndex).clear();
+    }
+
+    @Override
+    public void addBody(Body body) {
+        super.addBody(body);
+        this.addOrnament((Renderable) body, DEFAULT_BODY_ZINDEX);
+    }
+
+    public void addBody(Body body, int zIndex) {
+        super.addBody(body);
+        this.addOrnament((Renderable) body, zIndex);
+    }
+
+    @Override
+    public boolean removeBody(Body body) {
+        this.removeOrnament((Renderable) body, DEFAULT_BODY_ZINDEX);
+        return super.removeBody(body);
+    }
+
+    public boolean removeBody(Body body, int zIndex) {
+        this.removeOrnament((Renderable) body, zIndex);
+        return super.removeBody(body);
+    }
+
+    @Override
+    public void removeOrnament(Renderable ornament) {
+        this.removeOrnament(ornament, DEFAULT_DECORATION_ZINDEX);
+    }
+
+    public Viewport getViewport() {
+        return viewport;
     }
 }

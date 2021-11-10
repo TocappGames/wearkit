@@ -8,5 +8,5 @@ public interface Camera {
     double getZoom();
     Vector2 getPosition();
     double getAngle();
-    void setZoom(double zoom);
+    Camera zoom(double zoom);
 }

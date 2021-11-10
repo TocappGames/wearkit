@@ -95,17 +95,18 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
                 ((Renderable) fixture.getShape()).render(canvas);
             }
         }
+
         if(this.textAngle != null){
             double newRotationRad = this.textAngle - rotationRad;
             canvas.rotate((float) (newRotationRad * RAD_TO_DEG_RATE));
         }
+
         if(this.text != null){
-            canvas.drawText(
-                    this.text,
-                    (float) this.textX,
-                    (float) this.textY,
-                    this.textPaint
-            );
+            float x = (float) this.textX, y = (float) this.textY;
+            for (String line: this.text.split("\n")) {
+                canvas.drawText(line, x, y, this.textPaint);
+                y += this.textPaint.descent() - this.textPaint.ascent();
+            }
         }
 
         // restore previous transformation

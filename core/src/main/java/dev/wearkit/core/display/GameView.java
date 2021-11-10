@@ -1,11 +1,15 @@
 package dev.wearkit.core.display;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
+
+import androidx.annotation.NonNull;
 
 import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.engine.Game;
@@ -70,7 +74,7 @@ public class GameView extends View {
 
         this.game.onPreRender();
 
-        Camera camera = world.getCamera();
+        Camera camera = world.getViewport().getCamera();
         float zoom = (float) camera.getZoom();
         Vector2 center = world.getSize().copy().divide(2);
         Vector2 camPos = camera.getPosition();
@@ -93,21 +97,20 @@ public class GameView extends View {
         canvas.setMatrix(this.matrix);
 
         Map<Integer, List<Renderable>> decoration = world.getDecoration();
-        boolean isWorldDrawn = false;
-        for(Integer zIndex: decoration.keySet()){
-            if (!isWorldDrawn && zIndex > 0){
-                isWorldDrawn = true;
-                this.drawList(world.getBodies(), canvas);
-            }
+        for(Integer zIndex: decoration.keySet()) {
             this.drawList(decoration.get(zIndex), canvas);
         }
-        if(!isWorldDrawn){
-            this.drawList(world.getBodies(), canvas);
+
+        try {
+            world.getViewport().render(canvas);
+        } catch (PaintRequiredException e) {
+            e.printStackTrace();
         }
+
         this.game.onPostRender();
     }
 
-    private void drawList(List<?> renderables, Canvas canvas){
+    private void drawList(@NonNull List<?> renderables, Canvas canvas){
         for(Object r: renderables){
             try {
                 ((Renderable) r).render(canvas);
@@ -117,6 +120,7 @@ public class GameView extends View {
         }
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         return this.game.onMotionEvent(event);

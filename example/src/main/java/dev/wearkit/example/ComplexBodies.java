@@ -1,18 +1,15 @@
 package dev.wearkit.example;
 
-import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.text.TextPaint;
 
 import org.dyn4j.world.World;
-import org.dyn4j.geometry.AABB;
 import org.dyn4j.geometry.MassType;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.Map;
 
-import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.data.Loader;
 import dev.wearkit.core.engine.AbstractGame;
 import dev.wearkit.core.exceptions.LoadException;
@@ -110,9 +107,8 @@ public class ComplexBodies extends AbstractGame {
             soccerBall.translate(world.getSize().x / 2, world.getSize().y / 2);
             soccerBall.setMass(MassType.NORMAL);
             world.addBody(soccerBall);
-            BodyCamera soccerBallCam = new BodyCamera(soccerBall);
-            this.world.setCamera(soccerBallCam);
-            this.world.getCamera().setZoom(2);
+            BodyCamera soccerBallCam = new BodyCamera(soccerBall).zoom(2);
+            this.world.getViewport().setCamera(soccerBallCam);
 
         } catch (LoadException e) {
             e.printStackTrace();
