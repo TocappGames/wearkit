@@ -10,9 +10,6 @@ public class Text extends Rectangle {
 
     private String text;
 
-    /**
-     * @param text
-     */
     public Text(String text) {
         super(1, 1);
         this.text = text;
