@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  api:
+  core:
     runs-on: ubuntu-latest
     steps:
       - name: Obtaining the code
