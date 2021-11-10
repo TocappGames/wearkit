@@ -31,7 +31,7 @@ afterEvaluate {
         publications {
             maven(MavenPublication) {
                 groupId = group
-                version = android.defaultConfig.versionName
+                version = System.getProperty("args")
                 from components.release
                 artifact sourcesJar
                 artifact javadocJar
@@ -52,8 +52,6 @@ android {
     defaultConfig {
         minSdkVersion 16
         targetSdkVersion 31
-        versionCode 3
-        versionName "1.0.0-rc1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
