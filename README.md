@@ -38,3 +38,6 @@ dependencies {
     implementation 'org.dyn4j:dyn4j:4.2.0' // recommended
 }
 ```
+
+## Usage
+See some examples in [example module](https://github.com/TocappGames/wearkit/tree/main/example/src/main/java/dev/wearkit/example)
