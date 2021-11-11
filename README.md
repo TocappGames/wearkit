@@ -38,6 +38,3 @@ dependencies {
     implementation 'org.dyn4j:dyn4j:4.2.0' // recommended
 }
 ```
-
-## Usage
-to be completed...
