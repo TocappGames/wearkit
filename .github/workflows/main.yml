@@ -22,11 +22,11 @@ jobs:
           ./gradlew publish -Dargs=$(git describe --tags)
 
       - name: Upload to maven.wearkit.dev
+        env:
+          MAVEN_REPO_RSA: ${{ secrets.MAVEN_REPO_RSA }}
         run: |
           mkdir -m 700 -p $HOME/.ssh
-          cat <<EOF > $HOME/.ssh/id_rsa
-          ${{ secrets.MAVEN_REPO_RSA }}
-          EOF
+          echo "$MAVEN_REPO_RSA" > $HOME/.ssh/id_rsa
           chmod 400 $HOME/.ssh/id_rsa
           ssh-keyscan maven.wearkit.dev > $HOME/.ssh/known_hosts
           rsync -av core/build/outputs/maven wearkit@maven.wearkit.dev:maven.wearkit.dev
