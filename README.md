@@ -10,17 +10,34 @@ WearKit can be installed from the official
 or using [GitHub Packages](https://github.com/TocappGames/wearkit/packages).
 
 ### Add WearKit Maven repository to project
+If you configured gradle repositories in settings, add it to `gradle.settings`
 
 ```gradle
-// File: MyProject/build.gradle
-    
-allprojects {
+// File: MyProject/gradle.settings
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-        // ...
+        google()
+        mavenCentral()
         maven {
-            name = "WearKit"
-            url = uri("https://maven.wearkit.dev")
+            url "https://maven.wearkit.dev"
         }
+    }
+}
+// ...
+```
+
+Otherwise add it to `build.gradle`
+```gradle
+// File: MyProject/build.gradle
+
+// ...
+repositories {
+    // ...
+    mavenCentral()
+    maven {
+        url "https://maven.wearkit.dev"
     }
 }
 ```
