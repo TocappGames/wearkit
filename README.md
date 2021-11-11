@@ -16,7 +16,7 @@ or using [GitHub Packages](https://github.com/TocappGames/wearkit/packages).
     
 allprojects {
     repositories {
-        ...
+        // ...
         maven {
             name = "WearKit"
             url = uri("https://maven.wearkit.dev")
@@ -33,7 +33,7 @@ physics engine or use the Dyn4J data structures, you need Dyn4J too.
 // File: MyProject/MyModule/build.gradle
 
 dependencies {
-    ...
+    // ...
     implementation 'dev.wearkit:core:1.0.0-rc5' // mandatory
     implementation 'org.dyn4j:dyn4j:4.2.0' // recommended
 }
