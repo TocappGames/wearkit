@@ -15,13 +15,13 @@ jobs:
       - name: Build & Test
         run: ./gradlew build
 
-      - name: Publish Maven Artifacts
+      - name: Generate Maven Artifacts
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ./gradlew publish -Dargs=$(git describe --tags)
 
-      - name: Upload to maven.wearkit.dev
+      - name: Upload Artifacts
         env:
           MAVEN_REPO_RSA: ${{ secrets.MAVEN_REPO_RSA }}
         run: |
@@ -29,4 +29,4 @@ jobs:
           echo "$MAVEN_REPO_RSA" > $HOME/.ssh/id_rsa
           chmod 400 $HOME/.ssh/id_rsa
           ssh-keyscan maven.wearkit.dev > $HOME/.ssh/known_hosts
-          rsync -av core/build/outputs/maven wearkit@maven.wearkit.dev:maven.wearkit.dev
+          rsync -av core/build/outputs/maven/* wearkit@maven.wearkit.dev:maven.wearkit.dev
