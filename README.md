@@ -1,7 +1,7 @@
-WearKit - WearOS & Android GameDev
-==================================
+WearKit - WearOS 2D GameDev
+=====================================
 [WearKit](https://wearkit.dev) is a project to help developers to create
-WearOS (and Android) games, leveraging [Dyn4J](https://dyn4j.org) java
+WearOS (and Android) 2D games, leveraging [Dyn4J](https://dyn4j.org) java
 library as a underlying physics engine.
 
 ## Installation (using gradle)
@@ -34,7 +34,7 @@ physics engine or use the Dyn4J data structures, you need Dyn4J too.
 
 dependencies {
     // ...
-    implementation 'dev.wearkit:core:1.0.0-rc5' // mandatory
+    implementation 'dev.wearkit:core:1.0.0-rc6' // mandatory
     implementation 'org.dyn4j:dyn4j:4.2.0' // recommended
 }
 ```
