@@ -21,12 +21,12 @@ jobs:
         run: |
           ./gradlew publish -Dargs=$(git describe --tags)
 
-      - name: Install ssh key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.MAVEN_REPO_RSA }}
-
       - name: Upload to maven.wearkit.dev
         run: |
+          mkdir -m 700 -p $HOME/.ssh
+          cat <<EOF > $HOME/.ssh/id_rsa
+          ${{ secrets.MAVEN_REPO_RSA }}
+          EOF
+          chmod 400 $HOME/.ssh/id_rsa
           ssh-keyscan maven.wearkit.dev > $HOME/.ssh/known_hosts
           rsync -av core/build/outputs/maven wearkit@maven.wearkit.dev:maven.wearkit.dev
