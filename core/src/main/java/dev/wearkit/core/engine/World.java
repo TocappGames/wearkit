@@ -26,6 +26,8 @@ public class World extends org.dyn4j.world.World<Body> implements Measurable, Sc
     public static final int DEFAULT_BODY_ZINDEX = 0;
     private final Viewport viewport;
 
+    private boolean paused = false;
+
     World() {
         this.decoration = new TreeMap<>();
         this.viewport = new DefaultViewport();
@@ -33,6 +35,20 @@ public class World extends org.dyn4j.world.World<Body> implements Measurable, Sc
 
     public void setSize(Vector2 size) {
         this.size = size;
+    }
+
+    public void pause() {
+        this.paused = true;
+    }
+
+    public void resume() {
+        this.paused = false;
+    }
+
+    @Override
+    public boolean update(double elapsedTime, double stepElapsedTime, int maximumSteps) {
+        if (!this.paused) return super.update(elapsedTime, stepElapsedTime, maximumSteps);
+        return false;
     }
 
     @Override
