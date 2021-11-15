@@ -51,10 +51,10 @@ physics engine or use the Dyn4J data structures, you need Dyn4J too.
 
 dependencies {
     // ...
-    implementation 'dev.wearkit:core:1.0.0-rc6' // mandatory
+    implementation 'dev.wearkit:core:1.0.0-rc7' // mandatory
     implementation 'org.dyn4j:dyn4j:4.2.0' // recommended
 }
 ```
 
 ## Usage
-See some examples in [example module](https://github.com/TocappGames/wearkit/tree/main/example/src/main/java/dev/wearkit/example)
+See some game examples in [example module](https://github.com/TocappGames/wearkit/tree/main/example/src/main/java/dev/wearkit/example)
