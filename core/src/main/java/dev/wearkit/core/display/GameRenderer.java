@@ -6,9 +6,15 @@ import android.view.View;
 
 public class GameRenderer extends Thread {
 
+    public static int DEFAULT_FPS = 60;
+
     private View view;
     private Activity activity;
     private int fps;
+
+    public GameRenderer(View view, Activity activity) {
+        this(view, activity, DEFAULT_FPS);
+    }
 
     public GameRenderer(View view, Activity activity, int fps) {
         this.view = view;
