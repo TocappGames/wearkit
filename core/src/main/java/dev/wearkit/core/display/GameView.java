@@ -32,6 +32,7 @@ public class GameView extends View {
     private String status;
     private Vector2 viewSize = new Vector2(0, 0);
     private Matrix matrix;
+    private double lastUpdateTime = 0;
 
     public GameView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -66,7 +67,8 @@ public class GameView extends View {
 
         World world = this.game.getWorld();
         this.game.onPreUpdate();
-        world.update(this.game.getElapsedTime());
+        world.update(this.game.getElapsedTime() - this.lastUpdateTime);
+        this.lastUpdateTime = this.game.getElapsedTime();
         this.game.update();
 
         this.game.onPreRender();
