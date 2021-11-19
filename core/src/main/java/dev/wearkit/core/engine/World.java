@@ -45,6 +45,10 @@ public class World extends org.dyn4j.world.World<Body> implements Measurable, Sc
         this.paused = false;
     }
 
+    public boolean isPaused(){
+        return this.paused;
+    }
+
     @Override
     public boolean update(double elapsedTime, double stepElapsedTime, int maximumSteps) {
         if (!this.paused) return super.update(elapsedTime, stepElapsedTime, maximumSteps);
