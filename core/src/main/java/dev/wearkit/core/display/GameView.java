@@ -30,7 +30,6 @@ public class GameView extends View {
     private static final double RAD_TO_DEG = 180.0 / Math.PI;
     private Game game;
     private String status;
-    private double startTime;
     private Vector2 viewSize = new Vector2(0, 0);
     private Matrix matrix;
 
@@ -62,10 +61,9 @@ public class GameView extends View {
 
         if(this.status.equals(STATUS_READY)){
             this.game.init();
-            this.status = STATUS_INITIALIZED;
-            this.startTime = System.currentTimeMillis() / 1000.0;
+            this.status = STATUS_INITIALIZED;;
         }
-        double time = System.currentTimeMillis() / 1000.0 - this.startTime;
+        double time = this.game.getElapsedTime() / 1000.0;
 
         World world = this.game.getWorld();
         this.game.onPreUpdate();
