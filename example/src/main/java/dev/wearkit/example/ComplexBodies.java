@@ -30,6 +30,7 @@ public class ComplexBodies extends AbstractGame {
 
     @Override
     public void init() {
+        super.init();
         world.getSettings().setMaximumTranslation(10);
 
         double borderWeight = world.getSize().x / 50;

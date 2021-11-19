@@ -64,6 +64,7 @@ public class CarDriving extends AbstractGame {
 
     @Override
     public void init() {
+        super.init();
         world.setGravity(World.ZERO_GRAVITY);
         world.getSettings().setMaximumTranslation(10);
         Vector2 wc = world.getSize().copy().divide(2);

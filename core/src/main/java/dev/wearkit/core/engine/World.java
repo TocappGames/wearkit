@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class World extends org.dyn4j.world.World<Body> implements Measurable, Scene {
+public class World extends org.dyn4j.world.World<Body> implements Measurable, Scene, TimeControls {
 
     private Vector2 size;
     private Map<Integer, List<Renderable>> decoration;
@@ -32,14 +32,17 @@ public class World extends org.dyn4j.world.World<Body> implements Measurable, Sc
         this.size = size;
     }
 
+    @Override
     public void pause() {
         this.paused = true;
     }
 
+    @Override
     public void resume() {
         this.paused = false;
     }
 
+    @Override
     public boolean isPaused(){
         return this.paused;
     }

@@ -19,6 +19,7 @@ public class FloatingBalls extends AbstractGame {
 
     @Override
     public void init() {
+        super.init();
         world.getSettings().setMaximumTranslation(10);
 
         double borderWidth = world.getSize().x / 50;
