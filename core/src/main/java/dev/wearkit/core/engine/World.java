@@ -48,6 +48,11 @@ public class World extends org.dyn4j.world.World<Body> implements Measurable, Sc
     }
 
     @Override
+    public long getElapsedTime() {
+        return Math.round(this.time * 1000);
+    }
+
+    @Override
     public boolean update(double elapsedTime, double stepElapsedTime, int maximumSteps) {
         if (!this.paused) return super.update(elapsedTime, stepElapsedTime, maximumSteps);
         return false;
