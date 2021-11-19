@@ -24,6 +24,8 @@ abstract public class AbstractGame implements Game {
 
     @Override
     public double getElapsedTime() {
+        if (this.isPaused())
+            return this.paused_at - this.start;
         return (System.currentTimeMillis() / 1000.0) - this.start;
     }
 
