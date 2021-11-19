@@ -27,7 +27,6 @@ public class GameView extends View {
     private static final String TAG = "GameView";
     private static final String STATUS_READY = "ready";
     private static final String STATUS_INITIALIZED = "initialized";
-    private static final double RAD_TO_DEG = 180.0 / Math.PI;
     private Game game;
     private String status;
     private Vector2 viewSize = new Vector2(0, 0);
@@ -69,7 +68,7 @@ public class GameView extends View {
         this.game.onPreUpdate();
         double now = this.game.getElapsedTime();
         double elapsedTime = now - this.lastUpdateTime;
-        world.update(elapsedTime);
+        if(!this.game.isPaused()) world.update(elapsedTime);
         this.lastUpdateTime = now;
         this.game.update();
 
@@ -90,7 +89,7 @@ public class GameView extends View {
                 (float) camPos.y
         );
         this.matrix.postRotate(
-                (float) (camera.getAngle() * RAD_TO_DEG),
+                (float) (Math.toDegrees(camera.getAngle())),
                 (float) camPos.x,
                 (float) camPos.y
         );

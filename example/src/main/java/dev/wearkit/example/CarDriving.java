@@ -143,12 +143,6 @@ public class CarDriving extends AbstractGame {
 
                 @Override
                 public boolean collision(NarrowphaseCollisionData<org.dyn4j.dynamics.Body, BodyFixture> collision) {
-                    org.dyn4j.dynamics.Body b1 = collision.getBody1();
-                    org.dyn4j.dynamics.Body b2 = collision.getBody2();
-                    if (b1.equals(me) && b2.equals(circuit) || b1.equals(circuit) && b2.equals(me)) {
-                        //me.setLinearVelocity(0, 0);
-                        return true;
-                    }
                     return true;
                 }
 
@@ -236,9 +230,21 @@ public class CarDriving extends AbstractGame {
     @Override
     public void update() {
 
-        this.gearBox();
+        if (!this.isPaused()) {
+            this.gearBox();
+        }
 
         double time = (System.currentTimeMillis() - this.start) / 1000.0;
+
+        if (time > 2 && time <= 5) {
+            this.pause();
+            return;
+        }
+        if (time > 5 && this.isPaused()) {
+            this.resume();
+            return;
+        }
+
         double velocity = this.me.getLinearVelocity().getMagnitude();
 
         this.world.getViewport().clear();
