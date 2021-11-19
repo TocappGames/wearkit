@@ -51,7 +51,7 @@ physics engine or use the Dyn4J data structures, you need Dyn4J too.
 
 dependencies {
     // ...
-    implementation 'dev.wearkit:core:1.0.1' // mandatory
+    implementation 'dev.wearkit:core:1.0.2' // mandatory
     implementation 'org.dyn4j:dyn4j:4.2.0' // recommended
 }
 ```
