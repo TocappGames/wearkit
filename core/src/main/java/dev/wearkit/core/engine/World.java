@@ -1,19 +1,14 @@
 package dev.wearkit.core.engine;
 
-import android.graphics.Paint;
-
-import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.common.Measurable;
 import dev.wearkit.core.common.Renderable;
 import dev.wearkit.core.common.Viewport;
-import dev.wearkit.core.rendering.DefaultCamera;
 import dev.wearkit.core.rendering.DefaultViewport;
 
 import org.dyn4j.dynamics.Body;
 import org.dyn4j.geometry.Vector2;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
