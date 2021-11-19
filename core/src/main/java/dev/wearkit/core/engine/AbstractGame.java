@@ -5,8 +5,8 @@ import android.view.MotionEvent;
 abstract public class AbstractGame implements Game {
 
     protected World world;
-    private long paused_at;
-    private long start;
+    private double paused_at;
+    private double start;
 
     public AbstractGame() {
         this.world = new World();
@@ -14,29 +14,29 @@ abstract public class AbstractGame implements Game {
 
     @Override
     public void init() {
-        this.start = System.currentTimeMillis();
+        this.start = System.currentTimeMillis() / 1000.0;
     }
 
     @Override
-    public float getStartTime() {
+    public double getStartTime() {
         return this.start;
     }
 
     @Override
-    public float getElapsedTime() {
-        return System.currentTimeMillis() - this.start;
+    public double getElapsedTime() {
+        return (System.currentTimeMillis() / 1000.0) - this.start;
     }
 
     @Override
     public void pause() {
         this.getWorld().pause();
-        this.paused_at = System.currentTimeMillis();
+        this.paused_at = (System.currentTimeMillis() / 1000.0);
     }
 
     @Override
     public void resume() {
         this.getWorld().resume();
-        this.start += (System.currentTimeMillis() - this.paused_at);
+        this.start += (System.currentTimeMillis() / 1000.0 - this.paused_at);
     }
 
     @Override
