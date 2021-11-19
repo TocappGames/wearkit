@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class World extends org.dyn4j.world.World<Body> implements Measurable, Scene, TimeControls {
+public class World extends org.dyn4j.world.World<Body> implements Measurable, Scene, PlaybackControls {
 
     private Vector2 size;
     private Map<Integer, List<Renderable>> decoration;
@@ -48,13 +48,9 @@ public class World extends org.dyn4j.world.World<Body> implements Measurable, Sc
     }
 
     @Override
-    public long getElapsedTime() {
-        return Math.round(this.time * 1000);
-    }
-
-    @Override
     public boolean update(double elapsedTime, double stepElapsedTime, int maximumSteps) {
-        if (!this.paused) return super.update(elapsedTime, stepElapsedTime, maximumSteps);
+        if (!this.paused)
+            return super.update(elapsedTime, stepElapsedTime, maximumSteps);
         return false;
     }
 

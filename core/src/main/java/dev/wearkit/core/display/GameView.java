@@ -63,11 +63,10 @@ public class GameView extends View {
             this.game.init();
             this.status = STATUS_INITIALIZED;;
         }
-        double time = this.game.getElapsedTime() / 1000.0;
 
         World world = this.game.getWorld();
         this.game.onPreUpdate();
-        world.update(time);
+        world.update(this.game.getElapsedTime());
         this.game.update();
 
         this.game.onPreRender();

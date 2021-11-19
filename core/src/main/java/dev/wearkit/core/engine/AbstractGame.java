@@ -7,7 +7,6 @@ abstract public class AbstractGame implements Game {
     protected World world;
     private long paused_at;
     private long start;
-    private boolean paused = false;
 
     public AbstractGame() {
         this.world = new World();
@@ -19,27 +18,30 @@ abstract public class AbstractGame implements Game {
     }
 
     @Override
-    public long getElapsedTime() {
+    public float getStartTime() {
+        return this.start;
+    }
+
+    @Override
+    public float getElapsedTime() {
         return System.currentTimeMillis() - this.start;
     }
 
     @Override
     public void pause() {
         this.getWorld().pause();
-        this.paused = true;
         this.paused_at = System.currentTimeMillis();
     }
 
     @Override
     public void resume() {
         this.getWorld().resume();
-        this.paused = false;
         this.start += (System.currentTimeMillis() - this.paused_at);
     }
 
     @Override
     public boolean isPaused() {
-        return paused;
+        return this.getWorld().isPaused();
     }
 
     @Override
