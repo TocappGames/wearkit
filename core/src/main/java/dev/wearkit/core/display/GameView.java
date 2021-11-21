@@ -68,9 +68,11 @@ public class GameView extends View {
         this.game.onPreUpdate();
         double now = this.game.getElapsedTime();
         double elapsedTime = now - this.lastUpdateTime;
-        if(!this.game.isPaused()) world.update(elapsedTime);
+        if(!this.game.isPaused()) {
+            world.update(elapsedTime);
+            this.game.update();
+        }
         this.lastUpdateTime = now;
-        this.game.update();
 
         this.game.onPreRender();
 
