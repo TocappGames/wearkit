@@ -5,7 +5,6 @@ import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import dev.wearkit.core.common.Paintable;
-import dev.wearkit.core.common.Printable;
 import dev.wearkit.core.common.Renderable;
 import dev.wearkit.core.common.Scalable;
 import dev.wearkit.core.common.Stampable;
@@ -15,18 +14,14 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
 
-public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Printable, Scalable {
+public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Scalable {
 
     private static final double RAD_TO_DEG_RATE = 180.0 / Math.PI;
     private static final int CHUNK_SIZE_X = 256;
     private static final int CHUNK_SIZE_Y = 256;
 
     protected Paint paint;
-    private String text;
-    private double textX;
-    private double textY;
-    private Paint textPaint;
-    private Double textAngle;
+
     protected Bitmap[][] chunks;
     private int[] stampSize;
 
@@ -95,20 +90,6 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
                 ((Renderable) fixture.getShape()).render(canvas);
             }
         }
-
-        if(this.textAngle != null){
-            double newRotationRad = this.textAngle - rotationRad;
-            canvas.rotate((float) (newRotationRad * RAD_TO_DEG_RATE));
-        }
-
-        if(this.text != null){
-            float x = (float) this.textX, y = (float) this.textY;
-            for (String line: this.text.split("\n")) {
-                canvas.drawText(line, x, y, this.textPaint);
-                y += this.textPaint.descent() - this.textPaint.ascent();
-            }
-        }
-
         // restore previous transformation
         canvas.restore();
     }
@@ -144,25 +125,6 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
             this.stampSize = new int[]{ bitmap.getWidth(), bitmap.getHeight()};
         }
 
-    }
-
-    @Override
-    public void print(String text) {
-        this.print(text, 0, 0, DEFAULT_PAINT);
-    }
-
-    @Override
-    public void print(String text, double xPos, double yPos, Paint paint) {
-        this.print(text, xPos, yPos, paint, null);
-    }
-
-    @Override
-    public void print(String text, double xPos, double yPos, Paint paint, Double textAngle) {
-        this.text = text;
-        this.textX = xPos;
-        this.textY = yPos;
-        this.textPaint = paint;
-        this.textAngle = textAngle;
     }
 
     @Override

@@ -4,7 +4,6 @@ import dev.wearkit.core.common.Renderable;
 
 import java.util.List;
 import java.util.Map;
-import java.util.SortedSet;
 
 public interface Scene {
     Map<Integer, List<Renderable>> getDecoration();

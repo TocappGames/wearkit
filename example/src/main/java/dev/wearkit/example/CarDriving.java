@@ -89,20 +89,9 @@ public class CarDriving extends AbstractGame {
         Vector2 finishPos = new Vector2(
                 finishCircuPos.x - circuSize.x / 2,
                 finishCircuPos.y - circuSize.y / 2
-        ); // circuit1
-        //Vector2 finishPos = wc.copy().add(new Vector2(310, 773-1000)); // circuit2
+        );
 
         try {
-/*
-            Body circuit = this.loader.load("circuit.png").scale(4);
-            circuit.setMass(MassType.INFINITE);
-            circuit.translate(wc);
-            world.addBody(circuit);
-            */
-
-            //double circuScale = 1.5;
-
-            //Body circuit = this.bodies.load("circuit_round.png");//.scale(circuScale);
             Body circuit = this.bodies.load("circuit1-background.png");//.scale(circuScale);
             //Body circuit = this.bodies.load("circuit2-background.png").scale(circuScale);
             circuit.setMass(MassType.INFINITE);
@@ -170,10 +159,9 @@ public class CarDriving extends AbstractGame {
 
             world.addBody(this.me, 2);
 
-            BodyCamera bc = new BodyCamera(this.me);//.zoom(4);
+            BodyCamera bc = new BodyCamera(this.me).zoom(2);
             bc.setAngleMode(BodyCamera.MODE_BODY_ANGLE);
             this.world.getViewport().setCamera(bc);
-
 
         } catch (LoadException e) {
             throw new NullPointerException("ERROR: " + e.getMessage());
@@ -230,20 +218,9 @@ public class CarDriving extends AbstractGame {
     @Override
     public void update() {
 
-        if (!this.isPaused()) {
-            this.gearBox();
-        }
+        this.gearBox();
 
         double time = (System.currentTimeMillis() - this.start) / 1000.0;
-
-        if (time > 2 && time <= 5) {
-            this.pause();
-            return;
-        }
-        if (time > 5 && this.isPaused()) {
-            this.resume();
-            return;
-        }
 
         double velocity = this.me.getLinearVelocity().getMagnitude();
 
