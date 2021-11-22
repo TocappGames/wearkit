@@ -18,13 +18,6 @@ import dev.wearkit.core.common.Viewport;
 import dev.wearkit.core.exceptions.PaintRequiredException;
 
 public class DefaultViewport implements Viewport {
-
-    private String text;
-    private double textX;
-    private double textY;
-    private Paint textPaint;
-    private Double textAngle;
-
     private Map<Integer, List<Renderable>> decoration;
 
     private Camera camera;
@@ -32,25 +25,6 @@ public class DefaultViewport implements Viewport {
     public DefaultViewport() {
         this.camera = new DefaultCamera();
         this.decoration = new TreeMap<>();
-    }
-
-    @Override
-    public void print(String text) {
-        this.print(text, 0, 0, DEFAULT_PAINT);
-    }
-
-    @Override
-    public void print(String text, double xPos, double yPos, Paint paint) {
-        this.print(text, xPos, yPos, paint, null);
-    }
-
-    @Override
-    public void print(String text, double xPos, double yPos, Paint paint, Double textAngle) {
-        this.text = text;
-        this.textX = xPos;
-        this.textY = yPos;
-        this.textPaint = paint;
-        this.textAngle = textAngle;
     }
 
     public void setCamera(Camera camera) {
@@ -104,35 +78,21 @@ public class DefaultViewport implements Viewport {
 
     @Override
     public void render(Canvas canvas) throws PaintRequiredException {
-
-        /* TEXT rendering ornaments*/
         canvas.save();
         canvas.translate(
                 (float) this.camera.getPosition().x,
                 (float) this.camera.getPosition().y
         );
-        canvas.rotate((float) -(camera.getAngle() / Math.PI * 180));
+        canvas.rotate((float) -Math.toDegrees(camera.getAngle()));
 
+        canvas.save();
+        float inverseZoom = 1.0f / ((float)this.camera.getZoom());
+        canvas.scale(inverseZoom, inverseZoom);
         for(Integer zIndex: this.decoration.keySet()) {
             this.drawList(decoration.get(zIndex), canvas);
         }
+        canvas.restore();
 
-        /* TEXT rendering print() function*/
-        double angle = 0;
-        if(this.textAngle != null) {
-            angle = this.textAngle;
-        }
-        if(this.text != null){
-            //angle -= camera.getAngle();
-            canvas.rotate((float) (angle / Math.PI * 180));
-
-            float x = (float) this.textX; //(this.camera.getPosition().x + this.textX);
-            float y = (float) this.textY; //(this.camera.getPosition().y + this.textY);
-            for (String line: this.text.split("\n")) {
-                canvas.drawText(line, x, y, this.textPaint);
-                y += this.textPaint.descent() - this.textPaint.ascent();
-            }
-        }
         canvas.restore();
     }
 
