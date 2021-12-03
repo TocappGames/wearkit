@@ -3,7 +3,10 @@ package dev.wearkit.example;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+import dev.wearkit.core.common.Camera;
 import dev.wearkit.core.rendering.Body;
+import dev.wearkit.core.rendering.BodyCamera;
+import dev.wearkit.core.rendering.DefaultCamera;
 import dev.wearkit.core.rendering.Ornament;
 import dev.wearkit.core.engine.AbstractGame;
 import dev.wearkit.core.rendering.shape.Circle;
@@ -76,6 +79,11 @@ public class FloatingBalls extends AbstractGame {
         for(int i = 0; i < 25; i++){
             addRandomBall();
         }
+
+
+        DefaultCamera cam = new DefaultCamera();
+        cam.setPosition(this.world.getSize().copy().multiply(0.5));
+        this.world.getViewport().setCamera(cam);
 
     }
 
