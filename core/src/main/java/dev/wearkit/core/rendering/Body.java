@@ -124,6 +124,9 @@ public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintab
             }
             this.stampSize = new int[]{ bitmap.getWidth(), bitmap.getHeight()};
         }
+        else {
+            this.chunks = null;
+        }
 
     }
 
