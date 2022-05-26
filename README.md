@@ -21,7 +21,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url "https://maven.wearkit.dev"
+            url "https://maven.tocappgames.com"
         }
     }
 }
@@ -37,7 +37,7 @@ repositories {
     // ...
     mavenCentral()
     maven {
-        url "https://maven.wearkit.dev"
+        url "https://maven.tocpgamess.com"
     }
 }
 ```
