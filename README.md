@@ -37,7 +37,7 @@ repositories {
     // ...
     mavenCentral()
     maven {
-        url "https://maven.tocpgamess.com"
+        url "https://maven.tocappgames.com"
     }
 }
 ```
