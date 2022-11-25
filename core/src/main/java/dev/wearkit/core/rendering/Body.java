@@ -14,16 +14,16 @@ import org.dyn4j.dynamics.BodyFixture;
 import org.dyn4j.geometry.Convex;
 import org.dyn4j.geometry.Vector2;
 
-public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Scalable {
+public class Body extends org.dyn4j.dynamics.Body implements Renderable, Paintable, Stampable, Scalable<Body> {
 
     private static final double RAD_TO_DEG_RATE = 180.0 / Math.PI;
-    private static final int CHUNK_SIZE_X = 256;
-    private static final int CHUNK_SIZE_Y = 256;
+    static final int CHUNK_SIZE_X = 256;
+    static final int CHUNK_SIZE_Y = 256;
 
     protected Paint paint;
 
     protected Bitmap[][] chunks;
-    private int[] stampSize;
+    int[] stampSize;
 
     public Body(){ }
 
