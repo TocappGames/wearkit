@@ -28,5 +28,5 @@ jobs:
           mkdir -m 700 -p $HOME/.ssh
           echo "$MAVEN_REPO_RSA" > $HOME/.ssh/id_rsa
           chmod 400 $HOME/.ssh/id_rsa
-          ssh-keyscan maven.wearkit.dev > $HOME/.ssh/known_hosts
-          rsync -av core/build/outputs/maven/* wearkit@maven.wearkit.dev:maven.wearkit.dev
+          ssh-keyscan maven.tocappgames.com > $HOME/.ssh/known_hosts
+          rsync -av core/build/outputs/maven/* wearkit@maven.tocappgames.com:maven.wearkit.dev

@@ -1,12 +1,12 @@
 WearKit - WearOS 2D GameDev
 =====================================
-[WearKit](https://wearkit.dev) is a project to help developers to create
+[WearKit](https://github.com/tocappgames/wearkit) is a project to help developers to create
 WearOS (and Android) 2D games, leveraging [Dyn4J](https://dyn4j.org) java
 library as a underlying physics engine.
 
 ## Installation (using gradle)
 WearKit can be installed from the official
-[WearKit Maven Repository](https://maven.wearkit.dev) (recommended),
+[WearKit Maven Repository](https://maven.tocappgames.com) (recommended),
 or using [GitHub Packages](https://github.com/TocappGames/wearkit/packages).
 
 ### Add WearKit Maven repository to project
@@ -21,7 +21,7 @@ dependencyResolutionManagement {
         google()
         mavenCentral()
         maven {
-            url "https://maven.wearkit.dev"
+            url "https://maven.tocappgames.com"
         }
     }
 }
@@ -37,7 +37,7 @@ repositories {
     // ...
     mavenCentral()
     maven {
-        url "https://maven.wearkit.dev"
+        url "https://maven.tocappgames.com"
     }
 }
 ```
