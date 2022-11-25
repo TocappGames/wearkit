@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.4](https://github.com/TocappGames/wearkit/compare/v1.1.3...v1.1.4) (2022-11-25)
+
+
+### Bug Fixes
+
+* **ci:** added new workflow for tags ([76f832c](https://github.com/TocappGames/wearkit/commit/76f832c))
+* **doc:** changed version in readme ([73aeef4](https://github.com/TocappGames/wearkit/commit/73aeef4))
+
+
+
 ### [1.1.3](https://github.com/TocappGames/wearkit/compare/v1.0.0-rc1...v1.1.3) (2022-11-25)
 
 
