@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.6](https://github.com/TocappGames/wearkit/compare/v1.1.4...v1.1.6) (2022-11-25)
+
+
+### Bug Fixes
+
+* **ci:** fixed wf ([1ad2c47](https://github.com/TocappGames/wearkit/commit/1ad2c47))
+
+
+
+### 1.1.5 (2022-11-25)
+
+
+
+### 1.1.4 (2022-11-25)
+
+
+### Bug Fixes
+
+* **ci:** renamed wf ([4e9a849](https://github.com/TocappGames/wearkit/commit/4e9a849))
+
+
+
 ### [1.1.5](https://github.com/TocappGames/wearkit/compare/v1.1.4...v1.1.5) (2022-11-25)
 
 
