@@ -3,7 +3,7 @@ name: Deploy [RELEASE]
 on:
   push:
     tags:
-      - *
+      - '*'
 
 jobs:
   core:
